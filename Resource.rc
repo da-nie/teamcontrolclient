@@ -108,6 +108,9 @@ END
 IDR_MENU_MAIN MENU DISCARDABLE 
 BEGIN
     MENUITEM "Настройки",                   IDC_MENU_MAIN_SETTINGS
+    MENUITEM "Удаление выданных вами завершённых заданий", 
+                                            IDC_MENU_MAIN_DELETE_FINISHED_TASK
+
 END
 
 IDR_MENU_LIST_VIEW_MY_TASK MENU DISCARDABLE 
@@ -272,7 +275,7 @@ END
 IDD_DIALOG_PROJECT_SETTINGS DIALOGEX 0, 0, 287, 47
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Параметры проекта"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_PROJECT_SETTINGS_CANCEL,5,25,
                     50,14
@@ -282,6 +285,21 @@ BEGIN
                     14,ES_AUTOHSCROLL
     LTEXT           "Название проекта",IDC_STATIC,5,5,75,13,SS_CENTERIMAGE,
                     WS_EX_STATICEDGE
+END
+
+IDD_DIALOG_DELETE_FINISHED_TASK DIALOG DISCARDABLE  0, 0, 517, 47
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Удаление завершённых заданий"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Удалить все выданные вами и завершённые задания до заданной даты (включительно)",
+                    IDC_BUTTON_DIALOG_DELETE_FINISHED_TASK_DELETE,5,5,400,14
+    CONTROL         "DateTimePicker1",
+                    IDC_DATETIMEPICKER_DIALOG_DELETE_FINISHED_TASK_DATE,
+                    "SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,410,5,
+                    100,15
+    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_DELETE_FINISHED_TASK_CANCEL,5,
+                    25,400,14
 END
 
 
@@ -338,6 +356,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 40
     END
+
+    IDD_DIALOG_DELETE_FINISHED_TASK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 510
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 40
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -350,6 +376,8 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_ICON_SYSTRAY        ICON    DISCARDABLE     "bitmap\\systray_icon.ico"
+IDI_ICON_SYSTRAY_NOT_READ_INVERSE ICON    DISCARDABLE     "bitmap\\systray_icon_not_read_inverse.ico"
+IDI_ICON_SYSTRAY_NOT_READ ICON    DISCARDABLE     "bitmap\\systray_icon_not_read.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

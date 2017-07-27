@@ -103,6 +103,10 @@ SOURCE=.\cdialog_clientsettings.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\cdialog_deletefinishedtask.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\cdialog_projectsettings.cpp
 # End Source File
 # Begin Source File
@@ -216,6 +220,10 @@ SOURCE=.\cdialog_about.h
 # Begin Source File
 
 SOURCE=.\cdialog_clientsettings.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cdialog_deletefinishedtask.h
 # End Source File
 # Begin Source File
 
@@ -335,6 +343,10 @@ SOURCE=.\Bitmap\about.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Bitmap\ico00001.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\Bitmap\icon1.ico
 # End Source File
 # Begin Source File
@@ -396,6 +408,14 @@ SOURCE=.\Bitmap\systray_icon.bmp
 # Begin Source File
 
 SOURCE=.\Bitmap\systray_icon.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\Bitmap\systray_icon_not_read.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\Bitmap\systray_icon_not_read_inverse.ico
 # End Source File
 # Begin Source File
 

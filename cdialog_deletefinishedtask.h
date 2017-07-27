@@ -1,11 +1,11 @@
-#ifndef CDIALOG_TASK_SET_STATE_H
-#define CDIALOG_TASK_SET_STATE_H
+#ifndef CDIALOG_DELETE_FINISHED_TASK_H
+#define CDIALOG_DELETE_FINISHED_TASK_H
 
 //====================================================================================================
 //описание
 //====================================================================================================
 
-//Класс диалога установки состояния задания
+//Класс диалога удаления выданных вами и завершённых заданий
 
 //====================================================================================================
 //подключаемые библиотеки
@@ -15,38 +15,32 @@
 #include "protocol.h"
 
 //====================================================================================================
-//класс диалога установки состояния задания
+//класс диалога удаления выданных вами и завершённых заданий
 //====================================================================================================
-class CDialog_TaskSetState:public CDialog
+class CDialog_DeleteFinishedTask:public CDialog
 {
  protected:
   //-Переменные класса-------------------------------------------------------
-  STask sTask_Local;//редактируемое задание
-  //пиктограммы
-  HBITMAP hBitmap_TaskDone;
-  HBITMAP hBitmap_TaskIsRunning;
-  HBITMAP hBitmap_TaskRead;
-  HBITMAP hBitmap_TaskCancel;
-
+  //дата, до которой включительно нужно удалять завершённые задания
+  long Deleted_Year;//год
+  long Deleted_Month;//месяц
+  long Deleted_Day;//число
  public:
   //-Конструктор класса------------------------------------------------------
-  CDialog_TaskSetState(LPCTSTR lpszTemplateName,CWnd* pParentWnd);
+  CDialog_DeleteFinishedTask(LPCTSTR lpszTemplateName,CWnd* pParentWnd);
   //-Деструктор класса-------------------------------------------------------
-  ~CDialog_TaskSetState();
+  ~CDialog_DeleteFinishedTask();
   //-Функции-----------------------------------------------------------------
   afx_msg void OnOK(void);//нажали Enter
   afx_msg void OnCancel(void);//нажали ESC
   afx_msg BOOL OnInitDialog(void);//инициализация диалога
   //-Функции класса----------------------------------------------------------
-  bool Activate(STask& sTask);//запустить диалог
+  bool Activate(long &Year,long &Month,long &Day);//запустить диалог
   //-Функции обработки сообщений класса--------------------------------------
   DECLARE_MESSAGE_MAP()
   afx_msg void OnDestroy(void);//уничтожение окна
-  afx_msg void OnCommand_Button_Cancel(void);//отменить настройки
-  afx_msg void OnCommand_Button_TaskDone(void);//задание выполнено
-  afx_msg void OnCommand_Button_TaskCancel(void);//задание отклонено
-  afx_msg void OnCommand_Button_TaskRead(void);//задание прочитано
-  afx_msg void OnCommand_Button_TaskIsRunning(void);//задание выполняется
+  afx_msg void OnCommand_Button_Delete(void);//удалить
+  afx_msg void OnCommand_Button_Cancel(void);//отмена
  protected:
   //-Новые функции класса (защищённые)---------------------------------------
   //-Прочее------------------------------------------------------------------  

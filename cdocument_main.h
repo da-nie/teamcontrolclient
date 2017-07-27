@@ -84,6 +84,8 @@ class CDocument_Main:public CDocument
    CString MyGUID;//наш GUID, полученный после авторизации
    bool OnLine;//подключены ли мы к серверу
 
+   bool NotReadTaskState;//есть ли непрочитанные задани€
+
    SClientSettings sClientSettings;//настройки клиента
 
    CVectorTask cVectorTask_TransferToServer;//задани€ дл€ передачи на сервер
@@ -99,6 +101,10 @@ class CDocument_Main:public CDocument
   //-ƒеструктор класса-------------------------------------------------------
   ~CDocument_Main();
   //-‘ункции класса----------------------------------------------------------
+  void DeleteFinishedTask(long year,long month,long day);//удалить все выданные нами и завершЄнные задани€ до даты включительно
+  bool GetNotReadTaskState(void);//получить, есть ли непрочитанные задани€
+  void SetNotReadTaskState(bool state);//задать, есть ли непрочитанные задани€
+
   void SaveState(void);//сохранить состо€ние
   bool FindByUserGUIDAndResetChangeData(const CString &guid,SUser &sUser);//найти пользовател€ по GUID и сбросить новизну данных
   bool FindByUserGUID(const CString &guid,SUser &sUser);//найти пользовател€ по GUID

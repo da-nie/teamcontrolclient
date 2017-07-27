@@ -67,7 +67,18 @@ void CView_MyTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  
  vector<STask> vector_STask_Local;
  vector_STask_Local=cDocument_Main_Ptr->CreateVectorSTaskByForUserGUID(guid); 
-
+ 
+ size_t size=vector_STask_Local.size();
+ bool not_read_task_state=false;
+ for(size_t n=0;n<size;n++)
+ {
+  if (vector_STask_Local[n].State==TASK_STATE_NO_READ)
+  {
+   not_read_task_state=true;
+   break;
+  }
+ }
+ cDocument_Main_Ptr->SetNotReadTaskState(not_read_task_state);
  CView_Base::OnUpdate(pSender,lHint,pHint);	
  UpdateTask(vector_STask_Local); 
  return;

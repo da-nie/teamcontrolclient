@@ -1,20 +1,40 @@
 #ifndef CFRAMEWND_MAIN_H
 #define CFRAMEWND_MAIN_H
 
+//====================================================================================================
+//описание
+//====================================================================================================
+
+//Класс рамки окна
+
+//====================================================================================================
+//подключаемые библиотеки
+//====================================================================================================
 #include "stdafx.h"
 #include "cdocument_main.h"
 #include "cview_mytasks.h"
 #include "cview_outtasks.h"
 #include "ctreeview_kit.h"
 #include "cdialog_about.h"
+#include "cdialog_deletefinishedtask.h"
+
+//====================================================================================================
+//макроопределения
+//====================================================================================================
 
 //количество кнопок в панели инструментов
 #define TOOLBAR_MAIN_BUTTON_AMOUNT 13
 
+//период таймера рамки окна
 #define FRAME_WND_TIMER_PERIOD 100
-#define ABOUT_TIMER_MAX_CONTER (2000/FRAME_WND_TIMER_PERIOD)
+//максимальное время показа заставки при включении
+#define ABOUT_TIMER_MAX_CONTER (3000/FRAME_WND_TIMER_PERIOD)
+//время на смену иконки в трее
+#define SYSTRAY_CHANGE_ICON_COUNTER (500/FRAME_WND_TIMER_PERIOD)
 
-
+//====================================================================================================
+//класс рамки окна
+//====================================================================================================
 class CFrameWnd_Main:public CFrameWnd
 {
  protected:
@@ -24,11 +44,14 @@ class CFrameWnd_Main:public CFrameWnd
   CSplitterWnd cSplitterWnd_Main;
 
   NOTIFYICONDATA NotifyIconData;//иконка
+  HICON hIcon_SysTray;//стандартная иконка в трее
+  HICON hIcon_SysTray_NotRead;//иконка в трее при наличии непрочитанных сообщений
+  HICON hIcon_SysTray_NotReadInverse;//инверсная иконка в трее при наличии непрочитанных сообщений
 
   CDialog_About cDialog_About;//диалог "о программе"
   long AboutCounter;//счётчик показа окна о программе
-  //-Функции класса----------------------------------------------------------
-  //-Прочее------------------------------------------------------------------
+
+  long ChangeSysTrayIconCounter;//счётчик для смены иконки в трее
  public:
   //-Конструктор класса------------------------------------------------------
   CFrameWnd_Main(void);
@@ -45,6 +68,7 @@ class CFrameWnd_Main:public CFrameWnd
   //-Функции обработки сообщений класса--------------------------------------
   DECLARE_MESSAGE_MAP()
   afx_msg void OnCommand_Menu_Main_Settings(void);//настройка клиента
+  afx_msg void OnCommand_Menu_Main_DeleteFinishedTask(void);//удаление завершённых заданий
 
   afx_msg void OnCommand_ToolBar_Main_OutTaskShowCancelled(void);//нажата кнопка "показать отменённые задания из списка выданных" главной панели инструментов 
   afx_msg void OnCommand_ToolBar_Main_OutTaskShowDone(void);//нажата кнопка "показать выполненные задания из списка выданных" главной панели инструментов 
@@ -61,6 +85,7 @@ class CFrameWnd_Main:public CFrameWnd
   afx_msg void OnCommand_ToolBar_Main_MyTaskShowReaded(void);//нажата кнопка "показать прочитанные задания из списка полученных" главной панели инструментов 
 
   afx_msg void OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam);//обработка сообщений трея
+  afx_msg void OnCommand_Menu_SysTray_Exit(void);//обработка команды выхода из программы
 
  protected:
   //функции класса

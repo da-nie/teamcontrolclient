@@ -25,6 +25,7 @@ CDocument_Main::CDocument_Main(void)
    sProtectedVariables.MyGUID="";
    sProtectedVariables.OnLine=false;
    sProtectedVariables.OnShow=false;
+   sProtectedVariables.NotReadTaskState=false;
    cThreadClient.SetDocument(this);
 
    sProtectedVariables.sShowState.OutTask_Show_Cancelled=true;
@@ -77,6 +78,61 @@ CDocument_Main::~CDocument_Main()
 //====================================================================================================
 //функции класса
 //====================================================================================================
+
+//----------------------------------------------------------------------------------------------------
+//удалить все выданные нами и завершЄнные задани€ до даты включительно
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   vector<STask> vector_STask=sProtectedVariables.cVectorTask.CreateVectorSTaskByFromUserGUID(sProtectedVariables.MyGUID);
+   size_t size=vector_STask.size();
+   for(size_t n=0;n<size;n++)
+   {
+    STask &sTask=vector_STask[n];
+    if (sTask.State==TASK_STATE_FINISHED)
+	{
+     if (sTask.Year>year) continue;
+	 if (sTask.Month>month) continue;
+	 if (sTask.Day>day) continue;
+     //удал€ем из очереди заданий все упоминани€ о задании
+     while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(sTask.TaskGUID)==true);
+     sTask.TaskType=TASK_TYPE_DELETED;
+     sProtectedVariables.cVectorTask_TransferToServer.PushBack(sTask);
+     sProtectedVariables.OnUpdateView=true;
+	}
+   }
+  }
+ }
+}
+
+//----------------------------------------------------------------------------------------------------
+//получить, есть ли непрочитанные задани€
+//----------------------------------------------------------------------------------------------------
+bool CDocument_Main::GetNotReadTaskState(void)
+{ 
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   return(sProtectedVariables.NotReadTaskState);	   
+  }
+ }
+}
+//----------------------------------------------------------------------------------------------------
+//задать, есть ли непрочитанные задани€
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::SetNotReadTaskState(bool state)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   sProtectedVariables.NotReadTaskState=state;
+  }
+ }
+}
+
 
 //----------------------------------------------------------------------------------------------------
 //сохранить состо€ние

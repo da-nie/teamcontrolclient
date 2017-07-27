@@ -1,7 +1,7 @@
 #include "cframewnd_main.h"
 
 //====================================================================================================
-//Функции обработки сообщений класса
+//карта сообщений класса
 //====================================================================================================
 BEGIN_MESSAGE_MAP(CFrameWnd_Main,CFrameWnd)
  ON_WM_CREATE()
@@ -10,6 +10,7 @@ BEGIN_MESSAGE_MAP(CFrameWnd_Main,CFrameWnd)
  ON_WM_DESTROY()
  ON_WM_SYSCOMMAND()
  ON_COMMAND(IDC_MENU_MAIN_SETTINGS,OnCommand_Menu_Main_Settings)
+ ON_COMMAND(IDC_MENU_MAIN_DELETE_FINISHED_TASK,OnCommand_Menu_Main_DeleteFinishedTask)
 
  ON_COMMAND(IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_CANCELLED,OnCommand_ToolBar_Main_OutTaskShowCancelled)
  ON_COMMAND(IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_DONE,OnCommand_ToolBar_Main_OutTaskShowDone)
@@ -26,23 +27,26 @@ BEGIN_MESSAGE_MAP(CFrameWnd_Main,CFrameWnd)
  ON_COMMAND(IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_READED,OnCommand_ToolBar_Main_MyTaskShowReaded)
 
  ON_MESSAGE(WM_SYSTEM_TRAY_ICON,OnSystemTrayIconMessage)
+ ON_COMMAND(IDC_MENU_SYSTRAY_EXIT,OnCommand_Menu_SysTray_Exit)
 END_MESSAGE_MAP()
 //====================================================================================================
-//Конструктор класса
+//конструктор класса
 //====================================================================================================
 CFrameWnd_Main::CFrameWnd_Main(void)
 {
- NotifyIconData.hIcon=NULL;
+ hIcon_SysTray=NULL;
+ hIcon_SysTray_NotRead=NULL;
+ hIcon_SysTray_NotReadInverse=NULL;
 }
 //====================================================================================================
-//Деструктор класса
+//деструктор класса
 //====================================================================================================
 CFrameWnd_Main::~CFrameWnd_Main()
 {
 }
 
 //====================================================================================================
-//Функции класса
+//функции класса
 //====================================================================================================
 
 //----------------------------------------------------------------------------------------------------
@@ -134,13 +138,17 @@ afx_msg int CFrameWnd_Main::OnCreate(LPCREATESTRUCT lpCreateStruct)
 { 
  //запускаем таймер
  SetTimer(ID_TIMER_FRAMEWND_MAIN,FRAME_WND_TIMER_PERIOD,NULL); 
- //создаём иконку в системном лотке
+ //создаём иконку в трее
+ hIcon_SysTray=(HICON)LoadImage(AfxGetInstanceHandle(),(char*)IDI_ICON_SYSTRAY,IMAGE_ICON,32,32,LR_DEFAULTCOLOR);
+ hIcon_SysTray_NotRead=(HICON)LoadImage(AfxGetInstanceHandle(),(char*)IDI_ICON_SYSTRAY_NOT_READ,IMAGE_ICON,32,32,LR_DEFAULTCOLOR);
+ hIcon_SysTray_NotReadInverse=(HICON)LoadImage(AfxGetInstanceHandle(),(char*)IDI_ICON_SYSTRAY_NOT_READ_INVERSE,IMAGE_ICON,32,32,LR_DEFAULTCOLOR);
+
  NotifyIconData.cbSize=sizeof(NOTIFYICONDATA);
  NotifyIconData.hWnd=m_hWnd;
  NotifyIconData.uID=IDI_ICON_SYSTRAY;
  NotifyIconData.uFlags=NIF_ICON|NIF_MESSAGE|NIF_TIP;
  NotifyIconData.uCallbackMessage=WM_SYSTEM_TRAY_ICON;
- NotifyIconData.hIcon=(HICON)LoadImage(AfxGetInstanceHandle(),(char*)IDI_ICON_SYSTRAY,IMAGE_ICON,32,32,LR_DEFAULTCOLOR);
+ NotifyIconData.hIcon=hIcon_SysTray;
  strcpy(NotifyIconData.szTip,"Team Control клиент");
  Shell_NotifyIcon(NIM_ADD,&NotifyIconData);
  SetIcon(NotifyIconData.hIcon,TRUE); 
@@ -165,18 +173,23 @@ afx_msg int CFrameWnd_Main::OnCreate(LPCREATESTRUCT lpCreateStruct)
  cDialog_About.ShowWindow(SW_SHOW);
 
  AboutCounter=ABOUT_TIMER_MAX_CONTER;
+ ChangeSysTrayIconCounter=SYSTRAY_CHANGE_ICON_COUNTER;
 
  return(CFrameWnd::OnCreate(lpCreateStruct));
 }
 //----------------------------------------------------------------------------------------------------
-//уточтожение рамки
+//уничтожение рамки
 //----------------------------------------------------------------------------------------------------
 afx_msg void CFrameWnd_Main::OnDestroy(void)
 {
  KillTimer(ID_TIMER_FRAMEWND_MAIN);
  Shell_NotifyIcon(NIM_DELETE,&NotifyIconData);
- if (NotifyIconData.hIcon!=NULL) DeleteObject(NotifyIconData.hIcon);
- NotifyIconData.hIcon=NULL;
+ if (hIcon_SysTray!=NULL) DeleteObject(hIcon_SysTray);
+ if (hIcon_SysTray_NotRead!=NULL) DeleteObject(hIcon_SysTray_NotRead);
+ if (hIcon_SysTray_NotReadInverse!=NULL) DeleteObject(hIcon_SysTray_NotReadInverse);
+ hIcon_SysTray=NULL;
+ hIcon_SysTray_NotRead=NULL;
+ hIcon_SysTray_NotReadInverse=NULL;
 }
 //----------------------------------------------------------------------------------------------------
 //событие таймера
@@ -185,13 +198,42 @@ afx_msg void CFrameWnd_Main::OnTimer(UINT nIDEvent)
 {
  if (nIDEvent==ID_TIMER_FRAMEWND_MAIN)
  { 
+  CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
+  bool not_read_task=false;
+  if (cDocument_Main_Ptr!=NULL) not_read_task=cDocument_Main_Ptr->GetNotReadTaskState();
+
+  if (ChangeSysTrayIconCounter>0)
+  {
+   ChangeSysTrayIconCounter--;
+  }
+  else
+  {
+   //меняем иконку
+   HICON hIcon_Old=NotifyIconData.hIcon;
+   if (not_read_task==false)
+   {
+    NotifyIconData.hIcon=hIcon_SysTray;
+   }
+   else
+   {
+    if (hIcon_Old==hIcon_SysTray_NotRead || hIcon_Old==hIcon_SysTray)
+    {
+     NotifyIconData.hIcon=hIcon_SysTray_NotReadInverse;
+    }
+    if (hIcon_Old==hIcon_SysTray_NotReadInverse)
+    {
+     NotifyIconData.hIcon=hIcon_SysTray_NotRead;
+    }
+   }
+   Shell_NotifyIcon(NIM_MODIFY,&NotifyIconData);
+   ChangeSysTrayIconCounter=SYSTRAY_CHANGE_ICON_COUNTER;
+  }
+
   if (AboutCounter>0)
   {
    AboutCounter--;
    if (AboutCounter==0) cDialog_About.ShowWindow(SW_HIDE);
   }
-
-  CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
   if (cDocument_Main_Ptr!=NULL) 
   {
    cDocument_Main_Ptr->Processing();
@@ -281,6 +323,21 @@ afx_msg void CFrameWnd_Main::OnCommand_Menu_Main_Settings(void)
  CDialog_ClientSettings cDialog_ClientSettings((LPCSTR)IDD_DIALOG_CLIENT_SETTINGS,this);
  if (cDialog_ClientSettings.Activate(sClientSettings)==true) cDocument_Main_Ptr->SetClientSettings(sClientSettings);
 }
+
+//----------------------------------------------------------------------------------------------------
+//удаление завершённых заданий
+//----------------------------------------------------------------------------------------------------
+afx_msg void CFrameWnd_Main::OnCommand_Menu_Main_DeleteFinishedTask(void)
+{
+ CDocument_Main *cDocument_Main_Ptr=reinterpret_cast<CDocument_Main*>(GetActiveDocument());
+ if (cDocument_Main_Ptr==NULL) return;
+ CDialog_DeleteFinishedTask cDialog_DeleteFinishedTask((LPCSTR)IDD_DIALOG_DELETE_FINISHED_TASK,this);
+ long year=0;
+ long month=0;
+ long day=0;
+ if (cDialog_DeleteFinishedTask.Activate(year,month,day)==true) cDocument_Main_Ptr->DeleteFinishedTask(year,month,day);
+}
+
 //----------------------------------------------------------------------------------------------------
 //нажата кнопка "показать отменённые задания из списка выданных" главной панели инструментов 
 //----------------------------------------------------------------------------------------------------
@@ -376,8 +433,27 @@ afx_msg void CFrameWnd_Main::OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam
   SetForegroundWindow();
   ShowWindow(SW_SHOW);
  }
+ if (lParam==WM_RBUTTONUP)//нажали и отпустили правую кнопку мыши
+ {  
+  SetForegroundWindow();
+  //отображаем меню
+  CMenu *cMenu=new CMenu;
+  cMenu->CreatePopupMenu();
+  cMenu->AppendMenu(MF_STRING,IDC_MENU_SYSTRAY_EXIT,"Завершить работу программы");
+  CPoint cPoint;
+  GetCursorPos(&cPoint);
+  cMenu->TrackPopupMenu(TPM_LEFTBUTTON|TPM_RIGHTBUTTON,cPoint.x,cPoint.y,this);
+  delete(cMenu);
+ }
 }
-
+//----------------------------------------------------------------------------------------------------
+//обработка команды выхода из программы
+//----------------------------------------------------------------------------------------------------
+afx_msg void CFrameWnd_Main::OnCommand_Menu_SysTray_Exit(void)
+{
+ if (MessageBox("Завершить работу программы?","Подтверждение",MB_YESNO|MB_DEFBUTTON2)!=IDYES) return;
+ DestroyWindow();
+}
 //====================================================================================================
 //функции класса
 //====================================================================================================
