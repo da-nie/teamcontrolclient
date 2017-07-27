@@ -1,0 +1,188 @@
+#include "cdialog_tasksettings.h"
+
+//====================================================================================================
+//функции обработки сообщений класса
+//====================================================================================================
+
+BEGIN_MESSAGE_MAP(CDialog_TaskSettings,CDialog)
+ ON_WM_DESTROY()
+ ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_OK,OnCommand_Button_Ok)
+ ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED,OnCommand_Button_TaskFinished)
+ ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_CANCEL,OnCommand_Button_Cancel)
+END_MESSAGE_MAP()
+
+//====================================================================================================
+//конструктор класса
+//====================================================================================================
+CDialog_TaskSettings::CDialog_TaskSettings(LPCTSTR lpszTemplateName,CWnd* pParentWnd):CDialog(lpszTemplateName,pParentWnd)
+{
+}
+//====================================================================================================
+//деструктор класса
+//====================================================================================================
+CDialog_TaskSettings::~CDialog_TaskSettings()
+{
+}
+//====================================================================================================
+//функции класса
+//====================================================================================================
+
+//---------------------------------------------------------------------------
+//нажали Enter
+//---------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnOK(void)
+{
+}
+//----------------------------------------------------------------------------------------------------
+//нажали ESC
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCancel(void)
+{
+}
+//----------------------------------------------------------------------------------------------------
+//инициализаци€ диалога
+//----------------------------------------------------------------------------------------------------
+afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
+{
+ vector_SUser_Local.clear();
+ vector_SProject_Local.clear();
+
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetLimitText(254);
+ //заполним список данными проекторв
+ ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->ResetContent();
+ //заполн€ем список данными пользователей
+ ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->ResetContent();
+ ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->SetCurSel(0);
+ if (cDocument_Main_Local_Ptr!=NULL)
+ {
+  size_t n;
+  size_t size;
+  long selected_index=0;
+  CVectorUser cVector_User=cDocument_Main_Local_Ptr->GetCVectorUser();
+  vector<SUser> &vector_SUser=cVector_User.GetVectorSUser();
+  vector_SUser_Local=vector_SUser;
+  size=vector_SUser_Local.size();
+  for(n=0;n<size;n++)
+  {
+   SUser sUser=vector_SUser_Local[n];
+   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->AddString(sUser.Name);
+   if (sUser.UserGUID.Compare(sTask_Local.ForUserGUID)==0) selected_index=n;
+  }
+  ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->SetCurSel(selected_index);
+
+  CVectorProject cVector_Project=cDocument_Main_Local_Ptr->GetCVectorProject();
+  vector<SProject> &vector_SProject=cVector_Project.GetVectorSProject();
+  vector_SProject_Local=vector_SProject;
+  size=vector_SProject_Local.size();
+  selected_index=0;   
+  ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->AddString("Ѕез проекта");
+  for(n=0;n<size;n++)
+  {
+   SProject sProject=vector_SProject_Local[n];
+   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->AddString(sProject.ProjectName);
+   if (sProject.ProjectGUID.Compare(sTask_Local.ProjectGUID)==0) selected_index=n+1;
+  }
+  ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->SetCurSel(selected_index);
+ }
+ CTime cTime(sTask_Local.Year,sTask_Local.Month,sTask_Local.Day,0,0,0); 
+ ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetTime(&cTime); 
+ CTime cTime_Max(2037,12,31,0,0,0);
+ ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetRange(&cTime,&cTime_Max);
+
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetWindowText(sTask_Local.Task);
+
+ if (NewTask==true) ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->ShowWindow(SW_HIDE);
+               else ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->ShowWindow(SW_SHOW);
+
+ return(CDialog::OnInitDialog());
+}
+//----------------------------------------------------------------------------------------------------
+//запуск диалога
+//----------------------------------------------------------------------------------------------------
+bool CDialog_TaskSettings::Activate(STask &sTask,CDocument_Main *cDocument_Main_Ptr,bool new_task)
+{
+ sTask_Local=sTask;
+ cDocument_Main_Local_Ptr=cDocument_Main_Ptr;
+ NewTask=new_task;
+ long ret=DoModal();
+ if (ret==0)
+ {
+  sTask=sTask_Local;
+  return(true);
+ }
+ return(false);
+}
+
+//====================================================================================================
+//функции обработки сообщений класса
+//====================================================================================================
+
+//----------------------------------------------------------------------------------------------------
+//уничтожение окна
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnDestroy(void)
+{
+ CDialog::OnDestroy();
+}
+//----------------------------------------------------------------------------------------------------
+//применить настройки
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
+{ 
+ char task[255];
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->GetWindowText(task,255); 
+ CTime cTime; 
+ unsigned  long ret=((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->GetTime(cTime);
+ if (ret!=GDT_VALID)
+ {
+  MessageBox("Ќеверна€ дата!","ќшибка",MB_OK);
+  return;
+ } 
+ size_t size;
+ sTask_Local.Year=cTime.GetYear();
+ sTask_Local.Month=cTime.GetMonth();
+ sTask_Local.Day=cTime.GetDay();
+ sTask_Local.Task=task;  
+ sTask_Local.State=TASK_STATE_NO_READ;
+ //считываем пользовател€, которому предназначена задача
+ size=vector_SUser_Local.size();
+ long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
+ if (user_index<size)
+ {
+  SUser sUser=vector_SUser_Local[user_index];
+  sTask_Local.ForUserGUID=sUser.UserGUID;
+ }
+ //считываем проект, которому предназначена задача
+ size=vector_SProject_Local.size();
+ long project_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->GetCurSel();
+ if (project_index==0)//без проекта
+ {
+  sTask_Local.ProjectGUID="";  
+ }
+ else
+ {
+  project_index--;
+  if (project_index<size)
+  {
+   SProject sProject=vector_SProject_Local[project_index];
+   sTask_Local.ProjectGUID=sProject.ProjectGUID;
+  }
+ }
+ EndDialog(0);
+}
+//----------------------------------------------------------------------------------------------------
+//отменить настройки
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCommand_Button_Cancel(void)
+{
+ EndDialog(-1);
+}
+//----------------------------------------------------------------------------------------------------
+//подтверждение, что задание выполнено
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCommand_Button_TaskFinished(void)
+{
+ sTask_Local.State=TASK_STATE_FINISHED;
+ EndDialog(0);
+}
+

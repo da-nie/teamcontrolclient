@@ -1,0 +1,169 @@
+#ifndef CDOCUMENT_MAIN_H
+#define CDOCUMENT_MAIN_H
+
+//====================================================================================================
+//описание
+//====================================================================================================
+
+//Класс документов для списка пользователей.
+
+//====================================================================================================
+//подключаемые библиотеки
+//====================================================================================================
+
+#include <list>
+#include <vector>
+#include "stdafx.h"
+#include "craiiccriticalsection.h"
+#include "cvector_task.h"
+#include "cvector_user.h"
+#include "cvector_project.h"
+
+using namespace std;
+
+//====================================================================================================
+//макроопределения
+//====================================================================================================
+
+//GUID, отвечающее за всех пользователей
+#define ALL_USER_GUID "{5F133563-3C76-41EE-9038-743DAAC8949A}"
+
+//====================================================================================================
+//структуры
+//====================================================================================================
+
+//настройки клиента
+struct SClientSettings
+{
+ unsigned short ServerPort;//порт сервера
+ BYTE ServerIP[4];//адрес сервера
+ char Login[255];//логин
+ char Password[255];//пароль
+ unsigned long MyGUIDSize;//размер нашего GUID
+};
+
+//настройки отображения данных
+struct SShowState
+{
+ bool OutTask_Show_Cancelled;//показывать ли отменённые задания в списке выданных
+ bool OutTask_Show_Done;//показывать ли выполненные задания в списке выданных
+ bool OutTask_Show_NotRead;//показывать ли не прочитанные задания в списке выданных
+ bool OutTask_Show_Finished;//показывать ли завершённые задания в списке выданных
+ bool OutTask_Show_IsRunning;//показывать ли выполняющиеся задания в списке выданных
+ bool OutTask_Show_Readed;//показывать ли прочитанные задания в списке выданных
+
+ bool MyTask_Show_Cancelled;//показывать ли отменённые задания в списке полученных
+ bool MyTask_Show_Done;//показывать ли выполненные задания в списке полученных
+ bool MyTask_Show_NotRead;//показывать ли не прочитанные задания в списке полученных
+ bool MyTask_Show_Finished;//показывать ли завершённые задания в списке полученных
+ bool MyTask_Show_IsRunning;//показывать ли выполняющиеся задания в списке полученных
+ bool MyTask_Show_Readed;//показывать ли прочитанные задания в списке полученных
+};
+
+//====================================================================================================
+//класс документов
+//====================================================================================================
+
+class CDocument_Main:public CDocument
+{
+ protected:
+  //-Переменные класса-------------------------------------------------------
+  //структура защищённых переменных
+  struct SProtectedVariables
+  {
+   SUser sUser_Selected;//выбранный пользователь
+   bool UserIsSelected;//есть ли выбраный пользователь
+   bool OnShow;//нужно ли показать окно
+
+   CVectorUser cVectorUser;//список пользователей
+   CVectorTask cVectorTask;//список заданий
+   CVectorProject cVectorProject;//список проектов
+
+   bool OnUpdateView;//требуется ли обновить видам данные 
+
+   CString MyGUID;//наш GUID, полученный после авторизации
+   bool OnLine;//подключены ли мы к серверу
+
+   SClientSettings sClientSettings;//настройки клиента
+
+   CVectorTask cVectorTask_TransferToServer;//задания для передачи на сервер
+   CVectorProject cVectorProject_TransferToServer;//проекты для передачи на сервер
+
+   SShowState sShowState;//настройки отображения данных
+
+   CCriticalSection cCriticalSection;//критическая секция для доступа к структуре
+  } sProtectedVariables;
+ public:
+  //-Конструктор класса------------------------------------------------------
+  CDocument_Main(void);
+  //-Деструктор класса-------------------------------------------------------
+  ~CDocument_Main();
+  //-Функции класса----------------------------------------------------------
+  void SaveState(void);//сохранить состояние
+  bool FindByUserGUIDAndResetChangeData(const CString &guid,SUser &sUser);//найти пользователя по GUID и сбросить новизну данных
+  bool FindByUserGUID(const CString &guid,SUser &sUser);//найти пользователя по GUID
+
+  bool FindByProjectGUIDAndResetChangeData(const CString &guid,SProject &sProject);//найти проект по GUID и сбросить новизну данных
+  bool FindByProjectGUID(const CString &guid,SProject &sProject);//найти проект по GUID
+
+  void GetMyParam(bool &on_line,CString &guid);//получить наши параметры
+  void SetMyParam(const bool &on_line,const CString &guid);//задать наши параметры
+  void GetShowState(SShowState &sShowState);//получить параметры отображения данных
+  void SetShowState(SShowState &sShowState);//задать параметры отображения данных
+
+  void GetClientSettings(SClientSettings &sClientSettings);//получить настройки клиента
+  void SetClientSettings(const SClientSettings &sClientSettings);//установить настройки клиента (клиента будет перезапущен)
+
+  CVectorUser GetCVectorUser(void);//получить список пользователей
+  CVectorTask GetCVectorTask(void);//получить список заданий
+  CVectorProject GetCVectorProject(void);//получить список проектов
+
+  void SetUserBook(CVectorUser &cVectorUser_Set);//задать список пользователей
+  void SetTaskBook(CVectorTask &cVectorTask_Set);//задать список заданий
+  void SetProjectBook(CVectorProject &cVectorProject_Set);//задать список проектов
+
+  void OnDeletedUser(const SUser &sUser);//был удалён пользователь
+  void OnAddedUser(const SUser &sUser);//был добавлен пользователь
+  void OnChangedUser(const SUser &sUser);//был изменён пользователь
+
+  void OnDeletedTask(const STask &sTask);//было удалёно задание
+  void OnAddedTask(const STask &sTask);//было добавлено задание
+  void OnChangedTask(const STask &sTask);//было изменёно задание
+
+  void OnDeletedProject(const SProject &sProject);//был удалён проект
+  void OnAddedProject(const SProject &sProject);//был добавлен проект
+  void OnChangedProject(const SProject &sProject);//был изменёно задание
+
+  void SetSelectedUser(const SUser &sUser);//установить выбранного пользователя
+  void ResetSelectedUser(void);//отменить выбор пользователя
+  bool GetSelectedUser(SUser &sUser);//получить выбранного пользователя
+
+  bool AddTask(STask &sTask);//добавить задание
+  bool DeleteTask(STask &sTask);//удалить задание
+  bool ChangeTask(STask &sTask);//изменить задание
+
+  bool AddProject(SProject &sProject);//добавить проект
+  bool DeleteProject(SProject &sProject);//удалить проект
+  bool ChangeProject(SProject &sProject);//изменить проект
+
+  vector<STask> CreateVectorSTaskByForUserGUID(const CString &guid);//создать вектор задач по GUID пользователя для которого задание
+  vector<STask> CreateVectorSTaskByFromUserGUID(const CString &guid);//создать вектор задач по GUID пользователя от которого задание
+  vector<STask> CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CString &guid_one,const CString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
+  vector<STask> CreateVectorSTaskByProjectGUIDFromUserGUID(const CString &guid_project,const CString &guid_from_user);//создать вектор задач по проекту от пользователя
+
+  bool PopTaskTransferToServer(STask &sTask);//получить задание для передачи на сервер
+  void PushTaskTransferToServer(const STask &sTask);//добавить задание для передачи на сервер
+
+  bool PopProjectTransferToServer(SProject &sProject);//получить проект для передачи на сервер
+  void PushProjectTransferToServer(const SProject &sProject);//добавить проект для передачи на сервер
+
+  bool GetOnShowAndResetOnShow(void);//получить, нужно ли показать окно и сбросить флаг необходимости показа
+
+  void Processing(void);//цикл обработки
+ protected:
+  //-Функции класса----------------------------------------------------------  
+  //-Прочее------------------------------------------------------------------
+  DECLARE_DYNCREATE(CDocument_Main) 
+};
+
+#endif
