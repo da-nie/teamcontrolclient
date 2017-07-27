@@ -84,6 +84,10 @@ CDocument_Main::~CDocument_Main()
 //----------------------------------------------------------------------------------------------------
 void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
 {
+ STask sTask_Time;
+ sTask_Time.Year=year;
+ sTask_Time.Month=month;
+ sTask_Time.Day=day;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -94,9 +98,7 @@ void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
     STask &sTask=vector_STask[n];
     if (sTask.State==TASK_STATE_FINISHED)
 	{
-     if (sTask.Year>year) continue;
-	 if (sTask.Month>month) continue;
-	 if (sTask.Day>day) continue;
+     if (sTask>sTask_Time) continue;
      //удаляем из очереди заданий все упоминания о задании
      while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(sTask.TaskGUID)==true);
      sTask.TaskType=TASK_TYPE_DELETED;

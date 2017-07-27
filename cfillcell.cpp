@@ -43,3 +43,10 @@ void CFillCell::GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize)
  cSize.cx=0;
  cSize.cy=0;
 }
+//----------------------------------------------------------------------------------------------------
+//получить цвет фона
+//----------------------------------------------------------------------------------------------------
+COLORREF CFillCell::GetBackgroundColor(void)
+{
+ return(BackgroundColor);
+}

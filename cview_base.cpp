@@ -210,13 +210,16 @@ afx_msg void CView_Base::OnVScroll(UINT nSBCode,UINT nPos,CScrollBar* pScrollBar
  if (nSBCode==SB_LINELEFT) hpos--;
  int min,max;
  pScrollBar->GetScrollRange(&min,&max);
- if (nSBCode==SB_PAGERIGHT) hpos+=(max-min)*0.05;
- if (nSBCode==SB_PAGELEFT) hpos-=(max-min)*0.05;
+ long delta=(max-min);
+ long step=delta*0.05;
+ if (step<1 && delta>0) step=1;
+ if (nSBCode==SB_PAGERIGHT) hpos+=step;
+ if (nSBCode==SB_PAGELEFT) hpos-=step;
  if (nSBCode==SB_RIGHT) hpos=max;
  if (nSBCode==SB_LEFT) hpos=min;
  if (nSBCode==SB_THUMBPOSITION || nSBCode==SB_THUMBTRACK) hpos=nPos;
  if (hpos<min) hpos=min;
- if (hpos>max) hpos=max; 
+ if (hpos>max) hpos=max;
  pScrollBar->SetScrollPos(hpos,TRUE);
  InvalidateRect(NULL,FALSE);
 }
@@ -294,6 +297,14 @@ void CView_Base::DrawTasks(CDC *pDC)
  cRect_DrawArea.top=cRect.top;
  cRect_DrawArea.bottom=cRect.bottom;
 
+ SYSTEMTIME system_time;
+ GetLocalTime(&system_time);
+
+ STask sTask_CurrentDate;//задача, нужная для сравнения с текущим временем
+ sTask_CurrentDate.Day=system_time.wDay;
+ sTask_CurrentDate.Month=system_time.wMonth;
+ sTask_CurrentDate.Year=system_time.wYear;
+
  for(size_t n=task_index;n<size;n++)
  {
   if (cRect_DrawArea.top>cRect.bottom) break;
@@ -346,15 +357,27 @@ void CView_Base::DrawTasks(CDC *pDC)
   cRect_DrawArea.bottom=cRect_DrawArea.top+cell_height;
   //модифицируем размеры ячейки изображения по ширине
   CRect cRect_TaskState=CRect(cRect_DrawArea.left,cRect_DrawArea.top,cRect_DrawArea.left+GetTastStateHorizontalOffset()*2+cSize_TaskState.cx,cRect_DrawArea.bottom);
+  //заменим фон для выбранного задания
+  COLORREF color=RGB(250,250,230);
+  if (SelectedTaskGUID.Compare(sTask.TaskGUID)==0)
+  {
+   color=RGB(230,230,250);	  
+   cFillCell.SetBackgroundColor(color);
+   cFillCell.Draw(pDC,cRect_TextArea);
+  }
+  //закрашиваем срок
+  CRect cRect_TextDateArea=CRect(cRect_TextArea.left,cRect_TextArea.top,cRect_TextArea.right,cRect_TextArea.top+cSize_TaskDate.cy);  
+  if (sTask_CurrentDate>sTask) color=RGB(255,0,0);//просроченное задание
+  //if (sTask_CurrentDate<sTask) color=RGB(250,250,230);//ещё есть время
+  if (sTask_CurrentDate==sTask) color=RGB(255,255,0);//сегодняшняя дата
+   
+  cFillCell.SetBackgroundColor(color);
+  cFillCell.Draw(pDC,cRect_TextDateArea);
+
   //выводим статус задания
   cBitmapCell_TaskState.Draw(pDC,cRect_TaskState);
   cFrameCell_TaskState.Draw(pDC,cRect_TaskState);
-  //заменим фон для выбранного задания
-  if (SelectedTaskGUID.Compare(sTask.TaskGUID)==0)
-  {   
-   cFillCell.SetBackgroundColor(RGB(230,230,250));   
-   cFillCell.Draw(pDC,cRect_TextArea);
-  }
+
   //выведем текст
   CRect cRect_TaskDateArea=CRect(cRect_TextArea.left,cRect_TextArea.top,cRect_TextArea.right,cRect_TextArea.bottom);
   cTextCell_TaskDate.Draw(pDC,cRect_TaskDateArea);

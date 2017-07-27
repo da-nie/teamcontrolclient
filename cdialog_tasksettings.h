@@ -26,6 +26,8 @@ class CDialog_TaskSettings:public CDialog
   vector<SUser> vector_SUser_Local;//список пользователей на врем€ редактировани€ заданий (он ведь может внезапно изменитьс€ в документе)
   vector<SProject> vector_SProject_Local;//список проектов на врем€ редактировани€ заданий (он ведь может внезапно изменитьс€ в документе)
   bool NewTask;//создаЄтс€ ли новое задание
+
+  HBITMAP hBitmap_TaskFinished;//пиктограмма завершени€ задани€
  public:
   //- онструктор класса------------------------------------------------------
   CDialog_TaskSettings(LPCTSTR lpszTemplateName,CWnd* pParentWnd);
@@ -43,6 +45,7 @@ class CDialog_TaskSettings:public CDialog
   afx_msg void OnCommand_Button_Ok(void);//применить настройки
   afx_msg void OnCommand_Button_Cancel(void);//отменить настройки
   afx_msg void OnCommand_Button_TaskFinished(void);//подтверждение, что задание выполнено
+  afx_msg void OnSelChange_ComboBox_User(void);//изменилс€ пользователь
  protected:
   //-Ќовые функции класса (защищЄнные)---------------------------------------
   //-ѕрочее------------------------------------------------------------------  

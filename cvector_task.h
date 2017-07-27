@@ -54,6 +54,30 @@ struct STask
  TASK_TYPE TaskType;//тип задания
  CString ForUser;//для пользователя
  CString FromUser;//от пользователя
+
+ //операция сравнения по дате
+ bool operator<(const STask &sTask) const
+ {
+  if (sTask==*(this)) return(false);
+  if (sTask>*(this)) return(false);
+  return(true);
+ }
+ bool operator>(const STask &sTask) const
+ {
+  if (Year>sTask.Year) return(true);
+  if (Year<sTask.Year) return(false);
+  if (Month>sTask.Month) return(true);
+  if (Month<sTask.Month) return(false);
+  if (Day>sTask.Day) return(true);
+  return(false);
+ }
+ bool operator==(const STask &sTask) const
+ {
+  if (Year!=sTask.Year) return(false);
+  if (Month!=sTask.Month) return(false);
+  if (Day!=sTask.Day) return(false);
+  return(true);
+ }
 };
 
 //====================================================================================================

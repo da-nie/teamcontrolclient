@@ -31,6 +31,7 @@ class CFillCell:public CICell
   void Draw(CDC *pDC,const CRect &cRect_DrawArea);//отрисовка
   void GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize);//получить размеры элемента
   void SetBackgroundColor(const COLORREF &color);//задать цвет фона
+  COLORREF GetBackgroundColor(void);//получить цвет фона
 };
 
 #endif

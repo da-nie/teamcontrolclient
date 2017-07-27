@@ -9,6 +9,7 @@ BEGIN_MESSAGE_MAP(CDialog_TaskSettings,CDialog)
  ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_OK,OnCommand_Button_Ok)
  ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED,OnCommand_Button_TaskFinished)
  ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_CANCEL,OnCommand_Button_Cancel)
+ ON_CBN_SELCHANGE(IDC_COMBO_DIALOG_TASK_SETTINGS_USER,OnSelChange_ComboBox_User)
 END_MESSAGE_MAP()
 
 //====================================================================================================
@@ -16,12 +17,14 @@ END_MESSAGE_MAP()
 //====================================================================================================
 CDialog_TaskSettings::CDialog_TaskSettings(LPCTSTR lpszTemplateName,CWnd* pParentWnd):CDialog(lpszTemplateName,pParentWnd)
 {
+ hBitmap_TaskFinished=(HBITMAP)LoadImage(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_BITMAP_TASK_FINISHED),IMAGE_BITMAP,0,0,LR_CREATEDIBSECTION|LR_LOADMAP3DCOLORS); 
 }
 //====================================================================================================
 //деструктор класса
 //====================================================================================================
 CDialog_TaskSettings::~CDialog_TaskSettings()
 {
+ DeleteObject(hBitmap_TaskFinished);
 }
 //====================================================================================================
 //функции класса
@@ -47,6 +50,8 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  vector_SUser_Local.clear();
  vector_SProject_Local.clear();
 
+ ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->SetBitmap(hBitmap_TaskFinished);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE))->SetLimitText(254);
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetLimitText(254);
  //заполним список данными проекторв
  ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->ResetContent();
@@ -86,13 +91,18 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  }
  CTime cTime(sTask_Local.Year,sTask_Local.Month,sTask_Local.Day,0,0,0); 
  ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetTime(&cTime); 
+ SYSTEMTIME system_time;
+ GetLocalTime(&system_time);
+ CTime cTime_Min(system_time.wYear,system_time.wMonth,system_time.wDay,0,0,0);
  CTime cTime_Max(2037,12,31,0,0,0);
- ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetRange(&cTime,&cTime_Max);
+ ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetRange(&cTime_Min,&cTime_Max);
 
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetWindowText(sTask_Local.Task);
 
  if (NewTask==true) ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->ShowWindow(SW_HIDE);
                else ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->ShowWindow(SW_SHOW);
+
+ OnSelChange_ComboBox_User();
 
  return(CDialog::OnInitDialog());
 }
@@ -149,7 +159,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
  if (user_index<size)
  {
-  SUser sUser=vector_SUser_Local[user_index];
+  SUser &sUser=vector_SUser_Local[user_index];
   sTask_Local.ForUserGUID=sUser.UserGUID;
  }
  //считываем проект, которому предназначена задача
@@ -185,4 +195,21 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_TaskFinished(void)
  sTask_Local.State=TASK_STATE_FINISHED;
  EndDialog(0);
 }
-
+//----------------------------------------------------------------------------------------------------
+//изменился пользователь
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnSelChange_ComboBox_User(void)
+{
+ //считываем пользователя, которому предназначена задача
+ size_t size=vector_SUser_Local.size();
+ long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
+ if (user_index<size)
+ {
+  SUser &sUser=vector_SUser_Local[user_index];
+  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE))->SetWindowText(sUser.Telephone);  
+ }
+ else 
+ {
+  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE))->SetWindowText("");
+ }
+}
