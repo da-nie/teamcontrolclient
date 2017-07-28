@@ -114,7 +114,7 @@ void CThreadClient::Processing(void)
   vector_Data.clear();
   vector_Data.reserve(MAX_PACKAGE_LENGTH);
   StuffingEnabled=false;
-  WorkingMode=WORKING_MODE_AUTORIZATION;  
+  WorkingMode=WORKING_MODE_GET_CLIENT_PROGRAMM_CRC;
   //выполняем запросы и получение данных от сервера
   on_exit=false;
   while(1)
@@ -177,6 +177,7 @@ bool CThreadClient::LinkProcessing(SOCKET socket_server,bool &on_exit)
   } 
  }
  //делаем запрос сервера
+ if (WorkingMode==WORKING_MODE_GET_CLIENT_PROGRAMM_CRC) return(ExecuteCommand_GetClientProgrammCRC(socket_server,on_exit));//посылаем запрос на контрольную сумму программы на сервере
  if (WorkingMode==WORKING_MODE_AUTORIZATION) return(ExecuteCommand_Autorization(socket_server,on_exit));//посылаем запрос на авторизацию
  if (WorkingMode==WORKING_MODE_CHECK_AUTORIZATION) return(true);//ждём проверки авторизации
  if (WorkingMode==WORKING_MODE_GET_USER_BOOK) return(ExecuteCommand_GetUserBook(socket_server,on_exit));//посылаем запрос на получение базы пользователей
@@ -233,6 +234,23 @@ bool CThreadClient::ProjectProcessing(SOCKET socket_server,bool &on_exit)
  return(true);
 }
 
+//----------------------------------------------------------------------------------------------------
+//выполнение команды запроса контрольной суммы программы на сервере
+//----------------------------------------------------------------------------------------------------
+bool CThreadClient::ExecuteCommand_GetClientProgrammCRC(SOCKET socket_server,bool &on_exit)
+{
+ on_exit=false;
+ WorkingMode=WORKING_MODE_AUTORIZATION;
+ return(cTransceiver_File.GetClientProgrammCRC(socket_server,cEvent_Exit,on_exit));
+}
+//----------------------------------------------------------------------------------------------------
+//выполнение команды запроса программы и загрузчика
+//----------------------------------------------------------------------------------------------------
+bool CThreadClient::ExecuteCommand_GetClientProgrammAndLoader(SOCKET socket_server,bool &on_exit)
+{
+ on_exit=false;
+ return(cTransceiver_File.GetClientProgrammAndLoader(socket_server,cEvent_Exit,on_exit));
+}
 //----------------------------------------------------------------------------------------------------
 //выполнение команды авторизации
 //----------------------------------------------------------------------------------------------------
@@ -309,6 +327,8 @@ void CThreadClient::NewDataFromServer(SOCKET socket_server,char *data,unsigned l
    {
     sServerAnswer_sHeader=*(reinterpret_cast<SServerAnswer::SHeader*>(&vector_Data[0]));
     //расшифровываем принятые данные
+    if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_CLIENT_PROGRAMM_CRC) ExecuteAnswer_ClientProgrammCRC(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
+    if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_CLIENT_PROGRAMM_AND_LOADER) ExecuteAnswer_ClientProgrammAndLoader(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);	
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_USER_BOOK) ExecuteAnswer_GetUserBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_TASK_BOOK) ExecuteAnswer_GetTaskBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_PROJECT_BOOK) ExecuteAnswer_GetProjectBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
@@ -339,9 +359,60 @@ void CThreadClient::NewDataFromServer(SOCKET socket_server,char *data,unsigned l
   //добавляем байт в буфер
   vector_Data.push_back(byte);
   size_t cmd_length=vector_Data.size();
-  if (cmd_length>=MAX_PACKAGE_LENGTH) vector_Data.clear();//превысили размер команды  
+  //if (cmd_length>=MAX_PACKAGE_LENGTH) vector_Data.clear();//превысили размер команды  
  }
 }
+//----------------------------------------------------------------------------------------------------
+//обработка ответа: получение контрольной суммы клиентской программы на сервере
+//----------------------------------------------------------------------------------------------------
+void CThreadClient::ExecuteAnswer_ClientProgrammCRC(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit)
+{ 
+ on_exit=false;
+ //считываем CRC программы
+ size_t size=vector_Data.size();
+ char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
+ size_t offset=0;
+ SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
+ offset+=sizeof(SServerAnswer::SHeader);   
+ unsigned long file_crc16;
+ if (cTransceiver_File.ReadCRCInArray(ptr,offset,size,file_crc16)==false) return;
+
+ unsigned short crc16=0;
+ char file_name[MAX_PATH];
+ GetModuleFileName(NULL,file_name,MAX_PATH);
+ FILE *file=fopen(file_name,"rb"); 
+ if (file==NULL) return; 
+
+ while(1)
+ {  
+  unsigned char byte;
+  if (fread(&byte,sizeof(unsigned char),1,file)<=0) break;
+  crc16^=(byte<<8);
+  for (unsigned char i=0;i<8;i++) 
+  { 
+   if (crc16&0x8000) crc16=(crc16<<1)^0x1021;
+                else crc16<<=1;
+  }
+ }
+ fclose(file);
+ if (crc16!=file_crc16) ExecuteCommand_GetClientProgrammAndLoader(socket_server,on_exit);//запрашиваем обновление программы  
+}
+//----------------------------------------------------------------------------------------------------
+//обработка ответа: получение клиентской программы и загрузчика и выполнение обновления
+//----------------------------------------------------------------------------------------------------
+void CThreadClient::ExecuteAnswer_ClientProgrammAndLoader(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit)
+{
+ size_t size=vector_Data.size();
+ char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
+ size_t offset=0;
+ SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
+ offset+=sizeof(SServerAnswer::SHeader);
+ if (cTransceiver_File.ReadClientProgrammAndLoaderInArray(ptr,offset,size)==false) return;
+ //перезапускаемся
+ if (cDocument_Main_Ptr==NULL) return;
+ cDocument_Main_Ptr->RestartWithLoader();
+}
+
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение базы сотрудников
 //----------------------------------------------------------------------------------------------------

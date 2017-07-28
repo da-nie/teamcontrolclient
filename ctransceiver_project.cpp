@@ -25,19 +25,19 @@ CTransceiver_Project::~CTransceiver_Project()
 //----------------------------------------------------------------------------------------------------
 bool CTransceiver_Project::ReadSProjectInArray(char *ptr,size_t &offset,size_t max_length,SProject &sProject)
 {
- if (offset+sizeof(SServerCommand::SProjectDataHeader)>max_length) return(false);
- SServerCommand::SProjectDataHeader *sServerCommand_sProjectDataHeader_Ptr=reinterpret_cast<SServerCommand::SProjectDataHeader*>(ptr+offset);
- offset+=sizeof(SServerCommand::SProjectDataHeader);
+ if (offset+sizeof(SServerAnswer::SProjectDataHeader)>max_length) return(false);
+ SServerAnswer::SProjectDataHeader *sServerAnswer_sProjectDataHeader_Ptr=reinterpret_cast<SServerAnswer::SProjectDataHeader*>(ptr+offset);
+ offset+=sizeof(SServerAnswer::SProjectDataHeader);
  long length=offset;
- length+=sServerCommand_sProjectDataHeader_Ptr->ProjectNameSize;
- length+=sServerCommand_sProjectDataHeader_Ptr->ProjectGUIDSize;
+ length+=sServerAnswer_sProjectDataHeader_Ptr->ProjectNameSize;
+ length+=sServerAnswer_sProjectDataHeader_Ptr->ProjectGUIDSize;
  if (length>max_length) return(false);
 
- SetString(sProject.ProjectName,ptr+offset,sServerCommand_sProjectDataHeader_Ptr->ProjectNameSize);
- offset+=sServerCommand_sProjectDataHeader_Ptr->ProjectNameSize;
+ SetString(sProject.ProjectName,ptr+offset,sServerAnswer_sProjectDataHeader_Ptr->ProjectNameSize);
+ offset+=sServerAnswer_sProjectDataHeader_Ptr->ProjectNameSize;
 
- SetString(sProject.ProjectGUID,ptr+offset,sServerCommand_sProjectDataHeader_Ptr->ProjectGUIDSize);
- offset+=sServerCommand_sProjectDataHeader_Ptr->ProjectGUIDSize;
+ SetString(sProject.ProjectGUID,ptr+offset,sServerAnswer_sProjectDataHeader_Ptr->ProjectGUIDSize);
+ offset+=sServerAnswer_sProjectDataHeader_Ptr->ProjectGUIDSize;
  return(true); 
 }
 //----------------------------------------------------------------------------------------------------
@@ -46,10 +46,10 @@ bool CTransceiver_Project::ReadSProjectInArray(char *ptr,size_t &offset,size_t m
 bool CTransceiver_Project::SendProjectDataToServer(SOCKET socket_server,const SProject &sProject,CEvent &cEvent_Exit,bool &on_exit)
 {
  on_exit=false;
- SServerAnswer::SProjectDataHeader sServerAnswer_sProjectDataHeader;
- sServerAnswer_sProjectDataHeader.ProjectNameSize=sProject.ProjectName.GetLength();
- sServerAnswer_sProjectDataHeader.ProjectGUIDSize=sProject.ProjectGUID.GetLength();
- if (SendPart(socket_server,reinterpret_cast<char*>(&sServerAnswer_sProjectDataHeader),sizeof(SServerAnswer::SProjectDataHeader),cEvent_Exit,on_exit)==false) return(false);
+ SServerCommand::SProjectDataHeader sServerCommand_sProjectDataHeader;
+ sServerCommand_sProjectDataHeader.ProjectNameSize=sProject.ProjectName.GetLength();
+ sServerCommand_sProjectDataHeader.ProjectGUIDSize=sProject.ProjectGUID.GetLength();
+ if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_sProjectDataHeader),sizeof(SServerCommand::SProjectDataHeader),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
  if (SendPart(socket_server,sProject.ProjectName,sProject.ProjectName.GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);

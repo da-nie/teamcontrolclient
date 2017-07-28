@@ -86,6 +86,8 @@ class CDocument_Main:public CDocument
    CString MyName;//имя пользователя
    bool Leader;//является ли пользователь руководителем
 
+   bool RestartWithLoader;//нужна ли перезагрузка через загрузчик
+
    bool NotReadTaskState;//есть ли непрочитанные задания
 
    SClientSettings sClientSettings;//настройки клиента
@@ -95,6 +97,7 @@ class CDocument_Main:public CDocument
 
    SShowState sShowState;//настройки отображения данных
 
+
    CCriticalSection cCriticalSection;//критическая секция для доступа к структуре
   } sProtectedVariables;
  public:
@@ -103,6 +106,9 @@ class CDocument_Main:public CDocument
   //-Деструктор класса-------------------------------------------------------
   ~CDocument_Main();
   //-Функции класса----------------------------------------------------------
+  void RestartWithLoader(void);//выполнить перезагрузку через загрузчик
+  bool GetRestartWithLoaderState(void);//получить, нужна ли перезагрузка через загрузчик
+
   void DeleteFinishedTask(long year,long month,long day);//удалить все выданные нами и завершённые задания до даты включительно
   bool GetNotReadTaskState(void);//получить, есть ли непрочитанные задания
   void SetNotReadTaskState(bool state);//задать, есть ли непрочитанные задания

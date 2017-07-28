@@ -20,6 +20,7 @@
 #include "ctransceiver_user.h"
 #include "ctransceiver_task.h"
 #include "ctransceiver_project.h"
+#include "ctransceiver_file.h"
 #include "ctransceiver_autorization.h"
 
 using namespace std;
@@ -33,6 +34,10 @@ enum WORKING_MODE
 {
  //ожидание
  WORKING_MODE_WAIT,
+ //получение контрольной суммы программы на сервере
+ WORKING_MODE_GET_CLIENT_PROGRAMM_CRC,
+ //получение клиентской программы и загрузчика с сервера
+ WORKING_MODE_GET_CLIENT_PROGRAMM_AND_LOADER,
  //авторизация
  WORKING_MODE_AUTORIZATION,
  //проверка авторизации
@@ -73,6 +78,7 @@ class CThreadClient
   CTransceiver_User cTransceiver_User;//приёмо-передатчик данных пользователей
   CTransceiver_Task cTransceiver_Task;//приёмо-передатчик данных заданий
   CTransceiver_Project cTransceiver_Project;//приёмо-передатчик данных проектов
+  CTransceiver_File cTransceiver_File;//приёмо-передатчик файлов программы и загрузчика
   CTransceiver_Autorization cTransceiver_Autorization;//приёмо-передатчик данных авторизации
 
  public:  
@@ -90,12 +96,17 @@ class CThreadClient
   bool TaskProcessing(SOCKET socket_server,bool &on_exit);//обработка заданий
   bool ProjectProcessing(SOCKET socket_server,bool &on_exit);//обработка проектов
 
+  bool ExecuteCommand_GetClientProgrammCRC(SOCKET socket_server,bool &on_exit);//выполнение команды запроса контрольной суммы программы на сервере
+  bool ExecuteCommand_GetClientProgrammAndLoader(SOCKET socket_server,bool &on_exit);//выполнение команды запроса программы и загрузчика
+
   bool ExecuteCommand_Autorization(SOCKET socket_server,bool &on_exit);//выполнение команды авторизации
   bool ExecuteCommand_GetUserBook(SOCKET socket_server,bool &on_exit);//выполнение команды запроса базы пользователей
   bool ExecuteCommand_GetTaskBook(SOCKET socket_server,bool &on_exit);//выполнение команды запроса базы заданий
   bool ExecuteCommand_GetProjectBook(SOCKET socket_server,bool &on_exit);//выполнение команды запроса базы проектов
 
   void NewDataFromServer(SOCKET socket_server,char *data,unsigned long length,bool &on_exit);//приняты данные от сервера
+  void ExecuteAnswer_ClientProgrammCRC(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение контрольной суммы клиентской программы на сервере
+  void ExecuteAnswer_ClientProgrammAndLoader(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение клиентской программы и загрузчика и выполнение обновления
   void ExecuteAnswer_GetUserBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение базы сотрудников
   void ExecuteAnswer_GetTaskBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение базы заданий
   void ExecuteAnswer_GetProjectBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение базы проектов

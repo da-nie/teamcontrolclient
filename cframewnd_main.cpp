@@ -200,7 +200,17 @@ afx_msg void CFrameWnd_Main::OnTimer(UINT nIDEvent)
  { 
   CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
   bool not_read_task=false;
-  if (cDocument_Main_Ptr!=NULL) not_read_task=cDocument_Main_Ptr->GetNotReadTaskState();
+  if (cDocument_Main_Ptr!=NULL)
+  {
+   not_read_task=cDocument_Main_Ptr->GetNotReadTaskState();
+   if (cDocument_Main_Ptr->GetRestartWithLoaderState()==true)//перезапускаемся через загрузчик
+   {
+    //запускаем загрузчик
+    ShellExecute(NULL,NULL,"TeamControlLoader.exe",NULL,NULL,SW_SHOWNORMAL); 
+    DestroyWindow();
+	return;
+   }
+  }
 
   if (ChangeSysTrayIconCounter>0)
   {

@@ -26,6 +26,7 @@ CDocument_Main::CDocument_Main(void)
    sProtectedVariables.OnLine=false;
    sProtectedVariables.OnShow=false;
    sProtectedVariables.NotReadTaskState=false;
+   sProtectedVariables.RestartWithLoader=false;
    cThreadClient.SetDocument(this);
 
    sProtectedVariables.sShowState.OutTask_Show_Cancelled=true;
@@ -78,6 +79,33 @@ CDocument_Main::~CDocument_Main()
 //====================================================================================================
 //функции класса
 //====================================================================================================
+
+//----------------------------------------------------------------------------------------------------
+//выполнить перезагрузку через загрузчик
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::RestartWithLoader(void)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   sProtectedVariables.RestartWithLoader=true;
+  }
+ }
+}
+//----------------------------------------------------------------------------------------------------
+//получить, нужна ли перезагрузка через загрузчик
+//----------------------------------------------------------------------------------------------------
+bool CDocument_Main::GetRestartWithLoaderState(void)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   bool restart=sProtectedVariables.RestartWithLoader;
+   sProtectedVariables.RestartWithLoader=false;
+   return(restart);
+  }
+ }
+}
 
 //----------------------------------------------------------------------------------------------------
 //удалить все выданные нами и завершённые задания до даты включительно

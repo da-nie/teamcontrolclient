@@ -159,6 +159,10 @@ SOURCE=.\ctransceiver_autorization.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ctransceiver_file.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ctransceiver_project.cpp
 # End Source File
 # Begin Source File
@@ -280,6 +284,10 @@ SOURCE=.\ctransceiver.h
 # Begin Source File
 
 SOURCE=.\ctransceiver_autorization.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ctransceiver_file.h
 # End Source File
 # Begin Source File
 
