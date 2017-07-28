@@ -40,6 +40,7 @@ bool CVectorTask::Save(char *filename)
   sHeader.Day=sTask.Day;
   sHeader.State=sTask.State;
   sHeader.TaskType=sTask.TaskType;
+  sHeader.Index=sTask.Index;
   fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
   const char *s_ptr;
   s_ptr=sTask.FromUserGUID;
@@ -101,6 +102,7 @@ bool CVectorTask::Load(char *filename)
   sTask.Month=sHeader.Month;
   sTask.Day=sHeader.Day;
   sTask.TaskType=sHeader.TaskType;
+  sTask.Index=sHeader.Index;
 
   delete[](from_user_guid);
   delete[](for_user_guid);

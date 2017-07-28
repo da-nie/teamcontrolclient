@@ -220,26 +220,30 @@ bool CDocument_Main::FindByProjectGUID(const CString &guid,SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //получить наши параметры
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::GetMyParam(bool &on_line,CString &guid)
+void CDocument_Main::GetMyParam(bool &on_line,CString &guid,CString &name,bool &leader)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    guid=sProtectedVariables.MyGUID;
    on_line=sProtectedVariables.OnLine;
+   leader=sProtectedVariables.Leader;
+   name=sProtectedVariables.MyName;
   }
  }
 }
 //----------------------------------------------------------------------------------------------------
 //задать наши параметры
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::SetMyParam(const bool &on_line,const CString &guid)
+void CDocument_Main::SetMyParam(const bool &on_line,const CString &guid,const CString &name,const bool &leader)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    sProtectedVariables.MyGUID=guid;
    sProtectedVariables.OnLine=on_line;
+   sProtectedVariables.Leader=leader;
+   sProtectedVariables.MyName=name;
   }
  }
 }
@@ -355,6 +359,7 @@ void CDocument_Main::SetUserBook(CVectorUser &cVectorUser_Set)
   }
  } 
  SaveState();
+ FindAllMyParam();
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -400,6 +405,7 @@ void CDocument_Main::OnDeletedUser(const SUser &sUser)
   }
  }
  SaveState();
+ FindAllMyParam();
 }
 //----------------------------------------------------------------------------------------------------
 //был добавлен пользователь
@@ -414,6 +420,7 @@ void CDocument_Main::OnAddedUser(const SUser &sUser)
   }
  }
  SaveState();
+ FindAllMyParam();
 }
 //----------------------------------------------------------------------------------------------------
 //был изменён пользователь
@@ -428,6 +435,7 @@ void CDocument_Main::OnChangedUser(const SUser &sUser)
   }
  }
  SaveState();
+ FindAllMyParam();
 }
 
 
@@ -814,6 +822,25 @@ void CDocument_Main::Processing(void)
  } 
  if (update_view==true) UpdateAllViews(NULL);//у всех видов вызываем обновление изображения 
 }
+
+//----------------------------------------------------------------------------------------------------
+//определить все наши параметры (имя, руководитель ли)
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::FindAllMyParam(void)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   sProtectedVariables.Leader=false;
+   sProtectedVariables.MyName="";
+   SUser sUser;
+   if (sProtectedVariables.cVectorUser.FindByUserGUID(sProtectedVariables.MyGUID,sUser)==false) return;
+   sProtectedVariables.Leader=sUser.Leader;
+   sProtectedVariables.MyName=sUser.Name;
+  }
+ } 
+}
+
 //====================================================================================================
 //прочее
 //====================================================================================================

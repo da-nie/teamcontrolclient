@@ -239,10 +239,13 @@ afx_msg void CFrameWnd_Main::OnTimer(UINT nIDEvent)
    cDocument_Main_Ptr->Processing();
    bool on_line;
    CString guid;
-   cDocument_Main_Ptr->GetMyParam(on_line,guid);
-   if (on_line==true) SetWindowText("Клиент Team Control:   В сети");
-                 else SetWindowText("Клиент Team Control:   НЕ В СЕТИ");
-
+   CString name;
+   bool leader;
+   cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
+   CString out="Клиент Team Control: "+name+"    ";
+   if (on_line==true) out+="В сети";
+                 else out+="НЕ В СЕТИ";
+   SetWindowText(out);
    if (cDocument_Main_Ptr->GetOnShowAndResetOnShow()==true) ShowWindow(SW_SHOW);
   }
  }

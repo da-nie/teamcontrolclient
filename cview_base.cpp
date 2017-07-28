@@ -248,8 +248,10 @@ void CView_Base::UpdateTask(vector<STask> &vector_STask_Local)
  cDocument_Main_Ptr->GetShowState(sShowState);
 
  CString guid;
+ CString name;
  bool on_line;
- cDocument_Main_Ptr->GetMyParam(on_line,guid);
+ bool leader;
+ cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
 
  vector_STask.clear();
  size_t size=vector_STask_Local.size();
@@ -310,7 +312,7 @@ void CView_Base::DrawTasks(CDC *pDC)
   if (cRect_DrawArea.top>cRect.bottom) break;
   STask &sTask=vector_STask[n];
   char str_date[255];
-  sprintf(str_date,"Срок до %02i.%02i.%04i",sTask.Day,sTask.Month,sTask.Year);
+  sprintf(str_date,"Срок до %02i.%02i.%04i [№ %i]",sTask.Day,sTask.Month,sTask.Year,sTask.Index);
   cTextCell_TaskDate.SetText(str_date);
   /*if (sTask.State==TASK_STATE_DONE) cTextCell_Task.SetStrikeOut(true);
                                else cTextCell_Task.SetStrikeOut(false);

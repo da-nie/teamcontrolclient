@@ -40,6 +40,7 @@ bool CTransceiver_Task::ReadSTaskInArray(char *ptr,size_t &offset,size_t max_len
  sTask.Month=sServerCommand_sTaskDataHeader_Ptr->Month;
  sTask.Day=sServerCommand_sTaskDataHeader_Ptr->Day;
  sTask.State=sServerCommand_sTaskDataHeader_Ptr->State;
+ sTask.Index=sServerCommand_sTaskDataHeader_Ptr->Index;
 
  SetString(sTask.FromUserGUID,ptr+offset,sServerCommand_sTaskDataHeader_Ptr->FromUserGUIDSize);
  offset+=sServerCommand_sTaskDataHeader_Ptr->FromUserGUIDSize;
@@ -73,6 +74,7 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const STask &s
  sServerAnswer_sTaskDataHeader.Month=sTask.Month;
  sServerAnswer_sTaskDataHeader.Day=sTask.Day;
  sServerAnswer_sTaskDataHeader.State=sTask.State;
+ sServerAnswer_sTaskDataHeader.Index=sTask.Index;
  if (SendPart(socket_server,reinterpret_cast<char*>(&sServerAnswer_sTaskDataHeader),sizeof(SServerAnswer::STaskDataHeader),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
  if (SendPart(socket_server,sTask.FromUserGUID,sTask.FromUserGUID.GetLength(),cEvent_Exit,on_exit)==false) return(false);

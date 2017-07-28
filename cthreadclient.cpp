@@ -135,7 +135,7 @@ void CThreadClient::Processing(void)
   closesocket(socket_server);  
   //выходим, если нужно
   if (on_exit==true) break;
-  if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(false,"");
+  if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(false,"","",false);
  }
 }
 //----------------------------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ bool CThreadClient::ProjectProcessing(SOCKET socket_server,bool &on_exit)
 bool CThreadClient::ExecuteCommand_Autorization(SOCKET socket_server,bool &on_exit)
 {
  on_exit=false;
- if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(false,"");
+ if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(false,"","",false);
  CString login="";
  CString password="";
  if (cDocument_Main_Ptr!=NULL)
@@ -447,7 +447,7 @@ void CThreadClient::ExecuteAnswer_AutorizationOk(SOCKET socket_server,SERVER_COM
    char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
    CString guid;
    if (cTransceiver_Autorization.GetAutorizationAnswer(ptr,size,guid)==false) return;
-   if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(true,guid);
+   if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(true,guid,"",false);
    WorkingMode=WORKING_MODE_GET_USER_BOOK;
    return;
   }

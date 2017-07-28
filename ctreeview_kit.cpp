@@ -120,11 +120,19 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
  SUser sUser_Selected;
  if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
  //смотрим, что было выбрано
+ CString guid;
+ CString name;
+ bool on_line;
+ bool leader;
+ cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
+
  CTreeCtrl& cTreeCtrl=GetTreeCtrl();
  HTREEITEM hTREEITEM_item=cTreeCtrl.GetSelectedItem();
  if (sUser_Selected.UserGUID.Compare(ALL_USER_GUID)==0 && hTREEITEM_item==hTREEITEM_Colleague) return;//выбрана папка пользователей
  if (sUser_Selected.UserGUID.Compare(ALL_USER_GUID)==0 && hTREEITEM_item==hTREEITEM_Projects)//выбрана папка проектов
  {  
+  if (leader==false) return;//только руководитель может управлять проектами
+
   cMenu_List_Project.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_ADD_PROJECT,MF_BYCOMMAND,&cBitmap_MenuList_AddProject,&cBitmap_MenuList_AddProject);
   cMenu_List_Project.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_DELETE_PROJECT,MF_BYCOMMAND,&cBitmap_MenuList_DeleteProject,&cBitmap_MenuList_DeleteProject);
   cMenu_List_Project.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_EDIT_PROJECT,MF_BYCOMMAND,&cBitmap_MenuList_EditProject,&cBitmap_MenuList_EditProject);
@@ -137,6 +145,8 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
  SProject sProject;
  if (cDocument_Main_Ptr->FindByProjectGUID(sUser_Selected.UserGUID,sProject)==true)//выбран проект
  {
+  if (leader==false) return;//только руководитель может управлять проектами
+
   cMenu_List_Project.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_ADD_PROJECT,MF_BYCOMMAND,&cBitmap_MenuList_AddProject,&cBitmap_MenuList_AddProject);
   cMenu_List_Project.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_DELETE_PROJECT,MF_BYCOMMAND,&cBitmap_MenuList_DeleteProject,&cBitmap_MenuList_DeleteProject);
   cMenu_List_Project.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_EDIT_PROJECT,MF_BYCOMMAND,&cBitmap_MenuList_EditProject,&cBitmap_MenuList_EditProject);

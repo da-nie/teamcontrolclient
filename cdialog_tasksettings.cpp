@@ -153,6 +153,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  sTask_Local.Month=cTime.GetMonth();
  sTask_Local.Day=cTime.GetDay();
  sTask_Local.Task=task;  
+ sTask_Local.Index=0;
  sTask_Local.State=TASK_STATE_NO_READ;
  //считываем пользователя, которому предназначена задача
  size=vector_SUser_Local.size();

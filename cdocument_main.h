@@ -83,6 +83,8 @@ class CDocument_Main:public CDocument
 
    CString MyGUID;//наш GUID, полученный после авторизации
    bool OnLine;//подключены ли мы к серверу
+   CString MyName;//имя пользователя
+   bool Leader;//является ли пользователь руководителем
 
    bool NotReadTaskState;//есть ли непрочитанные задания
 
@@ -112,8 +114,8 @@ class CDocument_Main:public CDocument
   bool FindByProjectGUIDAndResetChangeData(const CString &guid,SProject &sProject);//найти проект по GUID и сбросить новизну данных
   bool FindByProjectGUID(const CString &guid,SProject &sProject);//найти проект по GUID
 
-  void GetMyParam(bool &on_line,CString &guid);//получить наши параметры
-  void SetMyParam(const bool &on_line,const CString &guid);//задать наши параметры
+  void GetMyParam(bool &on_line,CString &guid,CString &name,bool &leader);//получить наши параметры
+  void SetMyParam(const bool &on_line,const CString &guid,const CString &name,const bool &leader);//задать наши параметры
   void GetShowState(SShowState &sShowState);//получить параметры отображения данных
   void SetShowState(SShowState &sShowState);//задать параметры отображения данных
 
@@ -168,6 +170,7 @@ class CDocument_Main:public CDocument
   void Processing(void);//цикл обработки
  protected:
   //-Функции класса----------------------------------------------------------  
+  void FindAllMyParam(void);//определить все наши параметры (имя, руководитель ли)
   //-Прочее------------------------------------------------------------------
   DECLARE_DYNCREATE(CDocument_Main) 
 };

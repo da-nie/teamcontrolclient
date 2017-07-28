@@ -48,6 +48,7 @@ struct STask
  long Year;//год
  long Month;//месяц
  long Day;//число
+ long Index;//индекс задания
  CString TaskGUID;//идентификатор задания
  //дополнительные данные
  bool ChangeData;//изменились данные задания
@@ -91,6 +92,7 @@ class CVectorTask
   #pragma pack(1)
   struct SHeader
   {
+   long Index;//индекс задания
    unsigned long FromUserGUIDSize;//от пользователя
    unsigned long ForUserGUIDSize;//для пользователя
    unsigned long ProjectGUIDSize;//по проекту
@@ -99,7 +101,7 @@ class CVectorTask
    long State;//состояние
    long Year;//год
    long Month;//месяц
-   long Day;//число 
+   long Day;//число    
    TASK_TYPE TaskType;//тип задания
   };
   #pragma pack()

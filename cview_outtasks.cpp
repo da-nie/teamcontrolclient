@@ -68,8 +68,10 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
   return;
  }
  CString guid;
+ CString name;
  bool on_line;
- cDocument_Main_Ptr->GetMyParam(on_line,guid);
+ bool leader;
+ cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
  if (sUser.UserGUID.Compare(ALL_USER_GUID)==0)//выбраны сразу все пользователи
  {
   vector_STask_Local=cDocument_Main_Ptr->CreateVectorSTaskByFromUserGUID(guid); 
