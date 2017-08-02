@@ -12,6 +12,7 @@
 //====================================================================================================
 
 #include <vector>
+#include <algorithm>
 #include "stdafx.h"
 
 using namespace std;
@@ -117,6 +118,7 @@ class CVectorTask
   bool Load(char *filename);//загрузить
   bool AddNew(const STask &sTask);//добавить новый элемент
   void Clear(void);//очистить список
+  void SortByDate(void);//сортировка заданий по дате по возрастанию
   bool FindByTaskGUID(const CString &guid,STask &sTask);//найти по GUID задания
   bool FindByFromUserGUID(const CString &guid,STask &sTask);//найти по GUID пользователя от которого задание
   bool FindByForUserGUID(const CString &guid,STask &sTask);//найти по GUID пользователя для которого задание

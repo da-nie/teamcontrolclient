@@ -372,6 +372,7 @@ void CView_Base::DrawTasks(CDC *pDC)
   if (sTask_CurrentDate>sTask) color=RGB(255,0,0);//просроченное задание
   //if (sTask_CurrentDate<sTask) color=RGB(250,250,230);//ещЄ есть врем€
   if (sTask_CurrentDate==sTask) color=RGB(255,255,0);//сегодн€шн€€ дата
+  if (sTask.State==TASK_STATE_FINISHED) color=RGB(0,255,0);//задание завершено
    
   cFillCell.SetBackgroundColor(color);
   cFillCell.Draw(pDC,cRect_TextDateArea);

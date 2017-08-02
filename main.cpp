@@ -51,6 +51,8 @@ BOOL CWinApp_Main::InitInstance(void)
   size--;
  }
  SetCurrentDirectory(FileName);
+ //удаляем загрузчик
+ DeleteFile("TeamControlLoader.exe");
  //инициализируем сокеты
  WSADATA wsadata;
  if (WSAStartup(0x0202,&wsadata)!=0) 

@@ -71,6 +71,7 @@ IDB_BITMAP_TASK_FINISHED BITMAP  DISCARDABLE     "Bitmap\\task_finished.bmp"
 IDB_BITMAP_MENU_TASK_FINISHED BITMAP  DISCARDABLE     "Bitmap\\menu_task_finished.bmp"
 IDB_BITMAP_TOOLBAR_MAIN BITMAP  DISCARDABLE     "Bitmap\\toolbar_main.bmp"
 IDB_BITMAP_ABOUT        BITMAP  DISCARDABLE     "Bitmap\\about.bmp"
+IDB_BITMAP_TASK_FINISHED_BIG BITMAP  DISCARDABLE     "Bitmap\\task_finished_big.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -177,8 +178,8 @@ BEGIN
     PUSHBUTTON      "Отправить задание",IDC_BUTTON_DIALOG_TASK_SETTINGS_OK,
                     155,210,90,14
     PUSHBUTTON      "Завершить задание",
-                    IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED,250,130,
-                    130,75,BS_BITMAP
+                    IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED,275,130,85,
+                    80,BS_BITMAP
     LTEXT           "Задание для  ",IDC_STATIC,5,130,105,15,SS_CENTERIMAGE,
                     WS_EX_DLGMODALFRAME | WS_EX_RIGHT
     COMBOBOX        IDC_COMBO_DIALOG_TASK_SETTINGS_USER,115,130,130,75,
@@ -188,8 +189,8 @@ BEGIN
     EDITTEXT        IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE,115,150,130,14,
                     ES_AUTOHSCROLL | ES_READONLY
     CTEXT           "Завершить задание",
-                    IDC_STATIC_DIALOG_TASK_SETTINGS_TASK_FINISHED,250,210,
-                    130,13,SS_CENTERIMAGE
+                    IDC_STATIC_DIALOG_TASK_SETTINGS_TASK_FINISHED,275,215,85,
+                    13,SS_CENTERIMAGE
 END
 
 IDD_DIALOG_CLIENT_SETTINGS DIALOGEX 0, 0, 172, 121

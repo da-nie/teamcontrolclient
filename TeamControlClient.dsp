@@ -427,6 +427,10 @@ SOURCE=.\Bitmap\systray_icon_not_read_inverse.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\Bitmap\task_finished_big.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Bitmap\task_not_read_frame_two.bmp
 # End Source File
 # Begin Source File

@@ -399,6 +399,7 @@ void CDocument_Main::SetTaskBook(CVectorTask &cVectorTask_Set)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    sProtectedVariables.cVectorTask=cVectorTask_Set;
+   sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
   }
  } 
@@ -476,6 +477,7 @@ void CDocument_Main::OnDeletedTask(const STask &sTask)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    sProtectedVariables.cVectorTask.DeleteByTaskGUID(sTask.TaskGUID);
+   sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }
@@ -491,6 +493,7 @@ void CDocument_Main::OnAddedTask(const STask &sTask)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    sProtectedVariables.cVectorTask.AddNew(sTask);
+   sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }
@@ -506,6 +509,7 @@ void CDocument_Main::OnChangedTask(const STask &sTask)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {   
    sProtectedVariables.cVectorTask.ChangeByTaskGUID(sTask.TaskGUID,sTask);
+   sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }

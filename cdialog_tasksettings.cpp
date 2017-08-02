@@ -17,14 +17,13 @@ END_MESSAGE_MAP()
 //====================================================================================================
 CDialog_TaskSettings::CDialog_TaskSettings(LPCTSTR lpszTemplateName,CWnd* pParentWnd):CDialog(lpszTemplateName,pParentWnd)
 {
- hBitmap_TaskFinished=(HBITMAP)LoadImage(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_BITMAP_TASK_FINISHED),IMAGE_BITMAP,0,0,LR_CREATEDIBSECTION|LR_LOADMAP3DCOLORS); 
+ hBitmap_TaskFinished=NULL;
 }
 //====================================================================================================
 //деструктор класса
 //====================================================================================================
 CDialog_TaskSettings::~CDialog_TaskSettings()
-{
- DeleteObject(hBitmap_TaskFinished);
+{ 
 }
 //====================================================================================================
 //функции класса
@@ -50,10 +49,15 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  vector_SUser_Local.clear();
  vector_SProject_Local.clear();
 
+ CRect cRect;
+ ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->GetClientRect(cRect);
+ hBitmap_TaskFinished=(HBITMAP)LoadImage(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_BITMAP_TASK_FINISHED_BIG),IMAGE_BITMAP,cRect.right-cRect.left,cRect.bottom-cRect.top,LR_CREATEDIBSECTION|LR_LOADMAP3DCOLORS); 
+
+
  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->SetBitmap(hBitmap_TaskFinished);
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE))->SetLimitText(254);
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetLimitText(254);
- //заполним список данными проекторв
+ //заполним список данными проектов
  ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->ResetContent();
  //заполняем список данными пользователей
  ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->ResetContent();
@@ -140,6 +144,7 @@ bool CDialog_TaskSettings::Activate(STask &sTask,CDocument_Main *cDocument_Main_
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnDestroy(void)
 {
+ if (hBitmap_TaskFinished!=NULL) DeleteObject(hBitmap_TaskFinished);
  CDialog::OnDestroy();
 }
 //----------------------------------------------------------------------------------------------------
