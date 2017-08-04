@@ -327,6 +327,7 @@ void CDocument_Main::SetClientSettings(const SClientSettings &sClientSettings)
    sProtectedVariables.OnLine=false;
    sProtectedVariables.cVectorUser.Clear();
    sProtectedVariables.cVectorTask.Clear();
+   sProtectedVariables.cVectorProject.Clear();
   }
  }
  SaveState();
