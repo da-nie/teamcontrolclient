@@ -26,6 +26,7 @@ CView_OutTasks::CView_OutTasks()
 { 
  VisibleFromUser=false;
  VisibleForUser=false;
+ ColumnName="Выданные задания";
 }
 //====================================================================================================
 //деструктор класса

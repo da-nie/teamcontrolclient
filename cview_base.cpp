@@ -65,6 +65,21 @@ CView_Base::CView_Base()
  Logfont_ForUser.lfPitchAndFamily=DEFAULT_PITCH;  
  strcpy(Logfont_ForUser.lfFaceName,"Times New Roman"); 
 
+ Logfont_ColumnName.lfHeight=20; 
+ Logfont_ColumnName.lfWidth=0; 
+ Logfont_ColumnName.lfEscapement=0;
+ Logfont_ColumnName.lfOrientation=0; 
+ Logfont_ColumnName.lfWeight=FW_BOLD; 
+ Logfont_ColumnName.lfItalic=0;
+ Logfont_ColumnName.lfUnderline=0; 
+ Logfont_ColumnName.lfStrikeOut=0; 
+ Logfont_ColumnName.lfCharSet=DEFAULT_CHARSET; 
+ Logfont_ColumnName.lfOutPrecision=OUT_DEFAULT_PRECIS; 
+ Logfont_ColumnName.lfClipPrecision=CLIP_DEFAULT_PRECIS;
+ Logfont_ColumnName.lfQuality=DEFAULT_QUALITY; 
+ Logfont_ColumnName.lfPitchAndFamily=DEFAULT_PITCH;  
+ strcpy(Logfont_ColumnName.lfFaceName,"Arial"); 
+
  FlashState=false;
  SelectedTaskGUID="";
 
@@ -79,6 +94,9 @@ CView_Base::CView_Base()
 
  cTextCell_FromUser.SetTextFont(Logfont_FromUser);
  cTextCell_FromUser.SetTextColor(RGB(127,0,255));
+
+ cLineTextCell_ColumnName.SetTextFont(Logfont_ColumnName);
+ cLineTextCell_ColumnName.SetTextColor(RGB(0,0,0));
 
  cFrameCell_TaskState.SetBorderColor(RGB(0,0,0));
  cFrameCell.SetBorderColor(RGB(0,0,0));
@@ -306,6 +324,18 @@ void CView_Base::DrawTasks(CDC *pDC)
  sTask_CurrentDate.Day=system_time.wDay;
  sTask_CurrentDate.Month=system_time.wMonth;
  sTask_CurrentDate.Year=system_time.wYear;
+
+ //выводим название столбца
+ cLineTextCell_ColumnName.SetText(ColumnName);
+ CSize cSize_ColumnName;
+ cLineTextCell_ColumnName.GetSize(pDC,cRect_DrawArea,cSize_ColumnName);
+ CRect cRect_ColumnName=CRect(cRect_DrawArea.left,cRect_DrawArea.top,cRect_DrawArea.right,cRect_DrawArea.top+cSize_ColumnName.cy+GetHeightOffsetColumnName());
+ cFillCell.SetBackgroundColor(RGB(220,220,220));
+ cFillCell.Draw(pDC,cRect_ColumnName);
+ cLineTextCell_ColumnName.Draw(pDC,cRect_ColumnName);
+ cRect_DrawArea.top=cRect_ColumnName.bottom;
+ cFrameCell.SetBorderColor(RGB(0,0,0));
+ cFrameCell.Draw(pDC,cRect_ColumnName);
 
  for(size_t n=task_index;n<size;n++)
  {

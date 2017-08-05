@@ -143,6 +143,10 @@ SOURCE=.\cicell.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\clinetextcell.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ctextcell.cpp
 # End Source File
 # Begin Source File
@@ -264,6 +268,10 @@ SOURCE=.\cframewnd_main.h
 # Begin Source File
 
 SOURCE=.\cicell.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\clinetextcell.h
 # End Source File
 # Begin Source File
 

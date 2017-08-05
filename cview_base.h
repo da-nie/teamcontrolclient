@@ -20,6 +20,7 @@
 #include "cicell.h"
 #include "cfillcell.h"
 #include "ctextcell.h"
+#include "clinetextcell.h"
 #include "cframecell.h"
 #include "cbitmapcell.h"
 
@@ -56,14 +57,18 @@ class CView_Base:public CView
   CTextCell cTextCell_FromUser;//текст в ячейке
   CBitmapCell cBitmapCell_TaskState;//изображение в ячейке
   CFrameCell cFrameCell_TaskState;//рамка ячейки с состоянием задачи
+  CLineTextCell cLineTextCell_ColumnName;//текст назначения столбца
 
   LOGFONT Logfont_Task;//шрифт для вывода названия задачи
   LOGFONT Logfont_TaskDate;//шрифт для вывода срока задачи
   LOGFONT Logfont_FromUser;//шрифт для вывода от кого
   LOGFONT Logfont_ForUser;//шрифт для вывода для кого
+  LOGFONT Logfont_ColumnName;//шрифт для вывода назначения столбца
 
   bool VisibleFromUser;//выводить ли от кого
   bool VisibleForUser;//выводить ли для кого
+
+  CString ColumnName;//название стобца для вида
 
   //-Прочее------------------------------------------------------------------
  public:
@@ -94,6 +99,7 @@ class CView_Base:public CView
   const long & GetScrollBarWidth(void){static const long ret=16;return(ret);}//получить ширину полосы прокрутки
   const long & GetTastStateVerticalOffset(void){static const long ret=4;return(ret);}//получить отступ по вертикали для изображения статуса задания
   const long & GetTastStateHorizontalOffset(void){static const long ret=4;return(ret);}//получить отступ по горизонтали для изображения статуса задания
+  const long & GetHeightOffsetColumnName(void){static const long ret=8;return(ret);}//получить отступ по вертикали для изображения названия столбца
   //-Прочее------------------------------------------------------------------
 };
 #endif
