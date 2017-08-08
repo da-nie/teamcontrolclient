@@ -165,8 +165,8 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  sTask_Local.Year=cTime.GetYear();
  sTask_Local.Month=cTime.GetMonth();
  sTask_Local.Day=cTime.GetDay();
- sTask_Local.Task=task;  
- sTask_Local.Index=0;
+ sTask_Local.Task=task;
+ if (NewTask==true) sTask_Local.Index=0;//номер вернёт сервер
  sTask_Local.State=TASK_STATE_NO_READ;
  //считываем пользователя, которому предназначена задача
  size=vector_SUser_Local.size();
@@ -181,7 +181,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  long project_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->GetCurSel();
  if (project_index==0)//без проекта
  {
-  sTask_Local.ProjectGUID="";  
+  sTask_Local.ProjectGUID="";
  }
  else
  {
