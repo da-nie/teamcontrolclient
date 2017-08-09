@@ -87,6 +87,7 @@ class CView_Base:public CView
   afx_msg void OnTimer(UINT nIDEvent);//событие таймера
   afx_msg void OnDestroy(void);//уничтожение окна
   afx_msg void OnVScroll(UINT nSBCode,UINT nPos,CScrollBar* pScrollBar);//вертикальная полоса прокрутки
+  afx_msg BOOL OnMouseWheel(UINT nFlags,short zDelta,CPoint pt);//вращение колёсика мышки
  public:
   //-Функции класса----------------------------------------------------------
  protected:

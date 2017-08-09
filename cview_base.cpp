@@ -48,7 +48,7 @@ CView_Base::CView_Base()
  Logfont_FromUser.lfClipPrecision=CLIP_DEFAULT_PRECIS;
  Logfont_FromUser.lfQuality=DEFAULT_QUALITY; 
  Logfont_FromUser.lfPitchAndFamily=DEFAULT_PITCH;  
- strcpy(Logfont_FromUser.lfFaceName,"Courier New"); 
+ strcpy(Logfont_FromUser.lfFaceName,"Times New Roman"); 
 
  Logfont_ForUser.lfHeight=16; 
  Logfont_ForUser.lfWidth=0; 
@@ -240,6 +240,23 @@ afx_msg void CView_Base::OnVScroll(UINT nSBCode,UINT nPos,CScrollBar* pScrollBar
  if (hpos>max) hpos=max;
  pScrollBar->SetScrollPos(hpos,TRUE);
  InvalidateRect(NULL,FALSE);
+}
+//----------------------------------------------------------------------------------------------------
+//вращение колёсика мышки
+//----------------------------------------------------------------------------------------------------
+afx_msg BOOL CView_Base::OnMouseWheel(UINT nFlags,short zDelta,CPoint pt)
+{
+ zDelta/=WHEEL_DELTA;
+ if (zDelta>-1 && zDelta<1) return(TRUE);
+ long hpos=cScrollBar_ShiftItem.GetScrollPos();
+ int min,max;
+ cScrollBar_ShiftItem.GetScrollRange(&min,&max);
+ hpos-=zDelta;
+ if (hpos<min) hpos=min;
+ if (hpos>max) hpos=max;
+ cScrollBar_ShiftItem.SetScrollPos(hpos,TRUE);
+ InvalidateRect(NULL,FALSE);
+ return(TRUE);
 }
 
 //====================================================================================================
