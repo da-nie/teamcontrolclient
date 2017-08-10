@@ -63,8 +63,8 @@ void CView_MyTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
- CString guid;
- CString name;
+ CSafeString guid;
+ CSafeString name;
  bool on_line;
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);

@@ -38,7 +38,7 @@ class CTransceiver_File:public CTransceiver
   bool ReadCRCInArray(char *ptr,size_t &offset,size_t max_length,unsigned long &crc16);//считать CRC из ответа сервера
   bool ReadClientProgrammAndLoaderInArray(char *ptr,size_t &offset,size_t max_length);//считать и записать программу из ответа сервера
  protected:
-  bool SaveFileAndCompareCRC(char *ptr,size_t size,const CString &file_name,unsigned long original_crc16);//сохранить файл и сравнить его CRC
+  bool SaveFileAndCompareCRC(char *ptr,size_t size,const CSafeString &file_name,unsigned long original_crc16);//сохранить файл и сравнить его CRC
 
 };
 

@@ -125,7 +125,7 @@ class CThreadClient
   void ExecuteAnswer_GetAddedProject(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение данных добавленного проекта
   void ExecuteAnswer_GetChangedProject(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение данных изменённого проекта
 
-  bool ConnectAsServer(SOCKET &server,CString host_name,long port,bool &on_exit);//подключение к серверу
+  bool ConnectAsServer(SOCKET &server,CSafeString host_name,long port,bool &on_exit);//подключение к серверу
   bool SetSocketNoBlockMode(SOCKET socket_set,bool state);//задание неблокирующего режима для сокета
 };
 

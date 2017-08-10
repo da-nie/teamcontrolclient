@@ -36,7 +36,7 @@ struct SColleagueInTreeView
 {
  HTREEITEM hTREEITEM_Parent;//родитель
  HTREEITEM hTREEITEM_Colleague;//сам сотрудник
- CString ColleagueGUID;//идентификатор
+ CSafeString ColleagueGUID;//идентификатор
 };
 
 //представление проектов в дереве представлений
@@ -44,7 +44,7 @@ struct SProjectInTreeView
 {
  HTREEITEM hTREEITEM_Parent;//родитель
  HTREEITEM hTREEITEM_Project;//сам проект
- CString ProjectGUID;//идентификатор
+ CSafeString ProjectGUID;//идентификатор
 };
 
 //====================================================================================================
@@ -101,10 +101,10 @@ class CTreeView_Kit:public CTreeView
  protected:
   //-Функции класса----------------------------------------------------------
   CDocument_Main* GetDocument(void);//получить документ
-  HTREEITEM InsertItem(HTREEITEM hParent,const CString& text,long image,long selected_image,bool sort);//добавить элемент в дерево  
+  HTREEITEM InsertItem(HTREEITEM hParent,const CSafeString& text,long image,long selected_image,bool sort);//добавить элемент в дерево  
 
-  bool FindColleagueByGUID(const CString &guid,SColleagueInTreeView &sColleagueInTreeView);//найти сотрудника по GUID
-  bool FindProjectByGUID(const CString &guid,SProjectInTreeView &sProjectInTreeView);//найти проект по GUID
+  bool FindColleagueByGUID(const CSafeString &guid,SColleagueInTreeView &sColleagueInTreeView);//найти сотрудника по GUID
+  bool FindProjectByGUID(const CSafeString &guid,SProjectInTreeView &sProjectInTreeView);//найти проект по GUID
   //функции констант
   static const long& GetTreeImageSize(void) {static const long img=16; return(img);}//получить размер изображений
   static const long& GetRootColleagueImageIndex(void) {static const long img=0; return(img);}//получить индекс корневого изображения сотрудника

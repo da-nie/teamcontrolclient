@@ -147,6 +147,10 @@ SOURCE=.\clinetextcell.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\csafestring.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ctextcell.cpp
 # End Source File
 # Begin Source File
@@ -276,6 +280,10 @@ SOURCE=.\clinetextcell.h
 # Begin Source File
 
 SOURCE=.\craiiccriticalsection.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\csafestring.h
 # End Source File
 # Begin Source File
 

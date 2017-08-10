@@ -69,8 +69,8 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
   UpdateTask(vector_STask_Local);
   return;
  }
- CString guid;
- CString name;
+ CSafeString guid;
+ CSafeString name;
  bool on_line;
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);

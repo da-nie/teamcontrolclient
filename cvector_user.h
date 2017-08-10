@@ -24,11 +24,11 @@ using namespace std;
 //параметры пользователя
 struct SUser
 {
- CString Name;//имя
- CString JobTitle;//должность
- CString Description;//описание
- CString Telephone;//телефон
- CString UserGUID;//уникальный идентификатор пользователя 
+ CSafeString Name;//имя
+ CSafeString JobTitle;//должность
+ CSafeString Description;//описание
+ CSafeString Telephone;//телефон
+ CSafeString UserGUID;//уникальный идентификатор пользователя 
  bool Leader;//является ли начальником
  //дополнительные данные
  bool ChangeData;//изменились данные сотрудника
@@ -65,10 +65,10 @@ class CVectorUser
   bool Load(char *filename);//загрузить
   bool AddNew(const SUser &sUser);//добавить новый элемент
   void Clear(void);//очистить список
-  bool FindByUserGUID(const CString &guid,SUser &sUser);//найти по GUID пользователя
-  bool FindByUserGUIDAndResetChangeData(const CString &guid,SUser &sUser);//найти по GUID пользователя и отметить, что данные не изменены
-  bool DeleteByUserGUID(const CString &guid);//удалить по GUID пользователя
-  bool ChangeByUserGUID(const CString &guid,const SUser &sUser);//заменить по GUID пользователя
+  bool FindByUserGUID(const CSafeString &guid,SUser &sUser);//найти по GUID пользователя
+  bool FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser &sUser);//найти по GUID пользователя и отметить, что данные не изменены
+  bool DeleteByUserGUID(const CSafeString &guid);//удалить по GUID пользователя
+  bool ChangeByUserGUID(const CSafeString &guid,const SUser &sUser);//заменить по GUID пользователя
   size_t Size(void);//получить количество пользователей
   bool PopBack(SUser &sUser);//получить последнего пользователя и удалить его
   bool PushBack(const SUser &sUser);//добавить пользователя в конец

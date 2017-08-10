@@ -248,11 +248,11 @@ afx_msg void CFrameWnd_Main::OnTimer(UINT nIDEvent)
   {
    cDocument_Main_Ptr->Processing();
    bool on_line;
-   CString guid;
-   CString name;
+   CSafeString guid;
+   CSafeString name;
    bool leader;
    cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
-   CString out="Клиент Team Control: "+name+"    ";
+   CSafeString out="Клиент Team Control: "+name+"    ";
    if (on_line==true) out+="В сети";
                  else out+="НЕ В СЕТИ";
    SetWindowText(out);

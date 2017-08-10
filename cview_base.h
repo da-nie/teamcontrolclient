@@ -36,7 +36,7 @@ class CView_Base:public CView
   //-ѕеременные класса-------------------------------------------------------
   vector<STask> vector_STask;//отображаемый список задач
   bool FlashState;//состо€ние мигани€
-  CString SelectedTaskGUID;//GUID выбранного задани€
+  CSafeString SelectedTaskGUID;//GUID выбранного задани€
   vector<SCell> vector_SCell_Task;//список координат заданий
 
   CBitmap cBitmap_TaskNotReadFrameOne;//пиктограмма "задание не прочитано"
@@ -68,7 +68,7 @@ class CView_Base:public CView
   bool VisibleFromUser;//выводить ли от кого
   bool VisibleForUser;//выводить ли дл€ кого
 
-  CString ColumnName;//название стобца дл€ вида
+  CSafeString ColumnName;//название стобца дл€ вида
 
   //-ѕрочее------------------------------------------------------------------
  public:

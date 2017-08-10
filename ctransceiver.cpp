@@ -161,7 +161,7 @@ void CTransceiver::Pause(long time_ms)
 //----------------------------------------------------------------------------------------------------
 //задать строку по массиву
 //----------------------------------------------------------------------------------------------------
-void CTransceiver::SetString(CString &text,char *buffer,long length)
+void CTransceiver::SetString(CSafeString &text,char *buffer,long length)
 {
  text="";
  for(long n=0;n<length;n++) text+=buffer[n];

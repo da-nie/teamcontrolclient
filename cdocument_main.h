@@ -81,9 +81,9 @@ class CDocument_Main:public CDocument
 
    bool OnUpdateView;//требуется ли обновить видам данные 
 
-   CString MyGUID;//наш GUID, полученный после авторизации
+   CSafeString MyGUID;//наш GUID, полученный после авторизации
    bool OnLine;//подключены ли мы к серверу
-   CString MyName;//имя пользователя
+   CSafeString MyName;//имя пользователя
    bool Leader;//является ли пользователь руководителем
 
    bool RestartWithLoader;//нужна ли перезагрузка через загрузчик
@@ -114,14 +114,14 @@ class CDocument_Main:public CDocument
   void SetNotReadTaskState(bool state);//задать, есть ли непрочитанные задания
 
   void SaveState(void);//сохранить состояние
-  bool FindByUserGUIDAndResetChangeData(const CString &guid,SUser &sUser);//найти пользователя по GUID и сбросить новизну данных
-  bool FindByUserGUID(const CString &guid,SUser &sUser);//найти пользователя по GUID
+  bool FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser &sUser);//найти пользователя по GUID и сбросить новизну данных
+  bool FindByUserGUID(const CSafeString &guid,SUser &sUser);//найти пользователя по GUID
 
-  bool FindByProjectGUIDAndResetChangeData(const CString &guid,SProject &sProject);//найти проект по GUID и сбросить новизну данных
-  bool FindByProjectGUID(const CString &guid,SProject &sProject);//найти проект по GUID
+  bool FindByProjectGUIDAndResetChangeData(const CSafeString &guid,SProject &sProject);//найти проект по GUID и сбросить новизну данных
+  bool FindByProjectGUID(const CSafeString &guid,SProject &sProject);//найти проект по GUID
 
-  void GetMyParam(bool &on_line,CString &guid,CString &name,bool &leader);//получить наши параметры
-  void SetMyParam(const bool &on_line,const CString &guid,const CString &name,const bool &leader);//задать наши параметры
+  void GetMyParam(bool &on_line,CSafeString &guid,CSafeString &name,bool &leader);//получить наши параметры
+  void SetMyParam(const bool &on_line,const CSafeString &guid,const CSafeString &name,const bool &leader);//задать наши параметры
   void GetShowState(SShowState &sShowState);//получить параметры отображения данных
   void SetShowState(SShowState &sShowState);//задать параметры отображения данных
 
@@ -160,10 +160,10 @@ class CDocument_Main:public CDocument
   bool DeleteProject(SProject &sProject);//удалить проект
   bool ChangeProject(SProject &sProject);//изменить проект
 
-  vector<STask> CreateVectorSTaskByForUserGUID(const CString &guid);//создать вектор задач по GUID пользователя для которого задание
-  vector<STask> CreateVectorSTaskByFromUserGUID(const CString &guid);//создать вектор задач по GUID пользователя от которого задание
-  vector<STask> CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CString &guid_one,const CString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
-  vector<STask> CreateVectorSTaskByProjectGUIDFromUserGUID(const CString &guid_project,const CString &guid_from_user);//создать вектор задач по проекту от пользователя
+  vector<STask> CreateVectorSTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
+  vector<STask> CreateVectorSTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
+  vector<STask> CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
+  vector<STask> CreateVectorSTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
 
   bool PopTaskTransferToServer(STask &sTask);//получить задание для передачи на сервер
   void PushTaskTransferToServer(const STask &sTask);//добавить задание для передачи на сервер

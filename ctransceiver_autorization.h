@@ -33,8 +33,8 @@ class CTransceiver_Autorization:public CTransceiver
   //деструктор
   ~CTransceiver_Autorization();
   //функции класса
-  bool SendAutorization(SOCKET socket_server,const CString &login,const CString &password,CEvent &cEvent_Exit,bool &on_exit);//отправить данные авторизации
-  bool GetAutorizationAnswer(char *ptr,size_t size,CString &guid);//считать результат авторизации
+  bool SendAutorization(SOCKET socket_server,const CSafeString &login,const CSafeString &password,CEvent &cEvent_Exit,bool &on_exit);//отправить данные авторизации
+  bool GetAutorizationAnswer(char *ptr,size_t size,CSafeString &guid);//считать результат авторизации
 };
 
 #endif

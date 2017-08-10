@@ -88,7 +88,7 @@ void CTextCell::GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize)
 //----------------------------------------------------------------------------------------------------
 //задать текст
 //----------------------------------------------------------------------------------------------------
-void CTextCell::SetText(const CString &text)
+void CTextCell::SetText(const CSafeString &text)
 {
  Text=text;
 }

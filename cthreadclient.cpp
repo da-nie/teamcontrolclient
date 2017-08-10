@@ -258,8 +258,8 @@ bool CThreadClient::ExecuteCommand_Autorization(SOCKET socket_server,bool &on_ex
 {
  on_exit=false;
  if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(false,"","",false);
- CString login="";
- CString password="";
+ CSafeString login="";
+ CSafeString password="";
  if (cDocument_Main_Ptr!=NULL)
  {
   SClientSettings sClientSettings;
@@ -516,7 +516,7 @@ void CThreadClient::ExecuteAnswer_AutorizationOk(SOCKET socket_server,SERVER_COM
   {
    size_t size=vector_Data.size();
    char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
-   CString guid;
+   CSafeString guid;
    if (cTransceiver_Autorization.GetAutorizationAnswer(ptr,size,guid)==false) return;
    if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(true,guid,"",false);
    WorkingMode=WORKING_MODE_GET_USER_BOOK;
@@ -687,7 +687,7 @@ void CThreadClient::ExecuteAnswer_GetChangedProject(SOCKET socket_server,SERVER_
 //----------------------------------------------------------------------------------------------------
 //подключение к серверу
 //----------------------------------------------------------------------------------------------------
-bool CThreadClient::ConnectAsServer(SOCKET &socket_server,CString host_name,long port,bool &on_exit)
+bool CThreadClient::ConnectAsServer(SOCKET &socket_server,CSafeString host_name,long port,bool &on_exit)
 {
  const long block_timeout_us=500000;//таймаут на повторное соединение
 

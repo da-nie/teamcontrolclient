@@ -37,7 +37,7 @@ class CTransceiver
   bool SendPart(SOCKET socket_server,const char *data,unsigned long size,CEvent &cEvent_Exit,bool &on_exit);//отправить данные серверу с выполнением байтстаффинга
   bool SendData(SOCKET socket_server,const char *package,long size,CEvent &cEvent_Exit,bool &on_exit);//отправить данные серверу
   void Pause(long time_ms);//пауза
-  void SetString(CString &text,char *buffer,long length);//задать строку по массиву
+  void SetString(CSafeString &text,char *buffer,long length);//задать строку по массиву
 };
 
 #endif

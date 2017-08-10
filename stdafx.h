@@ -19,6 +19,7 @@
 #include <ws2tcpip.h>
 
 #include "resource.h"
+#include "csafestring.h"
 
 #define ID_TIMER_FRAMEWND_MAIN 1000
 #define ID_TIMER_TREE_VIEW_KIT 1001
@@ -31,7 +32,7 @@
 //====================================================================================================
 struct SCell
 {
- CString GUID;//GUID €чейки
+ CSafeString GUID;//GUID €чейки
  CRect cRect;//координаты €чейки
 };
 

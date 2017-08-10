@@ -88,7 +88,7 @@ bool CTransceiver_File::ReadClientProgrammAndLoaderInArray(char *ptr,size_t &off
 //----------------------------------------------------------------------------------------------------
 //сохранить файл и сравнить его CRC
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_File::SaveFileAndCompareCRC(char *ptr,size_t size,const CString &file_name,unsigned long original_crc16)
+bool CTransceiver_File::SaveFileAndCompareCRC(char *ptr,size_t size,const CSafeString &file_name,unsigned long original_crc16)
 {
  FILE *file=fopen(file_name,"wb");
  if (file==NULL) return(false);

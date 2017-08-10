@@ -193,7 +193,7 @@ void CDocument_Main::SaveState(void)
 //----------------------------------------------------------------------------------------------------
 //найти пользователя по GUID и сбросить новизну данных
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByUserGUIDAndResetChangeData(const CString &guid,SUser &sUser)
+bool CDocument_Main::FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser &sUser)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
@@ -206,7 +206,7 @@ bool CDocument_Main::FindByUserGUIDAndResetChangeData(const CString &guid,SUser 
 //----------------------------------------------------------------------------------------------------
 //найти пользователя по GUID
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByUserGUID(const CString &guid,SUser &sUser)
+bool CDocument_Main::FindByUserGUID(const CSafeString &guid,SUser &sUser)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
@@ -220,7 +220,7 @@ bool CDocument_Main::FindByUserGUID(const CString &guid,SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 //найти проект по GUID и сбросить новизну данных
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByProjectGUIDAndResetChangeData(const CString &guid,SProject &sProject)
+bool CDocument_Main::FindByProjectGUIDAndResetChangeData(const CSafeString &guid,SProject &sProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
@@ -233,7 +233,7 @@ bool CDocument_Main::FindByProjectGUIDAndResetChangeData(const CString &guid,SPr
 //----------------------------------------------------------------------------------------------------
 //найти проект по GUID
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByProjectGUID(const CString &guid,SProject &sProject)
+bool CDocument_Main::FindByProjectGUID(const CSafeString &guid,SProject &sProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
@@ -248,7 +248,7 @@ bool CDocument_Main::FindByProjectGUID(const CString &guid,SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //получить наши параметры
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::GetMyParam(bool &on_line,CString &guid,CString &name,bool &leader)
+void CDocument_Main::GetMyParam(bool &on_line,CSafeString &guid,CSafeString &name,bool &leader)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
@@ -263,7 +263,7 @@ void CDocument_Main::GetMyParam(bool &on_line,CString &guid,CString &name,bool &
 //----------------------------------------------------------------------------------------------------
 //задать наши параметры
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::SetMyParam(const bool &on_line,const CString &guid,const CString &name,const bool &leader)
+void CDocument_Main::SetMyParam(const bool &on_line,const CSafeString &guid,const CSafeString &name,const bool &leader)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
@@ -709,7 +709,7 @@ bool CDocument_Main::ChangeProject(SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByForUserGUID(const CString &guid)
+vector<STask> CDocument_Main::CreateVectorSTaskByForUserGUID(const CSafeString &guid)
 {
  vector<STask> vector_STask;
  {
@@ -723,7 +723,7 @@ vector<STask> CDocument_Main::CreateVectorSTaskByForUserGUID(const CString &guid
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByFromUserGUID(const CString &guid)
+vector<STask> CDocument_Main::CreateVectorSTaskByFromUserGUID(const CSafeString &guid)
 {
  vector<STask> vector_STask;
  {
@@ -737,7 +737,7 @@ vector<STask> CDocument_Main::CreateVectorSTaskByFromUserGUID(const CString &gui
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя один для которого задание от пользователя два
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CString &guid_one,const CString &guid_two)
+vector<STask> CDocument_Main::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
 {
  vector<STask> vector_STask;
  {
@@ -751,7 +751,7 @@ vector<STask> CDocument_Main::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUI
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по проекту от пользователя
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByProjectGUIDFromUserGUID(const CString &guid_project,const CString &guid_from_user)
+vector<STask> CDocument_Main::CreateVectorSTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
 {
  vector<STask> vector_STask;
  {

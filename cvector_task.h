@@ -41,21 +41,21 @@ enum TASK_TYPE
 //параметры задания
 struct STask
 {
- CString FromUserGUID;//от пользователя
- CString ForUserGUID;//для пользователя
- CString ProjectGUID;//по проекту
- CString Task;//задание
+ CSafeString FromUserGUID;//от пользователя
+ CSafeString ForUserGUID;//для пользователя
+ CSafeString ProjectGUID;//по проекту
+ CSafeString Task;//задание
  long State;//состояние
  long Year;//год
  long Month;//месяц
  long Day;//число
  long Index;//индекс задания
- CString TaskGUID;//идентификатор задания
+ CSafeString TaskGUID;//идентификатор задания
  //дополнительные данные
  bool ChangeData;//изменились данные задания
  TASK_TYPE TaskType;//тип задания
- CString ForUser;//для пользователя
- CString FromUser;//от пользователя
+ CSafeString ForUser;//для пользователя
+ CSafeString FromUser;//от пользователя
 
  //операция сравнения по дате
  bool operator<(const STask &sTask) const
@@ -119,20 +119,20 @@ class CVectorTask
   bool AddNew(const STask &sTask);//добавить новый элемент
   void Clear(void);//очистить список
   void SortByDate(void);//сортировка заданий по дате по возрастанию
-  bool FindByTaskGUID(const CString &guid,STask &sTask);//найти по GUID задания
-  bool FindByFromUserGUID(const CString &guid,STask &sTask);//найти по GUID пользователя от которого задание
-  bool FindByForUserGUID(const CString &guid,STask &sTask);//найти по GUID пользователя для которого задание
-  bool FindByProjectGUID(const CString &guid,STask &sTask);//найти по GUID проекта
-  bool DeleteByTaskGUID(const CString &guid);//удалить по GUID задания
-  bool ChangeByTaskGUID(const CString &guid,const STask &sTask);//заменить по GUID задания
+  bool FindByTaskGUID(const CSafeString &guid,STask &sTask);//найти по GUID задания
+  bool FindByFromUserGUID(const CSafeString &guid,STask &sTask);//найти по GUID пользователя от которого задание
+  bool FindByForUserGUID(const CSafeString &guid,STask &sTask);//найти по GUID пользователя для которого задание
+  bool FindByProjectGUID(const CSafeString &guid,STask &sTask);//найти по GUID проекта
+  bool DeleteByTaskGUID(const CSafeString &guid);//удалить по GUID задания
+  bool ChangeByTaskGUID(const CSafeString &guid,const STask &sTask);//заменить по GUID задания
   size_t Size(void);//получить количество заданий
   bool PopBack(STask &sTask);//получить последнее задание и удалить его
   bool PushBack(const STask &sTask);//добавить задание в конец
   vector<STask>& GetVectorSTask(void);//получить ссылку на вектор задач
-  vector<STask> CreateVectorSTaskByForUserGUID(const CString &guid);//создать вектор задач по GUID пользователя для которого задание
-  vector<STask> CreateVectorSTaskByFromUserGUID(const CString &guid);//создать вектор задач по GUID пользователя от которого задание
-  vector<STask> CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CString &guid_one,const CString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
-  vector<STask> CreateVectorSTaskByProjectGUIDFromUserGUID(const CString &guid_project,const CString &guid_from_user);//создать вектор задач по проекту от пользователя
+  vector<STask> CreateVectorSTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
+  vector<STask> CreateVectorSTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
+  vector<STask> CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
+  vector<STask> CreateVectorSTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
  protected:
   //функции
  

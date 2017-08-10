@@ -23,7 +23,7 @@ class CLineTextCell:public CICell
  protected:
   COLORREF TextColor;//цвет текста
   CFont cFont_Text;//шрифт текста  
-  CString Text;//выводимый текст
+  CSafeString Text;//выводимый текст
 
   COLORREF StrikeOutColor;//текст зачёркивания
   bool StrikeOut;//зачеркнуть ли текст
@@ -35,7 +35,7 @@ class CLineTextCell:public CICell
   //функции класса
   void Draw(CDC *pDC,const CRect &cRect_DrawArea);//отрисовка
   void GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize);//получить размеры элемента
-  void SetText(const CString &text);//задать текст
+  void SetText(const CSafeString &text);//задать текст
   void SetTextColor(const COLORREF &color);//задать цвет текста
   void SetStrikeOutColor(const COLORREF &color);//задать цвет зачёркивания
   void SetTextFont(const LOGFONT &lf);//задать шрифт текста

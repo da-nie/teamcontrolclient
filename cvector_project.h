@@ -40,8 +40,8 @@ enum PROJECT_TYPE
 //параметры проекта
 struct SProject
 {
- CString ProjectName;//проект
- CString ProjectGUID;//идентификатор проекта
+ CSafeString ProjectName;//проект
+ CSafeString ProjectGUID;//идентификатор проекта
  //дополнительные данные
  PROJECT_TYPE ProjectType;//тип проекта
  bool ChangeData;//изменились данные проекта
@@ -75,10 +75,10 @@ class CVectorProject
   bool Load(char *filename);//загрузить
   bool AddNew(const SProject &sProject);//добавить новый элемент
   void Clear(void);//очистить список
-  bool FindByProjectGUID(const CString &guid,SProject &sProject);//найти по GUID проекта
-  bool FindByProjectGUIDAndResetChangeData(const CString &guid,SProject &sProject);//найти по GUID проекта и отметить, что данные не изменены
-  bool DeleteByProjectGUID(const CString &guid);//удалить по GUID проекта
-  bool ChangeByProjectGUID(const CString &guid,const SProject &sProject);//заменить по GUID проекта
+  bool FindByProjectGUID(const CSafeString &guid,SProject &sProject);//найти по GUID проекта
+  bool FindByProjectGUIDAndResetChangeData(const CSafeString &guid,SProject &sProject);//найти по GUID проекта и отметить, что данные не изменены
+  bool DeleteByProjectGUID(const CSafeString &guid);//удалить по GUID проекта
+  bool ChangeByProjectGUID(const CSafeString &guid,const SProject &sProject);//заменить по GUID проекта
   size_t Size(void);//получить количество проектов
   bool PopBack(SProject &sProject);//получить последний проект и удалить его
   bool PushBack(const SProject &sProject);//добавить проект в конец

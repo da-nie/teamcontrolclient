@@ -98,7 +98,7 @@ void CVectorProject::Clear(void)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID проекта
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::FindByProjectGUID(const CString &guid,SProject &sProject)
+bool CVectorProject::FindByProjectGUID(const CSafeString &guid,SProject &sProject)
 {
  size_t size=vector_SProject.size();
  for(size_t n=0;n<size;n++)
@@ -111,7 +111,7 @@ bool CVectorProject::FindByProjectGUID(const CString &guid,SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID проекта и отметить, что данные не изменены
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::FindByProjectGUIDAndResetChangeData(const CString &guid,SProject &sProject)
+bool CVectorProject::FindByProjectGUIDAndResetChangeData(const CSafeString &guid,SProject &sProject)
 {
  size_t size=vector_SProject.size();
  for(size_t n=0;n<size;n++)
@@ -128,7 +128,7 @@ bool CVectorProject::FindByProjectGUIDAndResetChangeData(const CString &guid,SPr
 //----------------------------------------------------------------------------------------------------
 //удалить по GUID проекта
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::DeleteByProjectGUID(const CString &guid)
+bool CVectorProject::DeleteByProjectGUID(const CSafeString &guid)
 {
  size_t size=vector_SProject.size();
  for(size_t n=0;n<size;n++)
@@ -145,7 +145,7 @@ bool CVectorProject::DeleteByProjectGUID(const CString &guid)
 //----------------------------------------------------------------------------------------------------
 //заменить по GUID проекта
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::ChangeByProjectGUID(const CString &guid,const SProject &sProject)
+bool CVectorProject::ChangeByProjectGUID(const CSafeString &guid,const SProject &sProject)
 {
  size_t size=vector_SProject.size();
  for(size_t n=0;n<size;n++)

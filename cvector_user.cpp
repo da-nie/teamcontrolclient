@@ -122,7 +122,7 @@ void CVectorUser::Clear(void)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::FindByUserGUID(const CString &guid,SUser &sUser)
+bool CVectorUser::FindByUserGUID(const CSafeString &guid,SUser &sUser)
 {
  size_t size=vector_SUser.size();
  for(size_t n=0;n<size;n++)
@@ -135,7 +135,7 @@ bool CVectorUser::FindByUserGUID(const CString &guid,SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя и отметить, что данные не изменены
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::FindByUserGUIDAndResetChangeData(const CString &guid,SUser &sUser)
+bool CVectorUser::FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser &sUser)
 {
  size_t size=vector_SUser.size();
  for(size_t n=0;n<size;n++)
@@ -152,7 +152,7 @@ bool CVectorUser::FindByUserGUIDAndResetChangeData(const CString &guid,SUser &sU
 //----------------------------------------------------------------------------------------------------
 //удалить по GUID пользователя
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::DeleteByUserGUID(const CString &guid)
+bool CVectorUser::DeleteByUserGUID(const CSafeString &guid)
 {
  size_t size=vector_SUser.size();
  for(size_t n=0;n<size;n++)
@@ -169,7 +169,7 @@ bool CVectorUser::DeleteByUserGUID(const CString &guid)
 //----------------------------------------------------------------------------------------------------
 //заменить по GUID пользователя
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::ChangeByUserGUID(const CString &guid,const SUser &sUser)
+bool CVectorUser::ChangeByUserGUID(const CSafeString &guid,const SUser &sUser)
 {
  size_t size=vector_SUser.size();
  for(size_t n=0;n<size;n++)

@@ -120,8 +120,8 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
  SUser sUser_Selected;
  if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
  //смотрим, что было выбрано
- CString guid;
- CString name;
+ CSafeString guid;
+ CSafeString name;
  bool on_line;
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
@@ -455,7 +455,7 @@ CDocument_Main* CTreeView_Kit::GetDocument(void)
 //----------------------------------------------------------------------------------------------------
 //добавить элемент в дерево
 //----------------------------------------------------------------------------------------------------
-HTREEITEM CTreeView_Kit::InsertItem(HTREEITEM hParent,const CString& text,long image,long selected_image,bool sort)
+HTREEITEM CTreeView_Kit::InsertItem(HTREEITEM hParent,const CSafeString& text,long image,long selected_image,bool sort)
 {
  TV_ITEM TV_Item;
  TV_Item.mask=TVIF_IMAGE|TVIF_SELECTEDIMAGE|TVIF_TEXT;
@@ -474,7 +474,7 @@ HTREEITEM CTreeView_Kit::InsertItem(HTREEITEM hParent,const CString& text,long i
 //----------------------------------------------------------------------------------------------------
 //найти сотрудника по GUID
 //----------------------------------------------------------------------------------------------------
-bool CTreeView_Kit::FindColleagueByGUID(const CString &guid,SColleagueInTreeView &sColleagueInTreeView)
+bool CTreeView_Kit::FindColleagueByGUID(const CSafeString &guid,SColleagueInTreeView &sColleagueInTreeView)
 {
  list<SColleagueInTreeView>::iterator iterator=list_SColleagueInTreeView.begin();
  list<SColleagueInTreeView>::iterator iterator_end=list_SColleagueInTreeView.end();
@@ -489,7 +489,7 @@ bool CTreeView_Kit::FindColleagueByGUID(const CString &guid,SColleagueInTreeView
 //----------------------------------------------------------------------------------------------------
 //найти проект по GUID
 //----------------------------------------------------------------------------------------------------
-bool CTreeView_Kit::FindProjectByGUID(const CString &guid,SProjectInTreeView &sProjectInTreeView)
+bool CTreeView_Kit::FindProjectByGUID(const CSafeString &guid,SProjectInTreeView &sProjectInTreeView)
 {
  list<SProjectInTreeView>::iterator iterator=list_SProjectInTreeView.begin();
  list<SProjectInTreeView>::iterator iterator_end=list_SProjectInTreeView.end();

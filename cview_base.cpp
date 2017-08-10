@@ -282,8 +282,8 @@ void CView_Base::UpdateTask(vector<STask> &vector_STask_Local)
  SShowState sShowState;
  cDocument_Main_Ptr->GetShowState(sShowState);
 
- CString guid;
- CString name;
+ CSafeString guid;
+ CSafeString name;
  bool on_line;
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);

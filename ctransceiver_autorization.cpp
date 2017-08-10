@@ -23,7 +23,7 @@ CTransceiver_Autorization::~CTransceiver_Autorization()
 //----------------------------------------------------------------------------------------------------
 //отправить данные авторизации
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_Autorization::SendAutorization(SOCKET socket_server,const CString &login,const CString &password,CEvent &cEvent_Exit,bool &on_exit)
+bool CTransceiver_Autorization::SendAutorization(SOCKET socket_server,const CSafeString &login,const CSafeString &password,CEvent &cEvent_Exit,bool &on_exit)
 {
  on_exit=false;
  SServerCommand::SHeader sServerCommand_sHeader;
@@ -50,7 +50,7 @@ bool CTransceiver_Autorization::SendAutorization(SOCKET socket_server,const CStr
 //----------------------------------------------------------------------------------------------------
 //считать результат авторизации
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_Autorization::GetAutorizationAnswer(char *ptr,size_t size,CString &guid)
+bool CTransceiver_Autorization::GetAutorizationAnswer(char *ptr,size_t size,CSafeString &guid)
 {
  guid="";
  size_t offset=0;

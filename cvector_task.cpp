@@ -141,7 +141,7 @@ void CVectorTask::SortByDate(void)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID задания
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByTaskGUID(const CString &guid,STask &sTask)
+bool CVectorTask::FindByTaskGUID(const CSafeString &guid,STask &sTask)
 {
  size_t size=vector_STask.size();
  for(size_t n=0;n<size;n++)
@@ -154,7 +154,7 @@ bool CVectorTask::FindByTaskGUID(const CString &guid,STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByFromUserGUID(const CString &guid,STask &sTask)
+bool CVectorTask::FindByFromUserGUID(const CSafeString &guid,STask &sTask)
 {
  size_t size=vector_STask.size();
  for(size_t n=0;n<size;n++)
@@ -167,7 +167,7 @@ bool CVectorTask::FindByFromUserGUID(const CString &guid,STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByForUserGUID(const CString &guid,STask &sTask)
+bool CVectorTask::FindByForUserGUID(const CSafeString &guid,STask &sTask)
 {
  size_t size=vector_STask.size();
  for(size_t n=0;n<size;n++)
@@ -180,7 +180,7 @@ bool CVectorTask::FindByForUserGUID(const CString &guid,STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //найти по GUID проекта
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByProjectGUID(const CString &guid,STask &sTask)
+bool CVectorTask::FindByProjectGUID(const CSafeString &guid,STask &sTask)
 {
  size_t size=vector_STask.size();
  for(size_t n=0;n<size;n++)
@@ -193,7 +193,7 @@ bool CVectorTask::FindByProjectGUID(const CString &guid,STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //удалить по GUID задания
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::DeleteByTaskGUID(const CString &guid)
+bool CVectorTask::DeleteByTaskGUID(const CSafeString &guid)
 {
  size_t size=vector_STask.size();
  for(size_t n=0;n<size;n++)
@@ -210,7 +210,7 @@ bool CVectorTask::DeleteByTaskGUID(const CString &guid)
 //----------------------------------------------------------------------------------------------------
 //заменить по GUID задания
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::ChangeByTaskGUID(const CString &guid,const STask &sTask)
+bool CVectorTask::ChangeByTaskGUID(const CSafeString &guid,const STask &sTask)
 {
  size_t size=vector_STask.size();
  for(size_t n=0;n<size;n++)
@@ -260,7 +260,7 @@ vector<STask>& CVectorTask::GetVectorSTask(void)
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByForUserGUID(const CString &guid)
+vector<STask> CVectorTask::CreateVectorSTaskByForUserGUID(const CSafeString &guid)
 {
  vector<STask> vector_STask_Out;
  size_t size=vector_STask.size();
@@ -274,7 +274,7 @@ vector<STask> CVectorTask::CreateVectorSTaskByForUserGUID(const CString &guid)
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByFromUserGUID(const CString &guid)
+vector<STask> CVectorTask::CreateVectorSTaskByFromUserGUID(const CSafeString &guid)
 {
  vector<STask> vector_STask_Out;
  size_t size=vector_STask.size();
@@ -288,7 +288,7 @@ vector<STask> CVectorTask::CreateVectorSTaskByFromUserGUID(const CString &guid)
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя один для которого задание от пользователя два
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CString &guid_one,const CString &guid_two)
+vector<STask> CVectorTask::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
 {
  vector<STask> vector_STask_Out;
  size_t size=vector_STask.size();
@@ -302,7 +302,7 @@ vector<STask> CVectorTask::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(c
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по проекту от пользователя
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByProjectGUIDFromUserGUID(const CString &guid_project,const CString &guid_from_user)
+vector<STask> CVectorTask::CreateVectorSTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
 {
  vector<STask> vector_STask_Out;
  size_t size=vector_STask.size();
