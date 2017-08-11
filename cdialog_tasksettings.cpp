@@ -56,6 +56,7 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->SetBitmap(hBitmap_TaskFinished);
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE))->SetLimitText(254);
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetLimitText(254);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_ANSWER))->SetLimitText(254);
  //заполним список данными проектов
  ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->ResetContent();
  //заполняем список данными пользователей
@@ -101,6 +102,7 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetRange(&cTime_Min,&cTime_Max);
 
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetWindowText(sTask_Local.Task);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_ANSWER))->SetWindowText(sTask_Local.Answer);
 
  if (NewTask==true) 
  {

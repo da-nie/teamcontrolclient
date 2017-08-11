@@ -68,8 +68,11 @@ afx_msg BOOL CDialog_TaskSetState::OnInitDialog(void)
  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_IS_RUNNING))->SetBitmap(hBitmap_TaskIsRunning);
  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_READ))->SetBitmap(hBitmap_TaskRead);
 
- ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_TASK))->SetLimitText(255);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_TASK))->SetLimitText(254);
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_TASK))->SetWindowText(sTask_Local.Task);
+
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER))->SetLimitText(254);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER))->SetWindowText(sTask_Local.Answer);
 
  return(CDialog::OnInitDialog());
 }
@@ -116,6 +119,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_Cancel(void)
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskDone(void)
 {
  sTask_Local.State=TASK_STATE_DONE;
+ ReadAnswer();
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
@@ -124,6 +128,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskDone(void)
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskCancel(void)
 {
  sTask_Local.State=TASK_STATE_CANCELED;
+ ReadAnswer();
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
@@ -132,6 +137,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskCancel(void)
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskRead(void)
 {
  sTask_Local.State=TASK_STATE_READED;
+ ReadAnswer();
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
@@ -140,6 +146,15 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskRead(void)
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskIsRunning(void)
 {
  sTask_Local.State=TASK_STATE_IS_RUNNING;
+ ReadAnswer();
  EndDialog(0);
 }
-
+//----------------------------------------------------------------------------------------------------
+//считать ответ
+//----------------------------------------------------------------------------------------------------
+void CDialog_TaskSetState::ReadAnswer(void)
+{
+ char answer[255];
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER))->GetWindowText(answer,255);
+ sTask_Local.Answer=answer;
+}

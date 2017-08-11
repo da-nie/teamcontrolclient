@@ -56,6 +56,7 @@ struct STask
  TASK_TYPE TaskType;//тип задания
  CSafeString ForUser;//для пользователя
  CSafeString FromUser;//от пользователя
+ CSafeString Answer;//ответ
 
  //операция сравнения по дате
  bool operator<(const STask &sTask) const
@@ -89,6 +90,7 @@ struct STask
 class CVectorTask
 {
  protected: 
+  unsigned long Version;//номер версии структуры
   //заголовок для загрузки и сохранения данных
   #pragma pack(1)
   struct SHeader
@@ -99,6 +101,7 @@ class CVectorTask
    unsigned long ProjectGUIDSize;//по проекту
    unsigned long TaskSize;//задание
    unsigned long TaskGUIDSize;//идентификатор задания
+   unsigned long AnswerSize;//ответ
    long State;//состояние
    long Year;//год
    long Month;//месяц

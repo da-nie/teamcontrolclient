@@ -5,6 +5,7 @@
 //====================================================================================================
 CVectorTask::CVectorTask()
 {
+ Version=1;
 }
 //====================================================================================================
 //деструктор
@@ -23,6 +24,10 @@ bool CVectorTask::Save(char *filename)
 {
  FILE *file=fopen(filename,"wb");
  if (file==NULL) return(false);
+ //пишем сигнатуру и номер версии структуры данных
+ fwrite("TLV",sizeof(unsigned char),3,file);
+ fwrite(&Version,sizeof(unsigned long),1,file);
+
  size_t size=vector_STask.size();
  fwrite(&size,sizeof(size_t),1,file);
  for(size_t n=0;n<size;n++)
@@ -35,6 +40,7 @@ bool CVectorTask::Save(char *filename)
   sHeader.ProjectGUIDSize=sTask.ProjectGUID.GetLength();
   sHeader.TaskSize=sTask.Task.GetLength();
   sHeader.TaskGUIDSize=sTask.TaskGUID.GetLength();
+  sHeader.AnswerSize=sTask.Answer.GetLength();
   sHeader.Year=sTask.Year;
   sHeader.Month=sTask.Month;
   sHeader.Day=sTask.Day;
@@ -53,6 +59,8 @@ bool CVectorTask::Save(char *filename)
   fwrite(s_ptr,sTask.Task.GetLength(),1,file);
   s_ptr=sTask.TaskGUID;
   fwrite(s_ptr,sTask.TaskGUID.GetLength(),1,file);
+  s_ptr=sTask.Answer;
+  fwrite(s_ptr,sTask.Answer.GetLength(),1,file);
  }
  fclose(file);
  return(true);
@@ -66,6 +74,15 @@ bool CVectorTask::Load(char *filename)
 
  FILE *file=fopen(filename,"rb");
  if (file==NULL) return(false);
+ unsigned char signature[3];
+ unsigned char version;
+ fread(&signature,sizeof(unsigned char),3,file);
+ fread(&version,sizeof(unsigned long),1,file);
+ if (signature[0]!='T' || signature[1]!='L' || signature[2]!='V' || version!=Version)
+ {
+  fclose(file);
+  return(false);
+ }
  size_t size;
  fread(&size,sizeof(size_t),1,file);
  for(size_t n=0;n<size;n++)
@@ -77,18 +94,21 @@ bool CVectorTask::Load(char *filename)
   char *project_guid=new char[sHeader.ProjectGUIDSize+1];
   char *task=new char[sHeader.TaskSize+1];
   char *task_guid=new char[sHeader.TaskGUIDSize+1];
+  char *answer=new char[sHeader.AnswerSize+1];
  
   fread(from_user_guid,sizeof(char),sHeader.FromUserGUIDSize,file);
   fread(for_user_guid,sizeof(char),sHeader.ForUserGUIDSize,file);
   fread(project_guid,sizeof(char),sHeader.ProjectGUIDSize,file);
   fread(task,sizeof(char),sHeader.TaskSize,file);
-  fread(task_guid,sizeof(char),sHeader.TaskGUIDSize,file);  
+  fread(task_guid,sizeof(char),sHeader.TaskGUIDSize,file);
+  fread(answer,sizeof(char),sHeader.AnswerSize,file);
  
   from_user_guid[sHeader.FromUserGUIDSize]=0;
   for_user_guid[sHeader.ForUserGUIDSize]=0;
   project_guid[sHeader.ProjectGUIDSize]=0;
   task[sHeader.TaskSize]=0;
   task_guid[sHeader.TaskGUIDSize]=0;
+  answer[sHeader.AnswerSize]=0;
 
   STask sTask;
   sTask.FromUserGUID=from_user_guid;
@@ -96,6 +116,7 @@ bool CVectorTask::Load(char *filename)
   sTask.ProjectGUID=project_guid;
   sTask.Task=task;
   sTask.TaskGUID=task_guid;
+  sTask.Answer=answer;
 
   sTask.State=sHeader.State;
   sTask.Year=sHeader.Year;
@@ -109,6 +130,7 @@ bool CVectorTask::Load(char *filename)
   delete[](project_guid);
   delete[](task);
   delete[](task_guid);
+  delete[](answer);
 
   vector_STask.push_back(sTask);
  }

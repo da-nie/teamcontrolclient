@@ -34,6 +34,7 @@ bool CTransceiver_Task::ReadSTaskInArray(char *ptr,size_t &offset,size_t max_len
  length+=sServerAnswer_sTaskDataHeader_Ptr->ProjectGUIDSize;
  length+=sServerAnswer_sTaskDataHeader_Ptr->TaskGUIDSize;
  length+=sServerAnswer_sTaskDataHeader_Ptr->TaskSize;
+ length+=sServerAnswer_sTaskDataHeader_Ptr->AnswerSize;
  if (length>max_length) return(false);
 
  sTask.Year=sServerAnswer_sTaskDataHeader_Ptr->Year;
@@ -56,6 +57,9 @@ bool CTransceiver_Task::ReadSTaskInArray(char *ptr,size_t &offset,size_t max_len
 
  SetString(sTask.TaskGUID,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->TaskGUIDSize);
  offset+=sServerAnswer_sTaskDataHeader_Ptr->TaskGUIDSize;
+
+ SetString(sTask.Answer,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->AnswerSize);
+ offset+=sServerAnswer_sTaskDataHeader_Ptr->AnswerSize;
  return(true); 
 }
 //----------------------------------------------------------------------------------------------------
@@ -70,6 +74,7 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const STask &s
  sServerCommand_sTaskDataHeader.ProjectGUIDSize=sTask.ProjectGUID.GetLength();
  sServerCommand_sTaskDataHeader.TaskSize=sTask.Task.GetLength();
  sServerCommand_sTaskDataHeader.TaskGUIDSize=sTask.TaskGUID.GetLength();
+ sServerCommand_sTaskDataHeader.AnswerSize=sTask.Answer.GetLength();
  sServerCommand_sTaskDataHeader.Year=sTask.Year;
  sServerCommand_sTaskDataHeader.Month=sTask.Month;
  sServerCommand_sTaskDataHeader.Day=sTask.Day;
@@ -85,7 +90,9 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const STask &s
  if (on_exit==true) return(true);
  if (SendPart(socket_server,sTask.Task,sTask.Task.GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- return(SendPart(socket_server,sTask.TaskGUID,sTask.TaskGUID.GetLength(),cEvent_Exit,on_exit));
+ if (SendPart(socket_server,sTask.TaskGUID,sTask.TaskGUID.GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (on_exit==true) return(true);
+ return(SendPart(socket_server,sTask.Answer,sTask.Answer.GetLength(),cEvent_Exit,on_exit));
 }
 //----------------------------------------------------------------------------------------------------
 //передать серверу данные задания в виде полного пакета

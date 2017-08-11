@@ -54,6 +54,7 @@ struct SProject
 class CVectorProject
 {
  protected: 
+  unsigned long Version;//номер версии структуры
   //заголовок для загрузки и сохранения данных
   #pragma pack(1)
   struct SHeader
