@@ -72,8 +72,8 @@ afx_msg void CTreeView_Kit::OnInitialUpdate(void)
  //создаём ветки
  
  //создаём рабочие папки
- hTREEITEM_Colleague=InsertItem(NULL,"Сотрудники",GetRootColleagueImageIndex(),GetSelectedRootColleagueImageIndex(),false);
- hTREEITEM_Projects=InsertItem(NULL,"Проекты",GetRootProjectImageIndex(),GetSelectedRootProjectImageIndex(),false);
+ hTREEITEM_Colleague=InsertItem(NULL,"Выданные задания по сотрудникам",GetRootColleagueImageIndex(),GetSelectedRootColleagueImageIndex(),false);
+ hTREEITEM_Projects=InsertItem(NULL,"Выданные задания по проектам",GetRootProjectImageIndex(),GetSelectedRootProjectImageIndex(),false);
 
  UpdateTree();
 
@@ -246,9 +246,7 @@ afx_msg void CTreeView_Kit::OnCommand_Menu_List_AddTask(void)
  STask sTask;
  SYSTEMTIME system_time;
  GetLocalTime(&system_time);
- sTask.Year=system_time.wYear;
- sTask.Month=system_time.wMonth;
- sTask.Day=system_time.wDay;
+ sTask.cDate.SetDate(system_time.wYear,system_time.wMonth,system_time.wDay);
  sTask.ForUserGUID=sUser_Selected.UserGUID;
  while(1)
  {

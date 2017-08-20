@@ -41,9 +41,9 @@ bool CVectorTask::Save(char *filename)
   sHeader.TaskSize=sTask.Task.GetLength();
   sHeader.TaskGUIDSize=sTask.TaskGUID.GetLength();
   sHeader.AnswerSize=sTask.Answer.GetLength();
-  sHeader.Year=sTask.Year;
-  sHeader.Month=sTask.Month;
-  sHeader.Day=sTask.Day;
+  sHeader.Year=sTask.cDate.GetYear();
+  sHeader.Month=sTask.cDate.GetMonth();
+  sHeader.Day=sTask.cDate.GetDay();
   sHeader.State=sTask.State;
   sHeader.TaskType=sTask.TaskType;
   sHeader.Index=sTask.Index;
@@ -85,6 +85,7 @@ bool CVectorTask::Load(char *filename)
  }
  size_t size;
  fread(&size,sizeof(size_t),1,file);
+
  for(size_t n=0;n<size;n++)
  {
   SHeader sHeader;
@@ -119,9 +120,7 @@ bool CVectorTask::Load(char *filename)
   sTask.Answer=answer;
 
   sTask.State=sHeader.State;
-  sTask.Year=sHeader.Year;
-  sTask.Month=sHeader.Month;
-  sTask.Day=sHeader.Day;
+  sTask.cDate.SetDate(sHeader.Year,sHeader.Month,sHeader.Day);
   sTask.TaskType=sHeader.TaskType;
   sTask.Index=sHeader.Index;
 
@@ -131,10 +130,8 @@ bool CVectorTask::Load(char *filename)
   delete[](task);
   delete[](task_guid);
   delete[](answer);
-
   vector_STask.push_back(sTask);
- }
-
+ } 
  fclose(file);
  return(true);
 }

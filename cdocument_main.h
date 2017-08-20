@@ -122,6 +122,7 @@ class CDocument_Main:public CDocument
 
   void GetMyParam(bool &on_line,CSafeString &guid,CSafeString &name,bool &leader);//получить наши параметры
   void SetMyParam(const bool &on_line,const CSafeString &guid,const CSafeString &name,const bool &leader);//задать наши параметры
+  void SetOnLine(const bool &on_line);//установить, есть ли подключение
   void GetShowState(SShowState &sShowState);//получить параметры отображения данных
   void SetShowState(SShowState &sShowState);//задать параметры отображения данных
 

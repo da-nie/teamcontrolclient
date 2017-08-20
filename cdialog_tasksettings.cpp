@@ -93,7 +93,7 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
   }
   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->SetCurSel(selected_index);
  }
- CTime cTime(sTask_Local.Year,sTask_Local.Month,sTask_Local.Day,0,0,0); 
+ CTime cTime(sTask_Local.cDate.GetYear(),sTask_Local.cDate.GetMonth(),sTask_Local.cDate.GetDay(),0,0,0); 
  ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetTime(&cTime); 
  SYSTEMTIME system_time;
  GetLocalTime(&system_time);
@@ -163,9 +163,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
   return;
  } 
  size_t size;
- sTask_Local.Year=cTime.GetYear();
- sTask_Local.Month=cTime.GetMonth();
- sTask_Local.Day=cTime.GetDay();
+ sTask_Local.cDate.SetDate(cTime.GetYear(),cTime.GetMonth(),cTime.GetDay());
  sTask_Local.Task=task;
  if (NewTask==true) sTask_Local.Index=0;//номер вернёт сервер
  sTask_Local.State=TASK_STATE_NO_READ;

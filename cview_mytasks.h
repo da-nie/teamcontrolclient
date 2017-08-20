@@ -46,6 +46,7 @@ class CView_MyTasks:public CView_Base
   CBitmap cBitmap_MenuList_SetTaskReaded;//пиктограмма "задание прочитано"
   CBitmap cBitmap_MenuList_SetTaskIsRunning;//пиктограмма "задание выполн€етс€"
   CBitmap cBitmap_MenuList_SetTaskCanceled;//пиктограмма "задание отклонено"
+  CBitmap cBitmap_MenuList_SendTask;//пиктограмма "поручить копию задани€"
   //-ѕрочее------------------------------------------------------------------
  public:
   //- онструктор класса------------------------------------------------------
@@ -64,6 +65,7 @@ class CView_MyTasks:public CView_Base
   afx_msg void OnCommand_Menu_List_SetTaskReaded(void);//установить, что задание прочитано
   afx_msg void OnCommand_Menu_List_SetTaskIsRunning(void);//установить, что задание выполн€етс€
   afx_msg void OnCommand_Menu_List_SetTaskCanceled(void);//установить, что задание отклонено
+  afx_msg void OnCommand_Menu_List_SendTask(void);//поручить копию задани€
   DECLARE_MESSAGE_MAP()
  public:
   //-‘ункции класса----------------------------------------------------------

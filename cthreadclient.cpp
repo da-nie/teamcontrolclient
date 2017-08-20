@@ -135,7 +135,7 @@ void CThreadClient::Processing(void)
   closesocket(socket_server);  
   //выходим, если нужно
   if (on_exit==true) break;
-  if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetMyParam(false,"","",false);
+  if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetOnLine(false);
  }
 }
 //----------------------------------------------------------------------------------------------------

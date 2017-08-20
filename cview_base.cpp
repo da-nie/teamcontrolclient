@@ -337,10 +337,7 @@ void CView_Base::DrawTasks(CDC *pDC)
  SYSTEMTIME system_time;
  GetLocalTime(&system_time);
 
- STask sTask_CurrentDate;//задача, нужна€ дл€ сравнени€ с текущим временем
- sTask_CurrentDate.Day=system_time.wDay;
- sTask_CurrentDate.Month=system_time.wMonth;
- sTask_CurrentDate.Year=system_time.wYear;
+ CDate cDate(system_time.wYear,system_time.wMonth,system_time.wDay);//текущее врем€ дл€ сравнени€ с временем заданий
 
  //выводим название столбца
  cLineTextCell_ColumnName.SetText(ColumnName);
@@ -359,7 +356,7 @@ void CView_Base::DrawTasks(CDC *pDC)
   if (cRect_DrawArea.top>cRect.bottom) break;
   STask &sTask=vector_STask[n];
   char str_date[255];
-  sprintf(str_date,"ƒо %02i.%02i.%04i [є %i]",sTask.Day,sTask.Month,sTask.Year,sTask.Index);
+  sprintf(str_date,"ƒо %02i.%02i.%04i [є %i]",sTask.cDate.GetDay(),sTask.cDate.GetMonth(),sTask.cDate.GetYear(),sTask.Index);
   cTextCell_TaskDate.SetText(str_date);
   /*if (sTask.State==TASK_STATE_DONE) cTextCell_Task.SetStrikeOut(true);
                                else cTextCell_Task.SetStrikeOut(false);
@@ -416,9 +413,9 @@ void CView_Base::DrawTasks(CDC *pDC)
   }
   //закрашиваем срок
   CRect cRect_TextDateArea=CRect(cRect_TextArea.left,cRect_TextArea.top,cRect_TextArea.right,cRect_TextArea.top+cSize_TaskDate.cy);  
-  if (sTask_CurrentDate>sTask) color=RGB(255,0,0);//просроченное задание
+  if (cDate>sTask.cDate) color=RGB(255,0,0);//просроченное задание
   //if (sTask_CurrentDate<sTask) color=RGB(250,250,230);//ещЄ есть врем€
-  if (sTask_CurrentDate==sTask) color=RGB(255,255,0);//сегодн€шн€€ дата
+  if (cDate==sTask.cDate) color=RGB(255,255,0);//сегодн€шн€€ дата
   if (sTask.State==TASK_STATE_FINISHED) color=RGB(0,255,0);//задание завершено
    
   cFillCell.SetBackgroundColor(color);

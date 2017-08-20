@@ -14,6 +14,7 @@
 #include <vector>
 #include <algorithm>
 #include "stdafx.h"
+#include "cdate.h"
 
 using namespace std;
 
@@ -46,9 +47,7 @@ struct STask
  CSafeString ProjectGUID;//по проекту
  CSafeString Task;//задание
  long State;//состояние
- long Year;//год
- long Month;//месяц
- long Day;//число
+ CDate cDate;//дата
  long Index;//индекс задания
  CSafeString TaskGUID;//идентификатор задания
  //дополнительные данные
@@ -58,7 +57,7 @@ struct STask
  CSafeString FromUser;//от пользователя
  CSafeString Answer;//ответ
 
- //операция сравнения по дате
+ //операция сравнения заданий
  bool operator<(const STask &sTask) const
  {
   if (sTask==*(this)) return(false);
@@ -67,19 +66,18 @@ struct STask
  }
  bool operator>(const STask &sTask) const
  {
-  if (Year>sTask.Year) return(true);
-  if (Year<sTask.Year) return(false);
-  if (Month>sTask.Month) return(true);
-  if (Month<sTask.Month) return(false);
-  if (Day>sTask.Day) return(true);
+  if (cDate>sTask.cDate) return(true);
+  if (cDate==sTask.cDate) 
+  {
+   if (Index>sTask.Index) return(true);
+   return(false);
+  }
   return(false);
  }
  bool operator==(const STask &sTask) const
  {
-  if (Year!=sTask.Year) return(false);
-  if (Month!=sTask.Month) return(false);
-  if (Day!=sTask.Day) return(false);
-  return(true);
+  if (cDate==sTask.cDate && Index==sTask.Index) return(true);
+  return(false);
  }
 };
 

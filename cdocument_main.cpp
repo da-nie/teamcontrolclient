@@ -112,10 +112,7 @@ bool CDocument_Main::GetRestartWithLoaderState(void)
 //----------------------------------------------------------------------------------------------------
 void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
 {
- STask sTask_Time;
- sTask_Time.Year=year;
- sTask_Time.Month=month;
- sTask_Time.Day=day;
+ CDate cDate(year,month,day);
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -126,7 +123,7 @@ void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
     STask &sTask=vector_STask[n];
     if (sTask.State==TASK_STATE_FINISHED)
 	{
-     if (sTask>sTask_Time) continue;
+     if (sTask.cDate>cDate) continue;
      //удаляем из очереди заданий все упоминания о задании
      while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(sTask.TaskGUID)==true);
      sTask.TaskType=TASK_TYPE_DELETED;
@@ -275,6 +272,19 @@ void CDocument_Main::SetMyParam(const bool &on_line,const CSafeString &guid,cons
   }
  }
 }
+//----------------------------------------------------------------------------------------------------
+//установить, есть ли подключение
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::SetOnLine(const bool &on_line)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   sProtectedVariables.OnLine=on_line;
+  }
+ }
+}
+
 //----------------------------------------------------------------------------------------------------
 //получить параметры отображения данных
 //----------------------------------------------------------------------------------------------------

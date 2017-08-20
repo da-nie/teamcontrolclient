@@ -95,6 +95,10 @@ SOURCE=.\cbitmapcell.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\cdate.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\cdialog_about.cpp
 # End Source File
 # Begin Source File
@@ -224,6 +228,10 @@ SOURCE=.\Resource.rc
 # Begin Source File
 
 SOURCE=.\cbitmapcell.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cdate.h
 # End Source File
 # Begin Source File
 

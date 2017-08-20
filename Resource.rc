@@ -120,6 +120,9 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Задание отклонено",           IDC_MENU_LIST_VIEW_MY_TASK_SET_CANCELED
 
+        MENUITEM SEPARATOR
+        MENUITEM "Поручить копию задания",      IDC_MENU_LIST_VIEW_MY_TASK_SEND
+
     END
 END
 

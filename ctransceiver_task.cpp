@@ -37,9 +37,7 @@ bool CTransceiver_Task::ReadSTaskInArray(char *ptr,size_t &offset,size_t max_len
  length+=sServerAnswer_sTaskDataHeader_Ptr->AnswerSize;
  if (length>max_length) return(false);
 
- sTask.Year=sServerAnswer_sTaskDataHeader_Ptr->Year;
- sTask.Month=sServerAnswer_sTaskDataHeader_Ptr->Month;
- sTask.Day=sServerAnswer_sTaskDataHeader_Ptr->Day;
+ sTask.cDate.SetDate(sServerAnswer_sTaskDataHeader_Ptr->Year,sServerAnswer_sTaskDataHeader_Ptr->Month,sServerAnswer_sTaskDataHeader_Ptr->Day); 
  sTask.State=sServerAnswer_sTaskDataHeader_Ptr->State;
  sTask.Index=sServerAnswer_sTaskDataHeader_Ptr->Index;
 
@@ -75,9 +73,9 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const STask &s
  sServerCommand_sTaskDataHeader.TaskSize=sTask.Task.GetLength();
  sServerCommand_sTaskDataHeader.TaskGUIDSize=sTask.TaskGUID.GetLength();
  sServerCommand_sTaskDataHeader.AnswerSize=sTask.Answer.GetLength();
- sServerCommand_sTaskDataHeader.Year=sTask.Year;
- sServerCommand_sTaskDataHeader.Month=sTask.Month;
- sServerCommand_sTaskDataHeader.Day=sTask.Day;
+ sServerCommand_sTaskDataHeader.Year=sTask.cDate.GetYear();
+ sServerCommand_sTaskDataHeader.Month=sTask.cDate.GetMonth();
+ sServerCommand_sTaskDataHeader.Day=sTask.cDate.GetDay();
  sServerCommand_sTaskDataHeader.State=sTask.State;
  sServerCommand_sTaskDataHeader.Index=sTask.Index;
  if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_sTaskDataHeader),sizeof(SServerCommand::STaskDataHeader),cEvent_Exit,on_exit)==false) return(false);

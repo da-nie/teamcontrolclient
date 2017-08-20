@@ -7,10 +7,11 @@
 </h3>
 <h3>Command Lines</h3>
 Creating command line "rc.exe /l 0x419 /fo"Release/Resource.res" /d "NDEBUG" /d "_AFXDLL" "E:\TeamControl\TeamControlClient\Resource.rc"" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP276.tmp" with contents
+Creating temporary file "C:\WINDOWS\TEMP\RSP10.tmp" with contents
 [
 /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXDLL" /Fp"Release/TeamControlClient.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
 "E:\TeamControl\TeamControlClient\cbitmapcell.cpp"
+"E:\TeamControl\TeamControlClient\cdate.cpp"
 "E:\TeamControl\TeamControlClient\cdialog_about.cpp"
 "E:\TeamControl\TeamControlClient\cdialog_clientsettings.cpp"
 "E:\TeamControl\TeamControlClient\cdialog_deletefinishedtask.cpp"
@@ -42,11 +43,12 @@ Creating temporary file "C:\WINDOWS\TEMP\RSP276.tmp" with contents
 "E:\TeamControl\TeamControlClient\cview_outtasks.cpp"
 "E:\TeamControl\TeamControlClient\main.cpp"
 ]
-Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP276.tmp" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP277.tmp" with contents
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP10.tmp" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP11.tmp" with contents
 [
 ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlClient.pdb" /machine:I386 /out:"Release/TeamControlClient.exe" 
 .\Release\cbitmapcell.obj
+.\Release\cdate.obj
 .\Release\cdialog_about.obj
 .\Release\cdialog_clientsettings.obj
 .\Release\cdialog_deletefinishedtask.obj
@@ -79,11 +81,12 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\main.obj
 .\Release\Resource.res
 ]
-Creating command line "link.exe @C:\WINDOWS\TEMP\RSP277.tmp"
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP11.tmp"
 <h3>Output Window</h3>
 Compiling resources...
 Compiling...
 cbitmapcell.cpp
+cdate.cpp
 cdialog_about.cpp
 cdialog_clientsettings.cpp
 cdialog_deletefinishedtask.cpp

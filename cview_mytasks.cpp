@@ -19,6 +19,7 @@ BEGIN_MESSAGE_MAP(CView_MyTasks,CView)
  ON_COMMAND(IDC_MENU_LIST_VIEW_MY_TASK_SET_READED,OnCommand_Menu_List_SetTaskReaded)
  ON_COMMAND(IDC_MENU_LIST_VIEW_MY_TASK_SET_IS_RUNNING,OnCommand_Menu_List_SetTaskIsRunning)
  ON_COMMAND(IDC_MENU_LIST_VIEW_MY_TASK_SET_CANCELED,OnCommand_Menu_List_SetTaskCanceled)
+ ON_COMMAND(IDC_MENU_LIST_VIEW_MY_TASK_SEND,OnCommand_Menu_List_SendTask)
 END_MESSAGE_MAP()
 
 //====================================================================================================
@@ -53,6 +54,7 @@ afx_msg void CView_MyTasks::OnInitialUpdate(void)
  cBitmap_MenuList_SetTaskReaded.LoadBitmap(IDB_BITMAP_MENU_TASK_READED);
  cBitmap_MenuList_SetTaskIsRunning.LoadBitmap(IDB_BITMAP_MENU_TASK_IS_RUNNING);
  cBitmap_MenuList_SetTaskCanceled.LoadBitmap(IDB_BITMAP_MENU_DELETE_TASK);
+ cBitmap_MenuList_SendTask.LoadBitmap(IDB_BITMAP_MENU_ADD_TASK);
 
  CView_Base::OnInitialUpdate();
 }
@@ -118,6 +120,7 @@ afx_msg void CView_MyTasks::OnRButtonDown(UINT nFlags,CPoint point)
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SET_READED,MF_BYCOMMAND,&cBitmap_MenuList_SetTaskReaded,&cBitmap_MenuList_SetTaskReaded);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SET_IS_RUNNING,MF_BYCOMMAND,&cBitmap_MenuList_SetTaskIsRunning,&cBitmap_MenuList_SetTaskIsRunning);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SET_CANCELED,MF_BYCOMMAND,&cBitmap_MenuList_SetTaskCanceled,&cBitmap_MenuList_SetTaskCanceled);
+   cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SEND,MF_BYCOMMAND,&cBitmap_MenuList_SendTask,&cBitmap_MenuList_SendTask);
    cMenu_List.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN|TPM_LEFTBUTTON,mpoint.x,mpoint.y,this); 	
    return;
   }
@@ -241,6 +244,35 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskCanceled(void)
  if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
+ }
+}
+//----------------------------------------------------------------------------------------------------
+//поручить копию задания
+//----------------------------------------------------------------------------------------------------
+afx_msg void CView_MyTasks::OnCommand_Menu_List_SendTask(void)
+{
+ CDocument_Main *cDocument_Main_Ptr=GetDocument();
+ if (cDocument_Main_Ptr==NULL) return;
+ //получаем выбранное задание
+ CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
+ STask sTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ sTask.Answer="";
+ //запускаем диалог создания нового задания
+ while(1)
+ {
+  CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
+  if (cDialog_TaskSettings.Activate(sTask,cDocument_Main_Ptr,true)==true)
+  {
+   CDocument_Main *cDocument_Main_Ptr=GetDocument();
+   //просим добавить задание
+   if (cDocument_Main_Ptr->AddTask(sTask)==false)
+   {
+    MessageBox("Не удалось создать задание!","Ошибка",MB_OK);
+   }
+   else break;
+  }
+  else break;
  }
 }
 
