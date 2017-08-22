@@ -139,45 +139,63 @@ void CTextCell::OutText(CDC *pDC,const CRect &cRect_DrawArea,CRect &cRect_Cell,c
  long length=Text.GetLength();
  const char *s_ptr=Text;
  long pos=0;
- char str[2]={0,0};
  GetTextExtentPoint32(pDC->m_hDC," ",1,&Size);
  long line_height=min_line_height;
  long line_width=TextWidthOffset;
+ CString word="";//собираемое слово
  while(pos<=length)
  {
-  char symbol=*s_ptr;   
+  char symbol=*s_ptr;
   pos++;
   s_ptr++;
-  bool on_enter=false;
-  if (symbol=='\n' || symbol==0)
-  {
-   on_enter=true;
-   symbol=' ';
-  }
   if (symbol=='\t') symbol=' ';
-  if (static_cast<unsigned char>(symbol)<32) continue;//пропускае непечатный символ
-  str[0]=symbol;   
-  GetTextExtentPoint32(pDC->m_hDC,str,1,&Size);
-  if (Size.cy>line_height) line_height=Size.cy;
-  if (line_width+Size.cx>MinLineWidth-TextWidthOffset || on_enter==true)
-  {
-   if (cRect_DrawArea.left+line_width+Size.cx>cRect_DrawArea.right-TextWidthOffset || on_enter==true)//разрываем строку
-   {
-    if (StrikeOut==true && draw==true)//вычёркиваем строку 
-	{
-     pDC->MoveTo(CPoint(cRect_DrawArea.left,cRect_DrawArea.top+cSize_Cell.cy+line_height/2));
-     pDC->LineTo(cRect_DrawArea.right,cRect_DrawArea.top+cSize_Cell.cy+line_height/2);     	 
-	}
-    if (line_width>cSize_Cell.cx) cSize_Cell.cx=line_width;
-    line_width=TextWidthOffset;
-    cSize_Cell.cy+=line_height;
-    line_height=min_line_height;
-   }
+  if (static_cast<unsigned char>(symbol)>=32) 
+  {   
+   word+=symbol;
+   if (static_cast<unsigned char>(symbol)!=32) continue;
   }
-  if (on_enter==false)
+  if (word.GetLength()>0) GetTextExtentPoint32(pDC->m_hDC,word,word.GetLength(),&Size);  
+                     else GetTextExtentPoint32(pDC->m_hDC," ",1,&Size);
+  bool on_enter=false;
+  if (line_width+Size.cx>MinLineWidth-TextWidthOffset)//если длина строки превышает минимальную
   {
-   if (draw==true) pDC->TextOut(cRect_DrawArea.left+line_width,cRect_DrawArea.top+cSize_Cell.cy,str);
+   if (cRect_DrawArea.left+line_width+Size.cx>cRect_DrawArea.right-TextWidthOffset) on_enter=true;//разрываем строку, так как превысили размер области
+   if (line_width==TextWidthOffset) on_enter=false;//если слово столь длинное, что превышает минимальный размер строки, то выводим такое слово целиком
+  }
+  if (symbol=='\n') on_enter=true;
+  //делаем перевод строки, если он нужен
+  if (on_enter==true)
+  {
+   if (StrikeOut==true && draw==true)//вычёркиваем строку 
+   {
+    pDC->MoveTo(CPoint(cRect_DrawArea.left,cRect_DrawArea.top+cSize_Cell.cy+line_height/2));
+    pDC->LineTo(cRect_DrawArea.right,cRect_DrawArea.top+cSize_Cell.cy+line_height/2);     	 
+   }
+   if (line_width>cSize_Cell.cx) cSize_Cell.cx=line_width;
+   line_width=TextWidthOffset;
+   cSize_Cell.cy+=line_height;
+   line_height=min_line_height;
+  }
+  //заново считаем размер
+  if (Size.cy>line_height) line_height=Size.cy;
+  //выводим слово
+  if (word.GetLength()>0)
+  {
+   if (draw==true) pDC->TextOut(cRect_DrawArea.left+line_width,cRect_DrawArea.top+cSize_Cell.cy,word);
    line_width+=Size.cx;
+  }
+  word="";
+  if (symbol==0)//делаем ещё один перевод строки
+  {
+   if (StrikeOut==true && draw==true)//вычёркиваем строку 
+   {
+    pDC->MoveTo(CPoint(cRect_DrawArea.left,cRect_DrawArea.top+cSize_Cell.cy+line_height/2));
+    pDC->LineTo(cRect_DrawArea.right,cRect_DrawArea.top+cSize_Cell.cy+line_height/2);     	 
+   }
+   if (line_width>cSize_Cell.cx) cSize_Cell.cx=line_width;
+   line_width=TextWidthOffset;
+   cSize_Cell.cy+=line_height;
+   line_height=min_line_height;
   }
  }
  cSize_Cell.cy+=TextHeightOffset;

@@ -198,11 +198,16 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskEdit(void)
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
  STask sTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CSafeString for_user_guid=sTask.ForUserGUID;
  while(1)
  {
   CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
   if (cDialog_TaskSettings.Activate(sTask,cDocument_Main_Ptr,false)==true)
   {
+   if (sTask.ForUserGUID.Compare(for_user_guid)!=0)//у задания поменялся адресат
+   {
+    sTask.Answer="";//стираем комментарий старого адресата	;
+   }
    //просим изменить задание
    if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
    {

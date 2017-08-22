@@ -72,8 +72,13 @@ afx_msg void CTreeView_Kit::OnInitialUpdate(void)
  //создаём ветки
  
  //создаём рабочие папки
- hTREEITEM_Colleague=InsertItem(NULL,"Выданные задания по сотрудникам",GetRootColleagueImageIndex(),GetSelectedRootColleagueImageIndex(),false);
- hTREEITEM_Projects=InsertItem(NULL,"Выданные задания по проектам",GetRootProjectImageIndex(),GetSelectedRootProjectImageIndex(),false);
+ hTREEITEM_Colleague=InsertItem(NULL,"Выданные сотрудникам задания",GetRootColleagueImageIndex(),GetSelectedRootColleagueImageIndex(),false);
+ hTREEITEM_Projects=InsertItem(NULL,"Выданные по проектам задания",GetRootProjectImageIndex(),GetSelectedRootProjectImageIndex(),false);
+
+ SUser sUser;
+ sUser.UserGUID=ALL_USER_GUID;
+ CDocument_Main *cDocument_Main_Ptr=GetDocument();
+ cDocument_Main_Ptr->SetSelectedUser(sUser);
 
  UpdateTree();
 
