@@ -167,7 +167,7 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskRepeat(void)
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- cTask.SetState(TASK_STATE_NO_READ);
+ cTask.SetStateNoRead();
  if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
@@ -230,7 +230,7 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_SetTaskFinished(void)
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- cTask.SetState(TASK_STATE_FINISHED);
+ cTask.SetStateFinished();
  if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
@@ -243,14 +243,14 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_SetTaskFinished(void)
 //----------------------------------------------------------------------------------------------------
 //разрешено ли отображать задание
 //----------------------------------------------------------------------------------------------------
-bool CView_OutTasks::TaskIsVisible(const SShowState &sShowState,const long &state)
+bool CView_OutTasks::TaskIsVisible(const SShowState &sShowState,const CTask &cTask)
 {
- if (state==TASK_STATE_NO_READ && sShowState.OutTask_Show_NotRead==false) return(false);
- if (state==TASK_STATE_READED && sShowState.OutTask_Show_Readed==false) return(false);
- if (state==TASK_STATE_IS_RUNNING && sShowState.OutTask_Show_IsRunning==false) return(false);
- if (state==TASK_STATE_DONE && sShowState.OutTask_Show_Done==false) return(false);
- if (state==TASK_STATE_CANCELED && sShowState.OutTask_Show_Cancelled==false) return(false);
- if (state==TASK_STATE_FINISHED && sShowState.OutTask_Show_Finished==false) return(false);
+ if (cTask.IsStateNoRead()==true && sShowState.OutTask_Show_NotRead==false) return(false);
+ if (cTask.IsStateReaded()==true && sShowState.OutTask_Show_Readed==false) return(false);
+ if (cTask.IsStateIsRunning()==true && sShowState.OutTask_Show_IsRunning==false) return(false);
+ if (cTask.IsStateDone()==true && sShowState.OutTask_Show_Done==false) return(false);
+ if (cTask.IsStateCancelled()==true && sShowState.OutTask_Show_Cancelled==false) return(false);
+ if (cTask.IsStateFinished()==true && sShowState.OutTask_Show_Finished==false) return(false);
  return(true);
 }
 //====================================================================================================

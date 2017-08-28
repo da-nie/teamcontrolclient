@@ -93,7 +93,7 @@ class CView_Base:public CView
  protected:
   //-Функции класса----------------------------------------------------------
   CDocument_Main* GetDocument(void);//получить документ
-  virtual bool TaskIsVisible(const SShowState &sShowState,const long &state)=0;//разрешено ли отображать задание
+  virtual bool TaskIsVisible(const SShowState &sShowState,const CTask& cTask)=0;//разрешено ли отображать задание
   void UpdateTask(vector<CTask> &vector_CTask_Local);//обновить задания в списке
   void DrawTasks(CDC *pDC);//нарисовать список задач
   //константы класса

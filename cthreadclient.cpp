@@ -203,9 +203,9 @@ bool CThreadClient::TaskProcessing(SOCKET socket_server,bool &on_exit)
  CTask cTask;
  if (cDocument_Main_Ptr->PopTaskTransferToServer(cTask)==false) return(true);
  SERVER_COMMAND command=SERVER_COMMAND_NOTHING;
- if (cTask.GetTaskType()==TASK_TYPE_DELETED) command=SERVER_COMMAND_DELETED_TASK;
- if (cTask.GetTaskType()==TASK_TYPE_ADDED) command=SERVER_COMMAND_ADDED_TASK;
- if (cTask.GetTaskType()==TASK_TYPE_CHANGED) command=SERVER_COMMAND_CHANGED_TASK;
+ if (cTask.IsMarkForDelete()==true) command=SERVER_COMMAND_DELETED_TASK;
+ if (cTask.IsMarkForAdd()==true) command=SERVER_COMMAND_ADDED_TASK;
+ if (cTask.IsMarkForChange()==true) command=SERVER_COMMAND_CHANGED_TASK;
  if (command==SERVER_COMMAND_NOTHING) return(true);
  bool ret=cTransceiver_Task.SendTaskDataToServerInPackage(socket_server,cTask,command,cEvent_Exit,on_exit);
  //в случае ошибки возвращаем задание обратно в очередь
@@ -223,9 +223,9 @@ bool CThreadClient::ProjectProcessing(SOCKET socket_server,bool &on_exit)
  CProject cProject;
  if (cDocument_Main_Ptr->PopProjectTransferToServer(cProject)==false) return(true);
  SERVER_COMMAND command=SERVER_COMMAND_NOTHING;
- if (cProject.GetProjectType()==PROJECT_TYPE_DELETED) command=SERVER_COMMAND_DELETED_PROJECT;
- if (cProject.GetProjectType()==PROJECT_TYPE_ADDED) command=SERVER_COMMAND_ADDED_PROJECT;
- if (cProject.GetProjectType()==PROJECT_TYPE_CHANGED) command=SERVER_COMMAND_CHANGED_PROJECT;
+ if (cProject.IsMarkForDelete()==true) command=SERVER_COMMAND_DELETED_PROJECT;
+ if (cProject.IsMarkForAdd()==true) command=SERVER_COMMAND_ADDED_PROJECT;
+ if (cProject.IsMarkForChange()==true) command=SERVER_COMMAND_CHANGED_PROJECT;
  if (command==SERVER_COMMAND_NOTHING) return(true);
  bool ret=cTransceiver_Project.SendProjectDataToServerInPackage(socket_server,cProject,command,cEvent_Exit,on_exit);
  //в случае ошибки возвращаем задание обратно в очередь
@@ -456,7 +456,7 @@ void CThreadClient::ExecuteAnswer_GetTaskBook(SOCKET socket_server,SERVER_COMMAN
   CTask cTask;
   if (cTransceiver_Task.ReadCTaskInArray(ptr,offset,size,cTask)==false) break;
   cTask.SetChangeData(false);
-  cTask.SetTaskType(TASK_TYPE_NONE);
+  cTask.MarkForWork();
   cVectorTask.PushBack(cTask);
  } 
  cDocument_Main_Ptr->SetTaskBook(cVectorTask);
@@ -481,7 +481,7 @@ void CThreadClient::ExecuteAnswer_GetProjectBook(SOCKET socket_server,SERVER_COM
   CProject cProject;
   if (cTransceiver_Project.ReadCProjectInArray(ptr,offset,size,cProject)==false) break;
   cProject.SetChangeData(false);
-  cProject.SetProjectType(PROJECT_TYPE_NONE);
+  cProject.MarkForWork();
   cVectorProject.PushBack(cProject);
  } 
  cDocument_Main_Ptr->SetProjectBook(cVectorProject);
@@ -598,7 +598,7 @@ void CThreadClient::ExecuteAnswer_GetDeletedTask(SOCKET socket_server,SERVER_COM
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
  if (cTransceiver_Task.GetTaskAnswer(ptr,size,cTask)==false) return;
  cTask.SetChangeData(false);
- cTask.SetTaskType(TASK_TYPE_NONE);
+ cTask.MarkForWork();
  cDocument_Main_Ptr->OnDeletedTask(cTask);
 }
 //----------------------------------------------------------------------------------------------------
@@ -614,7 +614,7 @@ void CThreadClient::ExecuteAnswer_GetAddedTask(SOCKET socket_server,SERVER_COMMA
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
  if (cTransceiver_Task.GetTaskAnswer(ptr,size,cTask)==false) return;
  cTask.SetChangeData(false);
- cTask.SetTaskType(TASK_TYPE_NONE);
+ cTask.MarkForWork();
  cDocument_Main_Ptr->OnAddedTask(cTask);
 }
 //----------------------------------------------------------------------------------------------------
@@ -630,7 +630,7 @@ void CThreadClient::ExecuteAnswer_GetChangedTask(SOCKET socket_server,SERVER_COM
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
  if (cTransceiver_Task.GetTaskAnswer(ptr,size,cTask)==false) return;
  cTask.SetChangeData(true);
- cTask.SetTaskType(TASK_TYPE_NONE);
+ cTask.MarkForWork();
  cDocument_Main_Ptr->OnChangedTask(cTask);
 }
 
@@ -647,7 +647,7 @@ void CThreadClient::ExecuteAnswer_GetDeletedProject(SOCKET socket_server,SERVER_
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
  if (cTransceiver_Project.GetProjectAnswer(ptr,size,cProject)==false) return;
  cProject.SetChangeData(false);
- cProject.SetProjectType(PROJECT_TYPE_NONE);
+ cProject.MarkForWork();
  cDocument_Main_Ptr->OnDeletedProject(cProject);
 }
 //----------------------------------------------------------------------------------------------------
@@ -663,7 +663,7 @@ void CThreadClient::ExecuteAnswer_GetAddedProject(SOCKET socket_server,SERVER_CO
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
  if (cTransceiver_Project.GetProjectAnswer(ptr,size,cProject)==false) return;
  cProject.SetChangeData(false);
- cProject.SetProjectType(PROJECT_TYPE_NONE);
+ cProject.MarkForWork();
  cDocument_Main_Ptr->OnAddedProject(cProject);
 }
 //----------------------------------------------------------------------------------------------------
@@ -679,7 +679,7 @@ void CThreadClient::ExecuteAnswer_GetChangedProject(SOCKET socket_server,SERVER_
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
  if (cTransceiver_Project.GetProjectAnswer(ptr,size,cProject)==false) return;
  cProject.SetChangeData(true);
- cProject.SetProjectType(PROJECT_TYPE_NONE);
+ cProject.MarkForWork();
  cDocument_Main_Ptr->OnChangedProject(cProject);
 }
 

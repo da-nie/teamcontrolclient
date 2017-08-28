@@ -61,14 +61,22 @@ class CProject
   const CSafeString& GetProjectName(void) const;//получить название
   const CSafeString& GetProjectGUID(void) const;//получить уникальный идентификатор
   const bool& GetChangeData(void) const;//получить, изменились ли данные проекта
-  const PROJECT_TYPE& GetProjectType(void) const;//получить тип проекта
 
   void SetProjectName(const char *project_name);//задать название
   void SetProjectGUID(const char *guid);//задать уникальный идентификатор
   void SetChangeData(const bool& change_data);//задать изменились ли данные проекта
-  void SetProjectType(PROJECT_TYPE project_type);//задать тип проекта
 
-  bool IsProjectGUID(const char *guid);//верный ли ProjectGUID
+  void MarkForWork(void);//отметить дл€ работы
+  void MarkForDelete(void);//отметить дл€ удалени€
+  void MarkForChange(void);//отметить дл€ замены
+  void MarkForAdd(void);//отметить дл€ добавлени€
+
+  bool IsMarkForWork(void) const;//отмечено ли дл€ работы
+  bool IsMarkForDelete(void) const;//отмечено ли дл€ удалени€
+  bool IsMarkForChange(void) const;//отмечено ли дл€ замены
+  bool IsMarkForAdd(void) const;//отмечено ли дл€ добавлени€
+
+  bool IsProjectGUID(const char *guid) const;//верный ли ProjectGUID
 
   bool Save(FILE *file) const;//сохранить данные
   bool Load(FILE *file);//загрузить данные

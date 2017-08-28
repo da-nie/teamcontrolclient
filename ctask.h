@@ -106,12 +106,11 @@ class CTask
   const CSafeString& GetForUserGUID(void) const;//получить уникальный идентификатор для какого пользователя задание
   const CSafeString& GetProjectGUID(void) const;//получить уникальный идентификатор проекта
   const CSafeString& GetTask(void) const;//получить задание
-  const long& GetState(void) const;//получиь состояние задания
+  //const long& GetState(void) const;//получиь состояние задания
   const CDate& GetDate(void) const;//получить срок задания
   const CSafeString& GetTaskGUID(void) const;//получить уникальный идентификатор задания
   const CSafeString& GetAnswer(void) const;//получить ответ на задание
   const bool& GetChangeData(void) const;//получить, изменились ли данные задания
-  const TASK_TYPE& GetTaskType(void) const;//получить тип задания
   const CSafeString& GetForUser(void) const;//получить имя пользователя для которого задание
   const CSafeString& GetFromUser(void) const;//получить имя пользователя от которого задание
 
@@ -120,14 +119,37 @@ class CTask
   void SetForUserGUID(const char *for_user_guid);//задать уникальный идентификатор для какого пользователя задание
   void SetProjectGUID(const char *project_guid);//задать уникальный идентификатор проекта
   void SetTask(const char *task);//задать задание
-  void SetState(const long &state);//получиь состояние задания
+  //void SetState(const long &state);//получиь состояние задания
   void SetDate(const CDate &cDate_Set);//задать срок задания
   void SetTaskGUID(const char *task_guid);//задать уникальный идентификатор задания
   void SetAnswer(const char *answer);//задать ответ на задание
   void SetChangeData(const bool& change_data);//задать изменились ли данные задания
-  void SetTaskType(TASK_TYPE task_type);//задать тип задания
   void SetForUser(const char *for_user);//задать имя пользователя для которого задание
   void SetFromUser(const char *from_user);//задать имя пользователя от которого задание
+
+  void SetStateNoRead(void);//установить, что задание не прочитано
+  void SetStateReaded(void);//установить, что задание прочитано и ожидает выполнения
+  void SetStateIsRunning(void);//установить, что задание выполняется
+  void SetStateDone(void);//установить, что задание выполнено
+  void SetStateCancelled(void);//установить, что задание отклонено
+  void SetStateFinished(void);//установить, что задание завершено
+
+  void MarkForWork(void);//отметить для работы
+  void MarkForDelete(void);//отметить для удаления
+  void MarkForChange(void);//отметить для замены
+  void MarkForAdd(void);//отметить для добавления
+
+  bool IsMarkForWork(void) const;//отмечено ли для работы
+  bool IsMarkForDelete(void) const;//отмечено ли для удаления
+  bool IsMarkForChange(void) const;//отмечено ли для замены
+  bool IsMarkForAdd(void) const;//отмечено ли для добавления
+
+  bool IsStateNoRead(void) const;//проверить, что задание не прочитано
+  bool IsStateReaded(void) const;//проверить, что задание прочитано и ожидает выполнения
+  bool IsStateIsRunning(void) const;//проверить, что задание выполняется
+  bool IsStateDone(void) const;//проверить, что задание выполнено
+  bool IsStateCancelled(void) const;//проверить, что задание отклонено
+  bool IsStateFinished(void) const;//проверить, что задание завершено
 
   bool IsFromOrForUserGUID(const char *guid) const;//это задание от или для пользователя с уникальным идентификатором
   bool IsForUserGUID(const char *guid) const;//это задание для пользователя с уникальным идентификатором

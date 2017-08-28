@@ -118,7 +118,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_Cancel(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskDone(void)
 {
- cTask_Local.SetState(TASK_STATE_DONE);
+ cTask_Local.SetStateDone();
  ReadAnswer();
  EndDialog(0);
 }
@@ -127,7 +127,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskDone(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskCancel(void)
 {
- cTask_Local.SetState(TASK_STATE_CANCELED);
+ cTask_Local.SetStateCancelled();
  ReadAnswer();
  EndDialog(0);
 }
@@ -136,7 +136,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskCancel(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskRead(void)
 {
- cTask_Local.SetState(TASK_STATE_READED);
+ cTask_Local.SetStateReaded();
  ReadAnswer();
  EndDialog(0);
 }
@@ -145,7 +145,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskRead(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskIsRunning(void)
 {
- cTask_Local.SetState(TASK_STATE_IS_RUNNING);
+ cTask_Local.SetStateIsRunning();
  ReadAnswer();
  EndDialog(0);
 }

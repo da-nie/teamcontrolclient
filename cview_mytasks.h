@@ -71,7 +71,7 @@ class CView_MyTasks:public CView_Base
   //-Функции класса----------------------------------------------------------
  protected:
   //-Функции класса----------------------------------------------------------
-  bool TaskIsVisible(const SShowState &sShowState,const long &state);//разрешено ли отображать задание
+  bool TaskIsVisible(const SShowState &sShowState,const CTask& cTask);//разрешено ли отображать задание
   //-Прочее------------------------------------------------------------------
   DECLARE_DYNCREATE(CView_MyTasks)
   

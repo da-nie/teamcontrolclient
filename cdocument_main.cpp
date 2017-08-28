@@ -121,12 +121,12 @@ void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
    for(size_t n=0;n<size;n++)
    {
     CTask &cTask=vector_CTask[n];
-    if (cTask.GetState()==TASK_STATE_FINISHED)
+    if (cTask.IsStateFinished()==true)
 	{
      if (cTask.GetDate()>cDate) continue;
      //удаляем из очереди заданий все упоминания о задании
      while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(cTask.GetTaskGUID())==true);
-     cTask.SetTaskType(TASK_TYPE_DELETED);
+	 cTask.MarkForDelete();
      sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
      sProtectedVariables.OnUpdateView=true;
 	}
@@ -621,7 +621,7 @@ bool CDocument_Main::AddTask(CTask &cTask)
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   cTask.SetTaskType(TASK_TYPE_ADDED);
+   cTask.MarkForAdd();
    sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
    sProtectedVariables.OnUpdateView=true;
   }
@@ -638,7 +638,7 @@ bool CDocument_Main::DeleteTask(CTask &cTask)
   {
    //удаляем из очереди заданий все упоминания о задании
    while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(cTask.GetTaskGUID())==true);
-   cTask.SetTaskType(TASK_TYPE_DELETED);
+   cTask.MarkForDelete();
    sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
    sProtectedVariables.OnUpdateView=true;
   }
@@ -655,7 +655,7 @@ bool CDocument_Main::ChangeTask(CTask &cTask)
   {
    //удаляем из очереди заданий все упоминания о задании
    while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(cTask.GetTaskGUID())==true);
-   cTask.SetTaskType(TASK_TYPE_CHANGED);
+   cTask.MarkForChange();
    sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
@@ -672,7 +672,7 @@ bool CDocument_Main::AddProject(CProject &cProject)
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   cProject.SetProjectType(PROJECT_TYPE_ADDED);
+   cProject.MarkForAdd();
    sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
    sProtectedVariables.OnUpdateView=true;
   }
@@ -689,7 +689,7 @@ bool CDocument_Main::DeleteProject(CProject &cProject)
   {
    //удаляем из очереди заданий все упоминания о проекте
    while(sProtectedVariables.cVectorProject_TransferToServer.DeleteByProjectGUID(cProject.GetProjectGUID())==true);
-   cProject.SetProjectType(PROJECT_TYPE_DELETED);
+   cProject.MarkForDelete();
    sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
    sProtectedVariables.OnUpdateView=true;
   }
@@ -706,7 +706,7 @@ bool CDocument_Main::ChangeProject(CProject &cProject)
   {
    //удаляем из очереди заданий все упоминания о проекте
    while(sProtectedVariables.cVectorProject_TransferToServer.DeleteByProjectGUID(cProject.GetProjectGUID())==true);
-   cProject.SetProjectType(PROJECT_TYPE_CHANGED);
+   cProject.MarkForChange();
    sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;

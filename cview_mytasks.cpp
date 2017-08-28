@@ -78,7 +78,7 @@ void CView_MyTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  bool not_read_task_state=false;
  for(size_t n=0;n<size;n++)
  {
-  if (vector_CTask_Local[n].GetState()==TASK_STATE_NO_READ)
+  if (vector_CTask_Local[n].IsStateNoRead()==true)
   {
    not_read_task_state=true;
    break;
@@ -105,7 +105,7 @@ afx_msg void CView_MyTasks::OnRButtonDown(UINT nFlags,CPoint point)
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
- if (cTask.GetState()==TASK_STATE_FINISHED) return;//завершённые задания изменять нельзя
+ if (cTask.IsStateFinished()==true) return;//завершённые задания изменять нельзя
  //создаём выпадающее меню
  CPoint mpoint;
  GetCursorPos(&mpoint);
@@ -156,7 +156,7 @@ afx_msg void CView_MyTasks::OnLButtonDblClk(UINT nFlags,CPoint point)
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
- if (cTask.GetState()==TASK_STATE_FINISHED) return;//завершённые задания изменять нельзя
+ if (cTask.IsStateFinished()==true) return;//завершённые задания изменять нельзя
  //просим изменить задание
  while(1)
  {
@@ -186,7 +186,7 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskDone(void)
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- cTask.SetState(TASK_STATE_DONE);
+ cTask.SetStateDone();
  if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
@@ -204,7 +204,7 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskReaded(void)
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- cTask.SetState(TASK_STATE_READED);
+ cTask.SetStateReaded();
  if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
@@ -222,7 +222,7 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskIsRunning(void)
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- cTask.SetState(TASK_STATE_IS_RUNNING);
+ cTask.SetStateIsRunning();
  if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
@@ -240,7 +240,7 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskCanceled(void)
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- cTask.SetState(TASK_STATE_CANCELED);
+ cTask.SetStateCancelled();
  if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
@@ -283,14 +283,14 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SendTask(void)
 //----------------------------------------------------------------------------------------------------
 //разрешено ли отображать задание
 //----------------------------------------------------------------------------------------------------
-bool CView_MyTasks::TaskIsVisible(const SShowState &sShowState,const long &state)
+bool CView_MyTasks::TaskIsVisible(const SShowState &sShowState,const CTask& cTask)
 {
- if (state==TASK_STATE_NO_READ && sShowState.MyTask_Show_NotRead==false) return(false);
- if (state==TASK_STATE_READED && sShowState.MyTask_Show_Readed==false) return(false);
- if (state==TASK_STATE_IS_RUNNING && sShowState.MyTask_Show_IsRunning==false) return(false);
- if (state==TASK_STATE_DONE && sShowState.MyTask_Show_Done==false) return(false);
- if (state==TASK_STATE_CANCELED && sShowState.MyTask_Show_Cancelled==false) return(false);
- if (state==TASK_STATE_FINISHED && sShowState.MyTask_Show_Finished==false) return(false);
+ if (cTask.IsStateNoRead()==true && sShowState.MyTask_Show_NotRead==false) return(false);
+ if (cTask.IsStateReaded()==true && sShowState.MyTask_Show_Readed==false) return(false);
+ if (cTask.IsStateIsRunning()==true && sShowState.MyTask_Show_IsRunning==false) return(false);
+ if (cTask.IsStateDone()==true && sShowState.MyTask_Show_Done==false) return(false);
+ if (cTask.IsStateCancelled()==true && sShowState.MyTask_Show_Cancelled==false) return(false);
+ if (cTask.IsStateFinished()==true && sShowState.MyTask_Show_Finished==false) return(false);
  return(true);
 }
 

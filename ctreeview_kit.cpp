@@ -294,7 +294,7 @@ afx_msg void CTreeView_Kit::OnCommand_Menu_List_AddProject(void)
  cProject.SetProjectName("");
  cProject.SetProjectGUID("");
  cProject.SetChangeData(false);
- cProject.SetProjectType(PROJECT_TYPE_NONE);
+ cProject.MarkForWork();
  while(1)
  {  
   CDialog_ProjectSettings cDialog_ProjectSettings((LPCSTR)IDD_DIALOG_PROJECT_SETTINGS,this);

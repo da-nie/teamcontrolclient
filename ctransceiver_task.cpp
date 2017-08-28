@@ -38,7 +38,12 @@ bool CTransceiver_Task::ReadCTaskInArray(char *ptr,size_t &offset,size_t max_len
  if (length>max_length) return(false);
 
  cTask.SetDate(CDate(sServerAnswer_cTaskDataHeader_Ptr->Year,sServerAnswer_cTaskDataHeader_Ptr->Month,sServerAnswer_cTaskDataHeader_Ptr->Day)); 
- cTask.SetState(sServerAnswer_cTaskDataHeader_Ptr->State);
+ if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_NO_READ) cTask.SetStateNoRead();
+ if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_READED) cTask.SetStateReaded();
+ if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_CANCELED) cTask.SetStateCancelled();
+ if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_IS_RUNNING) cTask.SetStateIsRunning();
+ if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_DONE) cTask.SetStateDone();
+ if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_FINISHED) cTask.SetStateFinished();
  cTask.SetIndex(sServerAnswer_cTaskDataHeader_Ptr->Index);
 
  CSafeString str;
@@ -85,7 +90,14 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const CTask &c
  sServerCommand_cTaskDataHeader.Year=cDate.GetYear();
  sServerCommand_cTaskDataHeader.Month=cDate.GetMonth();
  sServerCommand_cTaskDataHeader.Day=cDate.GetDay();
- sServerCommand_cTaskDataHeader.State=cTask.GetState();
+
+ if (cTask.IsStateNoRead()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_NO_READ;
+ if (cTask.IsStateReaded()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_READED;
+ if (cTask.IsStateCancelled()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_CANCELED;
+ if (cTask.IsStateIsRunning()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_IS_RUNNING;
+ if (cTask.IsStateDone()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_DONE;
+ if (cTask.IsStateFinished()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_FINISHED;
+
  sServerCommand_cTaskDataHeader.Index=cTask.GetIndex();
  if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_cTaskDataHeader),sizeof(SServerCommand::CTaskDataHeader),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);

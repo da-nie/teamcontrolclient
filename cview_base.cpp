@@ -292,8 +292,7 @@ void CView_Base::UpdateTask(vector<CTask> &vector_CTask_Local)
  size_t size=vector_CTask_Local.size();
  for(size_t n=0;n<size;n++)
  {  
-  long state=vector_CTask_Local[n].GetState();
-  if (TaskIsVisible(sShowState,state)==false) continue;
+  if (TaskIsVisible(sShowState,vector_CTask_Local[n])==false) continue;
   CUser cUser;
   cDocument_Main_Ptr->FindByUserGUID(vector_CTask_Local[n].GetFromUserGUID(),cUser);
   vector_CTask_Local[n].SetFromUser(cUser.GetName());
@@ -370,16 +369,16 @@ void CView_Base::DrawTasks(CDC *pDC)
   cTextCell_FromUser.SetText("ќт: "+cTask.GetFromUser());
   //узнаем размеры изображени€
   CBitmap *cBitmap_Ptr=NULL;
-  if (cTask.GetState()==TASK_STATE_NO_READ)
+  if (cTask.IsStateNoRead()==true)
   {
    if (FlashState==true) cBitmap_Ptr=&cBitmap_TaskNotReadFrameOne;
                     else cBitmap_Ptr=&cBitmap_TaskNotReadFrameOneFlash;
   }
-  if (cTask.GetState()==TASK_STATE_READED) cBitmap_Ptr=&cBitmap_TaskReaded;
-  if (cTask.GetState()==TASK_STATE_CANCELED) cBitmap_Ptr=&cBitmap_TaskCanceled;
-  if (cTask.GetState()==TASK_STATE_IS_RUNNING) cBitmap_Ptr=&cBitmap_TaskIsRunning;
-  if (cTask.GetState()==TASK_STATE_DONE) cBitmap_Ptr=&cBitmap_TaskDone;
-  if (cTask.GetState()==TASK_STATE_FINISHED) cBitmap_Ptr=&cBitmap_TaskFinished;
+  if (cTask.IsStateReaded()==true) cBitmap_Ptr=&cBitmap_TaskReaded;
+  if (cTask.IsStateCancelled()==true) cBitmap_Ptr=&cBitmap_TaskCanceled;
+  if (cTask.IsStateIsRunning()==true) cBitmap_Ptr=&cBitmap_TaskIsRunning;
+  if (cTask.IsStateDone()==true) cBitmap_Ptr=&cBitmap_TaskDone;
+  if (cTask.IsStateFinished()==true) cBitmap_Ptr=&cBitmap_TaskFinished;
   cBitmapCell_TaskState.SetBitmap(cBitmap_Ptr);
   CSize cSize_TaskState;
   cBitmapCell_TaskState.GetSize(pDC,cRect_DrawArea,cSize_TaskState);
@@ -417,7 +416,7 @@ void CView_Base::DrawTasks(CDC *pDC)
   if (cDate_Current>cTask.GetDate()) color=RGB(255,0,0);//просроченное задание
   //if (cTaskGetDate()>cDate_Current) color=RGB(250,250,230);//ещЄ есть врем€
   if (cDate_Current==cTask.GetDate()) color=RGB(255,255,0);//сегодн€шн€€ дата
-  if (cTask.GetState()==TASK_STATE_FINISHED) color=RGB(0,255,0);//задание завершено
+  if (cTask.IsStateFinished()==true) color=RGB(0,255,0);//задание завершено
    
   cFillCell.SetBackgroundColor(color);
   cFillCell.Draw(pDC,cRect_TextDateArea);

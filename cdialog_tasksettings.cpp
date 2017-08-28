@@ -166,7 +166,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  cTask_Local.SetDate(CDate(cTime.GetYear(),cTime.GetMonth(),cTime.GetDay()));
  cTask_Local.SetTask(task);
  if (NewTask==true) cTask_Local.SetIndex(0);//номер вернёт сервер
- cTask_Local.SetState(TASK_STATE_NO_READ);
+ cTask_Local.SetStateNoRead();
  //считываем пользователя, которому предназначена задача
  size=vector_CUser_Local.size();
  long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
@@ -205,7 +205,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Cancel(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnCommand_Button_TaskFinished(void)
 {
- cTask_Local.SetState(TASK_STATE_FINISHED);
+ cTask_Local.SetStateFinished();
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
