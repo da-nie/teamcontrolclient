@@ -34,7 +34,7 @@ class CView_Base:public CView
 {
  protected: 
   //-Переменные класса-------------------------------------------------------
-  vector<STask> vector_STask;//отображаемый список задач
+  vector<CTask> vector_CTask;//отображаемый список задач
   bool FlashState;//состояние мигания
   CSafeString SelectedTaskGUID;//GUID выбранного задания
   vector<SCell> vector_SCell_Task;//список координат заданий
@@ -94,7 +94,7 @@ class CView_Base:public CView
   //-Функции класса----------------------------------------------------------
   CDocument_Main* GetDocument(void);//получить документ
   virtual bool TaskIsVisible(const SShowState &sShowState,const long &state)=0;//разрешено ли отображать задание
-  void UpdateTask(vector<STask> &vector_STask_Local);//обновить задания в списке
+  void UpdateTask(vector<CTask> &vector_CTask_Local);//обновить задания в списке
   void DrawTasks(CDC *pDC);//нарисовать список задач
   //константы класса
   const long & GetScrollBarWidth(void){static const long ret=16;return(ret);}//получить ширину полосы прокрутки

@@ -71,14 +71,14 @@ void CView_MyTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
  
- vector<STask> vector_STask_Local;
- vector_STask_Local=cDocument_Main_Ptr->CreateVectorSTaskByForUserGUID(guid); 
+ vector<CTask> vector_CTask_Local;
+ vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByForUserGUID(guid); 
  
- size_t size=vector_STask_Local.size();
+ size_t size=vector_CTask_Local.size();
  bool not_read_task_state=false;
  for(size_t n=0;n<size;n++)
  {
-  if (vector_STask_Local[n].State==TASK_STATE_NO_READ)
+  if (vector_CTask_Local[n].GetState()==TASK_STATE_NO_READ)
   {
    not_read_task_state=true;
    break;
@@ -86,7 +86,7 @@ void CView_MyTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  }
  cDocument_Main_Ptr->SetNotReadTaskState(not_read_task_state);
  CView_Base::OnUpdate(pSender,lHint,pHint);	
- UpdateTask(vector_STask_Local); 
+ UpdateTask(vector_CTask_Local); 
  return;
 }
 //====================================================================================================
@@ -103,9 +103,9 @@ afx_msg void CView_MyTasks::OnRButtonDown(UINT nFlags,CPoint point)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
- if (sTask.State==TASK_STATE_FINISHED) return;//завершённые задания изменять нельзя
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
+ if (cTask.GetState()==TASK_STATE_FINISHED) return;//завершённые задания изменять нельзя
  //создаём выпадающее меню
  CPoint mpoint;
  GetCursorPos(&mpoint);
@@ -154,17 +154,17 @@ afx_msg void CView_MyTasks::OnLButtonDblClk(UINT nFlags,CPoint point)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
- if (sTask.State==TASK_STATE_FINISHED) return;//завершённые задания изменять нельзя
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
+ if (cTask.GetState()==TASK_STATE_FINISHED) return;//завершённые задания изменять нельзя
  //просим изменить задание
  while(1)
  {
   CDialog_TaskSetState cDialog_TaskSetState((LPCSTR)IDD_DIALOG_TASK_SET_STATE,this);
-  if (cDialog_TaskSetState.Activate(sTask)==true)
+  if (cDialog_TaskSetState.Activate(cTask)==true)
   {
    //просим изменить задание
-   if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+   if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
    {
     MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
    }
@@ -183,11 +183,11 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskDone(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- sTask.State=TASK_STATE_DONE;
- if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+ cTask.SetState(TASK_STATE_DONE);
+ if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
  }
@@ -201,11 +201,11 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskReaded(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- sTask.State=TASK_STATE_READED;
- if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+ cTask.SetState(TASK_STATE_READED);
+ if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
  }
@@ -219,11 +219,11 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskIsRunning(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- sTask.State=TASK_STATE_IS_RUNNING;
- if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+ cTask.SetState(TASK_STATE_IS_RUNNING);
+ if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
  }
@@ -237,11 +237,11 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskCanceled(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- sTask.State=TASK_STATE_CANCELED;
- if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+ cTask.SetState(TASK_STATE_CANCELED);
+ if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
  }
@@ -255,18 +255,18 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SendTask(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
- sTask.Answer="";
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
+ cTask.SetAnswer("");
  //запускаем диалог создания нового задания
  while(1)
  {
   CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
-  if (cDialog_TaskSettings.Activate(sTask,cDocument_Main_Ptr,true)==true)
+  if (cDialog_TaskSettings.Activate(cTask,cDocument_Main_Ptr,true)==true)
   {
    CDocument_Main *cDocument_Main_Ptr=GetDocument();
    //просим добавить задание
-   if (cDocument_Main_Ptr->AddTask(sTask)==false)
+   if (cDocument_Main_Ptr->AddTask(cTask)==false)
    {
     MessageBox("Не удалось создать задание!","Ошибка",MB_OK);
    }

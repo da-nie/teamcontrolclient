@@ -33,9 +33,9 @@ class CTransceiver_User:public CTransceiver
   //деструктор
   ~CTransceiver_User();
   //функции класса
-  bool ReadSUserInArray(char *ptr,size_t &offset,size_t max_length,SUser &sUser);//получение сотрудника из массива принятых данных
+  bool ReadCUserInArray(char *ptr,size_t &offset,size_t max_length,CUser &cUser);//получение сотрудника из массива принятых данных
   bool GetUserBook(SOCKET socket_server,CEvent &cEvent_Exit,bool &on_exit);//запрос базы данных пользователей
-  bool GetUserAnswer(char *ptr,size_t size,SUser &sUser);//считать пользователя из ответа сервера
+  bool GetUserAnswer(char *ptr,size_t size,CUser &cUser);//считать пользователя из ответа сервера
 };
 
 #endif

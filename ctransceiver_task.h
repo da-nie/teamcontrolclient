@@ -33,11 +33,11 @@ class CTransceiver_Task:public CTransceiver
   //деструктор
   ~CTransceiver_Task();
   //функции класса
-  bool ReadSTaskInArray(char *ptr,size_t &offset,size_t max_length,STask &sTask);//получение задания из массива принятых данных
-  bool SendTaskDataToServer(SOCKET socket_server,const STask &sTask,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные задания
-  bool SendTaskDataToServerInPackage(SOCKET socket_server,const STask &sTask,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные задания в виде полного пакета
+  bool ReadCTaskInArray(char *ptr,size_t &offset,size_t max_length,CTask &cTask);//получение задания из массива принятых данных
+  bool SendTaskDataToServer(SOCKET socket_server,const CTask &cTask,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные задания
+  bool SendTaskDataToServerInPackage(SOCKET socket_server,const CTask &cTask,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные задания в виде полного пакета
   bool GetTaskBook(SOCKET socket_server,CEvent &cEvent_Exit,bool &on_exit);//запрос базы данных заданий
-  bool GetTaskAnswer(char *ptr,size_t size,STask &sTask);//считать задачу из ответа сервера
+  bool GetTaskAnswer(char *ptr,size_t size,CTask &cTask);//считать задачу из ответа сервера
 };
 
 #endif

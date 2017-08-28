@@ -23,35 +23,41 @@ CTransceiver_User::~CTransceiver_User()
 //----------------------------------------------------------------------------------------------------
 //получение сотрудника из массива принятых данных
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_User::ReadSUserInArray(char *ptr,size_t &offset,size_t max_length,SUser &sUser)
+bool CTransceiver_User::ReadCUserInArray(char *ptr,size_t &offset,size_t max_length,CUser &cUser)
 {
- if (offset+sizeof(SServerAnswer::SUserDataHeader)>max_length) return(false);
- SServerAnswer::SUserDataHeader *sServerAnswer_sUserDataHeader_Ptr=reinterpret_cast<SServerAnswer::SUserDataHeader*>(ptr+offset);
- offset+=sizeof(SServerAnswer::SUserDataHeader);
+ if (offset+sizeof(SServerAnswer::CUserDataHeader)>max_length) return(false);
+ SServerAnswer::CUserDataHeader *sServerAnswer_cUserDataHeader_Ptr=reinterpret_cast<SServerAnswer::CUserDataHeader*>(ptr+offset);
+ offset+=sizeof(SServerAnswer::CUserDataHeader);
  long length=offset;
- length+=sServerAnswer_sUserDataHeader_Ptr->NameSize;
- length+=sServerAnswer_sUserDataHeader_Ptr->DescriptionSize;
- length+=sServerAnswer_sUserDataHeader_Ptr->JobTitleSize;
- length+=sServerAnswer_sUserDataHeader_Ptr->GUIDSize;
- length+=sServerAnswer_sUserDataHeader_Ptr->TelephoneSize;
+ length+=sServerAnswer_cUserDataHeader_Ptr->NameSize;
+ length+=sServerAnswer_cUserDataHeader_Ptr->DescriptionSize;
+ length+=sServerAnswer_cUserDataHeader_Ptr->JobTitleSize;
+ length+=sServerAnswer_cUserDataHeader_Ptr->GUIDSize;
+ length+=sServerAnswer_cUserDataHeader_Ptr->TelephoneSize;
  if (length>max_length) return(false);
 
- SetString(sUser.Name,ptr+offset,sServerAnswer_sUserDataHeader_Ptr->NameSize);
- offset+=sServerAnswer_sUserDataHeader_Ptr->NameSize;
+ CSafeString str;
+ SetString(str,ptr+offset,sServerAnswer_cUserDataHeader_Ptr->NameSize);
+ cUser.SetName(str);
+ offset+=sServerAnswer_cUserDataHeader_Ptr->NameSize;
 
- SetString(sUser.JobTitle,ptr+offset,sServerAnswer_sUserDataHeader_Ptr->JobTitleSize);
- offset+=sServerAnswer_sUserDataHeader_Ptr->JobTitleSize;
+ SetString(str,ptr+offset,sServerAnswer_cUserDataHeader_Ptr->JobTitleSize);
+ cUser.SetJobTitle(str);
+ offset+=sServerAnswer_cUserDataHeader_Ptr->JobTitleSize;
 
- SetString(sUser.Telephone,ptr+offset,sServerAnswer_sUserDataHeader_Ptr->TelephoneSize);
- offset+=sServerAnswer_sUserDataHeader_Ptr->TelephoneSize;
+ SetString(str,ptr+offset,sServerAnswer_cUserDataHeader_Ptr->TelephoneSize);
+ cUser.SetTelephone(str);
+ offset+=sServerAnswer_cUserDataHeader_Ptr->TelephoneSize;
 
- SetString(sUser.Description,ptr+offset,sServerAnswer_sUserDataHeader_Ptr->DescriptionSize);
- offset+=sServerAnswer_sUserDataHeader_Ptr->DescriptionSize;
+ SetString(str,ptr+offset,sServerAnswer_cUserDataHeader_Ptr->DescriptionSize);
+ cUser.SetDescription(str);
+ offset+=sServerAnswer_cUserDataHeader_Ptr->DescriptionSize;
 
- SetString(sUser.UserGUID,ptr+offset,sServerAnswer_sUserDataHeader_Ptr->GUIDSize);
- offset+=sServerAnswer_sUserDataHeader_Ptr->GUIDSize;
+ SetString(str,ptr+offset,sServerAnswer_cUserDataHeader_Ptr->GUIDSize);
+ cUser.SetUserGUID(str);
+ offset+=sServerAnswer_cUserDataHeader_Ptr->GUIDSize;
 
- sUser.Leader=sServerAnswer_sUserDataHeader_Ptr->Leader;
+ cUser.SetLeader(sServerAnswer_cUserDataHeader_Ptr->Leader);
 
  return(true); 
 }
@@ -75,12 +81,12 @@ bool CTransceiver_User::GetUserBook(SOCKET socket_server,CEvent &cEvent_Exit,boo
 //----------------------------------------------------------------------------------------------------
 //считать пользователя из ответа сервера
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_User::GetUserAnswer(char *ptr,size_t size,SUser &sUser)
+bool CTransceiver_User::GetUserAnswer(char *ptr,size_t size,CUser &cUser)
 {
  size_t offset=0;
  if (sizeof(SServerAnswer::SHeader)>size) return(false);
  SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
  offset+=sizeof(SServerAnswer::SHeader);   
- if (ReadSUserInArray(ptr,offset,size,sUser)==false) return(false);;
+ if (ReadCUserInArray(ptr,offset,size,cUser)==false) return(false);;
  return(true);
 }

@@ -33,11 +33,11 @@ class CTransceiver_Project:public CTransceiver
   //деструктор
   ~CTransceiver_Project();
   //функции класса
-  bool ReadSProjectInArray(char *ptr,size_t &offset,size_t max_length,SProject &sProject);//получение проекта из массива принятых данных
-  bool SendProjectDataToServer(SOCKET socket_server,const SProject &sProject,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные проекта
-  bool SendProjectDataToServerInPackage(SOCKET socket_server,const SProject &sProject,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные проекта в виде полного пакета
+  bool ReadCProjectInArray(char *ptr,size_t &offset,size_t max_length,CProject &cProject);//получение проекта из массива принятых данных
+  bool SendProjectDataToServer(SOCKET socket_server,const CProject &cProject,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные проекта
+  bool SendProjectDataToServerInPackage(SOCKET socket_server,const CProject &cProject,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные проекта в виде полного пакета
   bool GetProjectBook(SOCKET socket_server,CEvent &cEvent_Exit,bool &on_exit);//запрос базы данных заданий
-  bool GetProjectAnswer(char *ptr,size_t size,SProject &sProject);//считать проект из ответа сервера
+  bool GetProjectAnswer(char *ptr,size_t size,CProject &cProject);//считать проект из ответа сервера
 };
 
 #endif

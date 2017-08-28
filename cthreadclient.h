@@ -90,7 +90,7 @@ class CThreadClient
    void Stop(void);//остановить поток
    void SetDocument(CDocument_Main *cDocument_Main_Set_Ptr);//задать класс документа
  protected:
-  void SaveTaskVector(char *filename,const vector<STask> &vector_STask);//сохранение массива заданий
+  void SaveTaskVector(char *filename,const vector<CTask> &vector_CTask);//сохранение массива заданий
   void Processing(void);//основной цикл обработки
   bool LinkProcessing(SOCKET socket_server,bool &on_exit);//обработка обмена с сервером
   bool TaskProcessing(SOCKET socket_server,bool &on_exit);//обработка заданий

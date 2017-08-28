@@ -44,19 +44,19 @@ afx_msg void CDialog_ProjectSettings::OnCancel(void)
 afx_msg BOOL CDialog_ProjectSettings::OnInitDialog(void)
 {
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_PROJECT_SETTINGS_PROJECT_NAME))->SetLimitText(254);
- ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_PROJECT_SETTINGS_PROJECT_NAME))->SetWindowText(sProject_Local.ProjectName);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_PROJECT_SETTINGS_PROJECT_NAME))->SetWindowText(cProject_Local.GetProjectName());
  return(CDialog::OnInitDialog());
 }
 //----------------------------------------------------------------------------------------------------
 //запуск диалога
 //----------------------------------------------------------------------------------------------------
-bool CDialog_ProjectSettings::Activate(SProject &sProject)
+bool CDialog_ProjectSettings::Activate(CProject &cProject)
 {
- sProject_Local=sProject;
+ cProject_Local=cProject;
  long ret=DoModal();
  if (ret==0)
  {
-  sProject=sProject_Local;
+  cProject=cProject_Local;
   return(true);
  }
  return(false);
@@ -80,7 +80,7 @@ afx_msg void CDialog_ProjectSettings::OnCommand_Button_Ok(void)
 { 
  char name[255];
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_PROJECT_SETTINGS_PROJECT_NAME))->GetWindowText(name,255); 
- sProject_Local.ProjectName=name;
+ cProject_Local.SetProjectName(name);
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------

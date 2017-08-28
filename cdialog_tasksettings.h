@@ -21,10 +21,10 @@ class CDialog_TaskSettings:public CDialog
 {
  protected:
   //-Переменные класса-------------------------------------------------------
-  STask sTask_Local;//редактируемое задание
+  CTask cTask_Local;//редактируемое задание
   CDocument_Main *cDocument_Main_Local_Ptr;//указатель на документ
-  vector<SUser> vector_SUser_Local;//список пользователей на время редактирования заданий (он ведь может внезапно измениться в документе)
-  vector<SProject> vector_SProject_Local;//список проектов на время редактирования заданий (он ведь может внезапно измениться в документе)
+  vector<CUser> vector_CUser_Local;//список пользователей на время редактирования заданий (он ведь может внезапно измениться в документе)
+  vector<CProject> vector_CProject_Local;//список проектов на время редактирования заданий (он ведь может внезапно измениться в документе)
   bool NewTask;//создаётся ли новое задание
 
   HBITMAP hBitmap_TaskFinished;//пиктограмма завершения задания
@@ -38,7 +38,7 @@ class CDialog_TaskSettings:public CDialog
   afx_msg void OnCancel(void);//нажали ESC
   afx_msg BOOL OnInitDialog(void);//инициализация диалога
   //-Функции класса----------------------------------------------------------
-  bool Activate(STask& sTask,CDocument_Main *cDocument_Main_Ptr,bool new_task);//запустить диалог
+  bool Activate(CTask& cTask,CDocument_Main *cDocument_Main_Ptr,bool new_task);//запустить диалог
   //-Функции обработки сообщений класса--------------------------------------
   DECLARE_MESSAGE_MAP()
   afx_msg void OnDestroy(void);//уничтожение окна

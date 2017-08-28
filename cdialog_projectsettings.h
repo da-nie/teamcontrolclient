@@ -21,7 +21,7 @@ class CDialog_ProjectSettings:public CDialog
 {
  protected:
   //-ѕеременные класса-------------------------------------------------------
-  SProject sProject_Local;//редактируемый проект
+  CProject cProject_Local;//редактируемый проект
  public:
   //- онструктор класса------------------------------------------------------
   CDialog_ProjectSettings(LPCTSTR lpszTemplateName,CWnd* pParentWnd);
@@ -32,7 +32,7 @@ class CDialog_ProjectSettings:public CDialog
   afx_msg void OnCancel(void);//нажали ESC
   afx_msg BOOL OnInitDialog(void);//инициализаци€ диалога
   //-‘ункции класса----------------------------------------------------------
-  bool Activate(SProject& sProject);//запустить диалог
+  bool Activate(CProject& cProject);//запустить диалог
   //-‘ункции обработки сообщений класса--------------------------------------
   DECLARE_MESSAGE_MAP()
   afx_msg void OnDestroy(void);//уничтожение окна

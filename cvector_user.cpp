@@ -28,31 +28,12 @@ bool CVectorUser::Save(char *filename)
  fwrite("ULV",sizeof(unsigned char),3,file);
  fwrite(&Version,sizeof(unsigned long),1,file);
  //пишем файл
- size_t size=vector_SUser.size();
+ size_t size=vector_CUser.size();
  fwrite(&size,sizeof(size_t),1,file);
  for(size_t n=0;n<size;n++)
  {
-  const SUser &sUser=vector_SUser[n]; 
-  //заполняем заголовок
-  SHeader sHeader;
-  sHeader.NameSize=sUser.Name.GetLength();
-  sHeader.JobTitleSize=sUser.JobTitle.GetLength();
-  sHeader.TelephoneSize=sUser.Telephone.GetLength();
-  sHeader.DescriptionSize=sUser.Description.GetLength();
-  sHeader.UserGUIDSize=sUser.UserGUID.GetLength();
-  sHeader.Leader=sUser.Leader;
-  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
-  const char *s_ptr;
-  s_ptr=sUser.Name;
-  fwrite(s_ptr,sUser.Name.GetLength(),1,file);
-  s_ptr=sUser.JobTitle;
-  fwrite(s_ptr,sUser.JobTitle.GetLength(),1,file);
-  s_ptr=sUser.Telephone;
-  fwrite(s_ptr,sUser.Telephone.GetLength(),1,file);
-  s_ptr=sUser.Description;
-  fwrite(s_ptr,sUser.Description.GetLength(),1,file);
-  s_ptr=sUser.UserGUID;
-  fwrite(s_ptr,sUser.UserGUID.GetLength(),1,file);
+  const CUser &cUser=vector_CUser[n]; 
+  if (cUser.Save(file)==false) break;
  }
  fclose(file);
  return(true);
@@ -62,7 +43,7 @@ bool CVectorUser::Save(char *filename)
 //----------------------------------------------------------------------------------------------------
 bool CVectorUser::Load(char *filename)
 {
- vector_SUser.clear();
+ vector_CUser.clear();
 
  FILE *file=fopen(filename,"rb");
  if (file==NULL) return(false);
@@ -79,41 +60,9 @@ bool CVectorUser::Load(char *filename)
  fread(&size,sizeof(size_t),1,file);
  for(size_t n=0;n<size;n++)
  {
-  SHeader sHeader;
-  fread(&sHeader,sizeof(SHeader),1,file);
-  char *name=new char[sHeader.NameSize+1];
-  char *job_title=new char[sHeader.JobTitleSize+1];
-  char *telephone=new char[sHeader.TelephoneSize+1];
-  char *description=new char[sHeader.DescriptionSize+1];
-  char *user_guid=new char[sHeader.UserGUIDSize+1];
- 
-  fread(name,sizeof(char),sHeader.NameSize,file);
-  fread(job_title,sizeof(char),sHeader.JobTitleSize,file);
-  fread(telephone,sizeof(char),sHeader.TelephoneSize,file);
-  fread(description,sizeof(char),sHeader.DescriptionSize,file);
-  fread(user_guid,sizeof(char),sHeader.UserGUIDSize,file);  
- 
-  name[sHeader.NameSize]=0;
-  job_title[sHeader.JobTitleSize]=0;
-  telephone[sHeader.TelephoneSize]=0;
-  description[sHeader.DescriptionSize]=0;
-  user_guid[sHeader.UserGUIDSize]=0;
-
-  SUser sUser;
-  sUser.Name=name;
-  sUser.JobTitle=job_title;
-  sUser.Telephone=telephone;
-  sUser.Description=description;
-  sUser.UserGUID=user_guid;
-  sUser.Leader=sHeader.Leader;
-
-  delete[](name);
-  delete[](job_title);
-  delete[](telephone);
-  delete[](description);
-  delete[](user_guid);
-
-  vector_SUser.push_back(sUser);
+  CUser cUser;
+  if (cUser.Load(file)==false) break;
+  vector_CUser.push_back(cUser);
  }
  fclose(file);
  return(true);
@@ -121,9 +70,9 @@ bool CVectorUser::Load(char *filename)
 //----------------------------------------------------------------------------------------------------
 //добавить новый элемент
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::AddNew(const SUser &sUser)
+bool CVectorUser::AddNew(const CUser &cUser)
 {
- vector_SUser.push_back(sUser);
+ vector_CUser.push_back(cUser);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
@@ -131,33 +80,33 @@ bool CVectorUser::AddNew(const SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 void CVectorUser::Clear(void)
 {
- vector_SUser.clear();
+ vector_CUser.clear();
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::FindByUserGUID(const CSafeString &guid,SUser &sUser)
+bool CVectorUser::FindByUserGUID(const CSafeString &guid,CUser &cUser)
 {
- size_t size=vector_SUser.size();
+ size_t size=vector_CUser.size();
  for(size_t n=0;n<size;n++)
  {
-  sUser=vector_SUser[n];
-  if (sUser.UserGUID.Compare(guid)==0) return(true);
+  cUser=vector_CUser[n];
+  if (cUser.IsUserGUID(guid)==true) return(true);
  }
  return(false);
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя и отметить, что данные не изменены
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser &sUser)
+bool CVectorUser::FindByUserGUIDAndResetChangeData(const CSafeString &guid,CUser &cUser)
 {
- size_t size=vector_SUser.size();
+ size_t size=vector_CUser.size();
  for(size_t n=0;n<size;n++)
  {
-  sUser=vector_SUser[n];
-  if (sUser.UserGUID.Compare(guid)==0)
+  cUser=vector_CUser[n];
+  if (cUser.IsUserGUID(guid)==true)
   {
-   vector_SUser[n].ChangeData=false;
+   vector_CUser[n].SetChangeData(false);
    return(true);
   }
  }
@@ -168,13 +117,13 @@ bool CVectorUser::FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser
 //----------------------------------------------------------------------------------------------------
 bool CVectorUser::DeleteByUserGUID(const CSafeString &guid)
 {
- size_t size=vector_SUser.size();
+ size_t size=vector_CUser.size();
  for(size_t n=0;n<size;n++)
  {
-  SUser &sUser_Local=vector_SUser[n];
-  if (sUser_Local.UserGUID.Compare(guid)==0)
+  CUser &cUser_Local=vector_CUser[n];
+  if (cUser_Local.IsUserGUID(guid)==true)
   { 
-   vector_SUser.erase(vector_SUser.begin()+n);
+   vector_CUser.erase(vector_CUser.begin()+n);
    return(true);
   }
  }
@@ -183,15 +132,15 @@ bool CVectorUser::DeleteByUserGUID(const CSafeString &guid)
 //----------------------------------------------------------------------------------------------------
 //заменить по GUID пользователя
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::ChangeByUserGUID(const CSafeString &guid,const SUser &sUser)
+bool CVectorUser::ChangeByUserGUID(const CSafeString &guid,const CUser &cUser)
 {
- size_t size=vector_SUser.size();
+ size_t size=vector_CUser.size();
  for(size_t n=0;n<size;n++)
  {
-  SUser &sUser_Local=vector_SUser[n];
-  if (sUser_Local.UserGUID.Compare(guid)==0)
+  CUser &cUser_Local=vector_CUser[n];
+  if (cUser_Local.IsUserGUID(guid)==true)
   { 
-   sUser_Local=sUser;
+   cUser_Local=cUser;
    return(true);
   }
  }
@@ -202,31 +151,31 @@ bool CVectorUser::ChangeByUserGUID(const CSafeString &guid,const SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 size_t CVectorUser::Size(void)
 {
- return(vector_SUser.size());
+ return(vector_CUser.size());
 }
 //----------------------------------------------------------------------------------------------------
 //получить последнего пользователя и удалить его
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::PopBack(SUser &sUser)
+bool CVectorUser::PopBack(CUser &cUser)
 {
- size_t size=vector_SUser.size();
+ size_t size=vector_CUser.size();
  if (size==0) return(false);
- sUser=vector_SUser[size-1];
- vector_SUser.pop_back();
+ cUser=vector_CUser[size-1];
+ vector_CUser.pop_back();
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //добавить пользователя в конец
 //----------------------------------------------------------------------------------------------------
-bool CVectorUser::PushBack(const SUser &sUser)
+bool CVectorUser::PushBack(const CUser &cUser)
 {
- vector_SUser.push_back(sUser);
+ vector_CUser.push_back(cUser);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //получить ссылку на вектор пользователей
 //----------------------------------------------------------------------------------------------------
-vector<SUser>& CVectorUser::GetVectorSUser(void)
+vector<CUser>& CVectorUser::GetVectorCUser(void)
 {
- return(vector_SUser);
+ return(vector_CUser);
 }

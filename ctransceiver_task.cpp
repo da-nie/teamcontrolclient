@@ -23,79 +23,88 @@ CTransceiver_Task::~CTransceiver_Task()
 //----------------------------------------------------------------------------------------------------
 //получение задания из массива принятых данных
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_Task::ReadSTaskInArray(char *ptr,size_t &offset,size_t max_length,STask &sTask)
+bool CTransceiver_Task::ReadCTaskInArray(char *ptr,size_t &offset,size_t max_length,CTask &cTask)
 {
- if (offset+sizeof(SServerAnswer::STaskDataHeader)>max_length) return(false);
- SServerAnswer::STaskDataHeader *sServerAnswer_sTaskDataHeader_Ptr=reinterpret_cast<SServerAnswer::STaskDataHeader*>(ptr+offset);
- offset+=sizeof(SServerAnswer::STaskDataHeader);
+ if (offset+sizeof(SServerAnswer::CTaskDataHeader)>max_length) return(false);
+ SServerAnswer::CTaskDataHeader *sServerAnswer_cTaskDataHeader_Ptr=reinterpret_cast<SServerAnswer::CTaskDataHeader*>(ptr+offset);
+ offset+=sizeof(SServerAnswer::CTaskDataHeader);
  long length=offset;
- length+=sServerAnswer_sTaskDataHeader_Ptr->ForUserGUIDSize;
- length+=sServerAnswer_sTaskDataHeader_Ptr->FromUserGUIDSize;
- length+=sServerAnswer_sTaskDataHeader_Ptr->ProjectGUIDSize;
- length+=sServerAnswer_sTaskDataHeader_Ptr->TaskGUIDSize;
- length+=sServerAnswer_sTaskDataHeader_Ptr->TaskSize;
- length+=sServerAnswer_sTaskDataHeader_Ptr->AnswerSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->ForUserGUIDSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->FromUserGUIDSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->ProjectGUIDSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->TaskGUIDSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->TaskSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->AnswerSize;
  if (length>max_length) return(false);
 
- sTask.cDate.SetDate(sServerAnswer_sTaskDataHeader_Ptr->Year,sServerAnswer_sTaskDataHeader_Ptr->Month,sServerAnswer_sTaskDataHeader_Ptr->Day); 
- sTask.State=sServerAnswer_sTaskDataHeader_Ptr->State;
- sTask.Index=sServerAnswer_sTaskDataHeader_Ptr->Index;
+ cTask.SetDate(CDate(sServerAnswer_cTaskDataHeader_Ptr->Year,sServerAnswer_cTaskDataHeader_Ptr->Month,sServerAnswer_cTaskDataHeader_Ptr->Day)); 
+ cTask.SetState(sServerAnswer_cTaskDataHeader_Ptr->State);
+ cTask.SetIndex(sServerAnswer_cTaskDataHeader_Ptr->Index);
 
- SetString(sTask.FromUserGUID,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->FromUserGUIDSize);
- offset+=sServerAnswer_sTaskDataHeader_Ptr->FromUserGUIDSize;
+ CSafeString str;
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->FromUserGUIDSize);
+ cTask.SetFromUserGUID(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->FromUserGUIDSize;
 
- SetString(sTask.ForUserGUID,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->ForUserGUIDSize);
- offset+=sServerAnswer_sTaskDataHeader_Ptr->ForUserGUIDSize;
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->ForUserGUIDSize);
+ cTask.SetForUserGUID(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->ForUserGUIDSize;
 
- SetString(sTask.ProjectGUID,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->ProjectGUIDSize);
- offset+=sServerAnswer_sTaskDataHeader_Ptr->ProjectGUIDSize;
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->ProjectGUIDSize);
+ cTask.SetProjectGUID(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->ProjectGUIDSize;
 
- SetString(sTask.Task,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->TaskSize);
- offset+=sServerAnswer_sTaskDataHeader_Ptr->TaskSize;
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->TaskSize);
+ cTask.SetTask(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->TaskSize;
 
- SetString(sTask.TaskGUID,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->TaskGUIDSize);
- offset+=sServerAnswer_sTaskDataHeader_Ptr->TaskGUIDSize;
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->TaskGUIDSize);
+ cTask.SetTaskGUID(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->TaskGUIDSize;
 
- SetString(sTask.Answer,ptr+offset,sServerAnswer_sTaskDataHeader_Ptr->AnswerSize);
- offset+=sServerAnswer_sTaskDataHeader_Ptr->AnswerSize;
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->AnswerSize);
+ cTask.SetAnswer(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->AnswerSize;
+
  return(true); 
 }
 //----------------------------------------------------------------------------------------------------
 //передать серверу данные задания
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const STask &sTask,CEvent &cEvent_Exit,bool &on_exit)
+bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const CTask &cTask,CEvent &cEvent_Exit,bool &on_exit)
 {
  on_exit=false;
- SServerCommand::STaskDataHeader sServerCommand_sTaskDataHeader;
- sServerCommand_sTaskDataHeader.FromUserGUIDSize=sTask.FromUserGUID.GetLength();
- sServerCommand_sTaskDataHeader.ForUserGUIDSize=sTask.ForUserGUID.GetLength();
- sServerCommand_sTaskDataHeader.ProjectGUIDSize=sTask.ProjectGUID.GetLength();
- sServerCommand_sTaskDataHeader.TaskSize=sTask.Task.GetLength();
- sServerCommand_sTaskDataHeader.TaskGUIDSize=sTask.TaskGUID.GetLength();
- sServerCommand_sTaskDataHeader.AnswerSize=sTask.Answer.GetLength();
- sServerCommand_sTaskDataHeader.Year=sTask.cDate.GetYear();
- sServerCommand_sTaskDataHeader.Month=sTask.cDate.GetMonth();
- sServerCommand_sTaskDataHeader.Day=sTask.cDate.GetDay();
- sServerCommand_sTaskDataHeader.State=sTask.State;
- sServerCommand_sTaskDataHeader.Index=sTask.Index;
- if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_sTaskDataHeader),sizeof(SServerCommand::STaskDataHeader),cEvent_Exit,on_exit)==false) return(false);
+ SServerCommand::CTaskDataHeader sServerCommand_cTaskDataHeader;
+ sServerCommand_cTaskDataHeader.FromUserGUIDSize=cTask.GetFromUserGUID().GetLength();
+ sServerCommand_cTaskDataHeader.ForUserGUIDSize=cTask.GetForUserGUID().GetLength();
+ sServerCommand_cTaskDataHeader.ProjectGUIDSize=cTask.GetProjectGUID().GetLength();
+ sServerCommand_cTaskDataHeader.TaskSize=cTask.GetTask().GetLength();
+ sServerCommand_cTaskDataHeader.TaskGUIDSize=cTask.GetTaskGUID().GetLength();
+ sServerCommand_cTaskDataHeader.AnswerSize=cTask.GetAnswer().GetLength();
+ const CDate& cDate=cTask.GetDate();
+ sServerCommand_cTaskDataHeader.Year=cDate.GetYear();
+ sServerCommand_cTaskDataHeader.Month=cDate.GetMonth();
+ sServerCommand_cTaskDataHeader.Day=cDate.GetDay();
+ sServerCommand_cTaskDataHeader.State=cTask.GetState();
+ sServerCommand_cTaskDataHeader.Index=cTask.GetIndex();
+ if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_cTaskDataHeader),sizeof(SServerCommand::CTaskDataHeader),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- if (SendPart(socket_server,sTask.FromUserGUID,sTask.FromUserGUID.GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (SendPart(socket_server,cTask.GetFromUserGUID(),cTask.GetFromUserGUID().GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- if (SendPart(socket_server,sTask.ForUserGUID,sTask.ForUserGUID.GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (SendPart(socket_server,cTask.GetForUserGUID(),cTask.GetForUserGUID().GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- if (SendPart(socket_server,sTask.ProjectGUID,sTask.ProjectGUID.GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (SendPart(socket_server,cTask.GetProjectGUID(),cTask.GetProjectGUID().GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- if (SendPart(socket_server,sTask.Task,sTask.Task.GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (SendPart(socket_server,cTask.GetTask(),cTask.GetTask().GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- if (SendPart(socket_server,sTask.TaskGUID,sTask.TaskGUID.GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (SendPart(socket_server,cTask.GetTaskGUID(),cTask.GetTaskGUID().GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- return(SendPart(socket_server,sTask.Answer,sTask.Answer.GetLength(),cEvent_Exit,on_exit));
+ return(SendPart(socket_server,cTask.GetAnswer(),cTask.GetAnswer().GetLength(),cEvent_Exit,on_exit));
 }
 //----------------------------------------------------------------------------------------------------
 //передать серверу данные задания в виде полного пакета
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_Task::SendTaskDataToServerInPackage(SOCKET socket_server,const STask &sTask,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit)
+bool CTransceiver_Task::SendTaskDataToServerInPackage(SOCKET socket_server,const CTask &cTask,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit)
 {
  on_exit=false;
  //передаём данные
@@ -106,7 +115,7 @@ bool CTransceiver_Task::SendTaskDataToServerInPackage(SOCKET socket_server,const
  if (on_exit==true) return(true);
  if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_sHeader),sizeof(SServerCommand::SHeader),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- if (SendTaskDataToServer(socket_server,sTask,cEvent_Exit,on_exit)==false) return(false);
+ if (SendTaskDataToServer(socket_server,cTask,cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
  return(SendEndPackage(socket_server,cEvent_Exit,on_exit));
 }
@@ -130,12 +139,12 @@ bool CTransceiver_Task::GetTaskBook(SOCKET socket_server,CEvent &cEvent_Exit,boo
 //----------------------------------------------------------------------------------------------------
 //считать задачу из ответа сервера
 //----------------------------------------------------------------------------------------------------
-bool CTransceiver_Task::GetTaskAnswer(char *ptr,size_t size,STask &sTask)
+bool CTransceiver_Task::GetTaskAnswer(char *ptr,size_t size,CTask &cTask)
 {
  size_t offset=0;
  if (sizeof(SServerAnswer::SHeader)>size) return(false);
  SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
  offset+=sizeof(SServerAnswer::SHeader);   
- if (ReadSTaskInArray(ptr,offset,size,sTask)==false) return(false);;
+ if (ReadCTaskInArray(ptr,offset,size,cTask)==false) return(false);;
  return(true);
 }

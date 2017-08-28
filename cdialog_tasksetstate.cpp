@@ -69,23 +69,23 @@ afx_msg BOOL CDialog_TaskSetState::OnInitDialog(void)
  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_READ))->SetBitmap(hBitmap_TaskRead);
 
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_TASK))->SetLimitText(254);
- ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_TASK))->SetWindowText(sTask_Local.Task);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_TASK))->SetWindowText(cTask_Local.GetTask());
 
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER))->SetLimitText(254);
- ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER))->SetWindowText(sTask_Local.Answer);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER))->SetWindowText(cTask_Local.GetAnswer());
 
  return(CDialog::OnInitDialog());
 }
 //----------------------------------------------------------------------------------------------------
 //запуск диалога
 //----------------------------------------------------------------------------------------------------
-bool CDialog_TaskSetState::Activate(STask &sTask)
+bool CDialog_TaskSetState::Activate(CTask &cTask)
 {
- sTask_Local=sTask;
+ cTask_Local=cTask;
  long ret=DoModal();
  if (ret==0)
  {
-  sTask=sTask_Local;
+  cTask=cTask_Local;
   return(true);
  }
  return(false);
@@ -118,7 +118,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_Cancel(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskDone(void)
 {
- sTask_Local.State=TASK_STATE_DONE;
+ cTask_Local.SetState(TASK_STATE_DONE);
  ReadAnswer();
  EndDialog(0);
 }
@@ -127,7 +127,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskDone(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskCancel(void)
 {
- sTask_Local.State=TASK_STATE_CANCELED;
+ cTask_Local.SetState(TASK_STATE_CANCELED);
  ReadAnswer();
  EndDialog(0);
 }
@@ -136,7 +136,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskCancel(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskRead(void)
 {
- sTask_Local.State=TASK_STATE_READED;
+ cTask_Local.SetState(TASK_STATE_READED);
  ReadAnswer();
  EndDialog(0);
 }
@@ -145,7 +145,7 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskRead(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskIsRunning(void)
 {
- sTask_Local.State=TASK_STATE_IS_RUNNING;
+ cTask_Local.SetState(TASK_STATE_IS_RUNNING);
  ReadAnswer();
  EndDialog(0);
 }
@@ -156,5 +156,5 @@ void CDialog_TaskSetState::ReadAnswer(void)
 {
  char answer[255];
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER))->GetWindowText(answer,255);
- sTask_Local.Answer=answer;
+ cTask_Local.SetAnswer(answer);
 }

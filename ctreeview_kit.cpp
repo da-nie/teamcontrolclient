@@ -75,10 +75,10 @@ afx_msg void CTreeView_Kit::OnInitialUpdate(void)
  hTREEITEM_Colleague=InsertItem(NULL,"Выданные сотрудникам задания",GetRootColleagueImageIndex(),GetSelectedRootColleagueImageIndex(),false);
  hTREEITEM_Projects=InsertItem(NULL,"Выданные по проектам задания",GetRootProjectImageIndex(),GetSelectedRootProjectImageIndex(),false);
 
- SUser sUser;
- sUser.UserGUID=ALL_USER_GUID;
+ CUser cUser;
+ cUser.SetUserGUID(ALL_USER_GUID);
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- cDocument_Main_Ptr->SetSelectedUser(sUser);
+ cDocument_Main_Ptr->SetSelectedUser(cUser);
 
  UpdateTree();
 
@@ -122,8 +122,8 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
  CPoint mpoint;
  GetCursorPos(&mpoint);
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- SUser sUser_Selected;
- if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
+ CUser cUser_Selected;
+ if (cDocument_Main_Ptr->GetSelectedUser(cUser_Selected)==false) return;//нет выбранного элемента
  //смотрим, что было выбрано
  CSafeString guid;
  CSafeString name;
@@ -133,8 +133,8 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
 
  CTreeCtrl& cTreeCtrl=GetTreeCtrl();
  HTREEITEM hTREEITEM_item=cTreeCtrl.GetSelectedItem();
- if (sUser_Selected.UserGUID.Compare(ALL_USER_GUID)==0 && hTREEITEM_item==hTREEITEM_Colleague) return;//выбрана папка пользователей
- if (sUser_Selected.UserGUID.Compare(ALL_USER_GUID)==0 && hTREEITEM_item==hTREEITEM_Projects)//выбрана папка проектов
+ if (cUser_Selected.IsUserGUID(ALL_USER_GUID)==true && hTREEITEM_item==hTREEITEM_Colleague) return;//выбрана папка пользователей
+ if (cUser_Selected.IsUserGUID(ALL_USER_GUID)==true && hTREEITEM_item==hTREEITEM_Projects)//выбрана папка проектов
  {  
   if (leader==false) return;//только руководитель может управлять проектами
 
@@ -147,8 +147,8 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
   return;
  }
  
- SProject sProject;
- if (cDocument_Main_Ptr->FindByProjectGUID(sUser_Selected.UserGUID,sProject)==true)//выбран проект
+ CProject cProject;
+ if (cDocument_Main_Ptr->FindByProjectGUID(cUser_Selected.GetUserGUID(),cProject)==true)//выбран проект
  {
   if (leader==false) return;//только руководитель может управлять проектами
 
@@ -160,8 +160,8 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
   cMenu_List_Project.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN|TPM_LEFTBUTTON,mpoint.x,mpoint.y,this); 	
   return;
  }
- SUser sUser;
- if (cDocument_Main_Ptr->FindByUserGUID(sUser_Selected.UserGUID,sUser)==true)//выбран пользователь
+ CUser cUser;
+ if (cDocument_Main_Ptr->FindByUserGUID(cUser_Selected.GetUserGUID(),cUser)==true)//выбран пользователь
  {
   cMenu_List_User.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_ADD_TASK,MF_BYCOMMAND,&cBitmap_MenuList_AddTask,&cBitmap_MenuList_AddTask);
   cMenu_List_User.SetMenuItemBitmaps(IDC_MENU_LIST_TREE_VIEW_USER_INFO,MF_BYCOMMAND,&cBitmap_MenuList_UserInfo,&cBitmap_MenuList_UserInfo);
@@ -174,9 +174,9 @@ afx_msg void CTreeView_Kit::OnRButtonDown(UINT nFlags,CPoint point)
 afx_msg void CTreeView_Kit::OnLButtonDblClk(UINT nFlags,CPoint point)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- SUser sUser_Selected;
- if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
- if (sUser_Selected.UserGUID.Compare(ALL_USER_GUID)==0) return;
+ CUser cUser_Selected;
+ if (cDocument_Main_Ptr->GetSelectedUser(cUser_Selected)==false) return;//нет выбранного элемента
+ if (cUser_Selected.IsUserGUID(ALL_USER_GUID)==true) return;
  OnCommand_Menu_List_AddTask();
 }
 //----------------------------------------------------------------------------------------------------
@@ -191,9 +191,9 @@ afx_msg void CTreeView_Kit::OnSelchanged(NMHDR* pNMHDR,LRESULT* pResult)
  //посмотрим, не выбран ли корневой элемент "сотрудники" или "проекты"
  if (hTREEITEM_item==hTREEITEM_Colleague || hTREEITEM_item==hTREEITEM_Projects)
  {
-  SUser sUser;
-  sUser.UserGUID=ALL_USER_GUID;
-  cDocument_Main_Ptr->SetSelectedUser(sUser);
+  CUser cUser;
+  cUser.SetUserGUID(ALL_USER_GUID);
+  cDocument_Main_Ptr->SetSelectedUser(cUser);
   return;
  }
  //ищем выбранный элемент среди сотрудников
@@ -204,30 +204,30 @@ afx_msg void CTreeView_Kit::OnSelchanged(NMHDR* pNMHDR,LRESULT* pResult)
   SColleagueInTreeView &sColleagueInTreeView=*iterator;
   if (sColleagueInTreeView.hTREEITEM_Colleague==hTREEITEM_item)
   {
-   SUser sUser;
-   bool is_finded=cDocument_Main_Ptr->FindByUserGUIDAndResetChangeData(sColleagueInTreeView.ColleagueGUID,sUser);
-   if (is_finded==true) cDocument_Main_Ptr->SetSelectedUser(sUser);//указываем, что был выбран данный пользователь
+   CUser cUser;
+   bool is_finded=cDocument_Main_Ptr->FindByUserGUIDAndResetChangeData(sColleagueInTreeView.ColleagueGUID,cUser);
+   if (is_finded==true) cDocument_Main_Ptr->SetSelectedUser(cUser);//указываем, что был выбран данный пользователь
    return;
   }
   iterator++;
  }
 
  //ищем выбранный элемент среди проектов
- list<SProjectInTreeView>::iterator iterator_project=list_SProjectInTreeView.begin();
- list<SProjectInTreeView>::iterator iterator_project_end=list_SProjectInTreeView.end();  
+ list<CProjectInTreeView>::iterator iterator_project=list_CProjectInTreeView.begin();
+ list<CProjectInTreeView>::iterator iterator_project_end=list_CProjectInTreeView.end();  
  while(iterator_project!=iterator_project_end)
  {
-  SProjectInTreeView &sProjectInTreeView=*iterator_project;
-  if (sProjectInTreeView.hTREEITEM_Project==hTREEITEM_item)
+  CProjectInTreeView &cProjectInTreeView=*iterator_project;
+  if (cProjectInTreeView.hTREEITEM_Project==hTREEITEM_item)
   {
-   SProject sProject;
-   bool is_finded=cDocument_Main_Ptr->FindByProjectGUIDAndResetChangeData(sProjectInTreeView.ProjectGUID,sProject);
+   CProject cProject;
+   bool is_finded=cDocument_Main_Ptr->FindByProjectGUIDAndResetChangeData(cProjectInTreeView.ProjectGUID,cProject);
    if (is_finded==true)
    {      
     //устанавливаем выбранным пользователя с идентификатором проекта (идентификаторы никогда не пересекаются)
-    SUser sUser;
-    sUser.UserGUID=sProject.ProjectGUID;
-    cDocument_Main_Ptr->SetSelectedUser(sUser);
+    CUser cUser;
+    cUser.SetUserGUID(cProject.GetProjectGUID());
+    cDocument_Main_Ptr->SetSelectedUser(cUser);
    }
    return;
   }
@@ -243,24 +243,24 @@ afx_msg void CTreeView_Kit::OnSelchanged(NMHDR* pNMHDR,LRESULT* pResult)
 afx_msg void CTreeView_Kit::OnCommand_Menu_List_AddTask(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- SUser sUser_Selected;
- if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
- SUser sUser;
- if (cDocument_Main_Ptr->FindByUserGUID(sUser_Selected.UserGUID,sUser)==false) return;//такого пользователя нет в базе
+ CUser cUser_Selected;
+ if (cDocument_Main_Ptr->GetSelectedUser(cUser_Selected)==false) return;//нет выбранного элемента
+ CUser cUser;
+ if (cDocument_Main_Ptr->FindByUserGUID(cUser_Selected.GetUserGUID(),cUser)==false) return;//такого пользователя нет в базе
 
- STask sTask;
+ CTask cTask;
  SYSTEMTIME system_time;
  GetLocalTime(&system_time);
- sTask.cDate.SetDate(system_time.wYear,system_time.wMonth,system_time.wDay);
- sTask.ForUserGUID=sUser_Selected.UserGUID;
+ cTask.SetDate(CDate(system_time.wYear,system_time.wMonth,system_time.wDay));
+ cTask.SetForUserGUID(cUser_Selected.GetUserGUID());
  while(1)
  {
   CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
-  if (cDialog_TaskSettings.Activate(sTask,cDocument_Main_Ptr,true)==true)
+  if (cDialog_TaskSettings.Activate(cTask,cDocument_Main_Ptr,true)==true)
   {
    CDocument_Main *cDocument_Main_Ptr=GetDocument();
    //просим добавить задание
-   if (cDocument_Main_Ptr->AddTask(sTask)==false)
+   if (cDocument_Main_Ptr->AddTask(cTask)==false)
    {
     MessageBox("Не удалось создать задание!","Ошибка",MB_OK);
    }
@@ -275,13 +275,13 @@ afx_msg void CTreeView_Kit::OnCommand_Menu_List_AddTask(void)
 afx_msg void CTreeView_Kit::OnCommand_Menu_List_UserInfo(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- SUser sUser_Selected;
- if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
- SUser sUser;
- if (cDocument_Main_Ptr->FindByUserGUID(sUser_Selected.UserGUID,sUser)==false) return;//такого пользователя нет в базе
+ CUser cUser_Selected;
+ if (cDocument_Main_Ptr->GetSelectedUser(cUser_Selected)==false) return;//нет выбранного элемента
+ CUser cUser;
+ if (cDocument_Main_Ptr->FindByUserGUID(cUser_Selected.GetUserGUID(),cUser)==false) return;//такого пользователя нет в базе
 
  CDialog_UserSettings cDialog_UserSettings((LPCSTR)IDD_DIALOG_USER_SETTINGS,this);
- cDialog_UserSettings.Activate(sUser_Selected);	
+ cDialog_UserSettings.Activate(cUser_Selected);	
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -290,19 +290,19 @@ afx_msg void CTreeView_Kit::OnCommand_Menu_List_UserInfo(void)
 afx_msg void CTreeView_Kit::OnCommand_Menu_List_AddProject(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- SProject sProject;
- sProject.ProjectName="";
- sProject.ProjectGUID="";
- sProject.ChangeData=false;
- sProject.ProjectType=PROJECT_TYPE_NONE;
+ CProject cProject;
+ cProject.SetProjectName("");
+ cProject.SetProjectGUID("");
+ cProject.SetChangeData(false);
+ cProject.SetProjectType(PROJECT_TYPE_NONE);
  while(1)
  {  
   CDialog_ProjectSettings cDialog_ProjectSettings((LPCSTR)IDD_DIALOG_PROJECT_SETTINGS,this);
-  if (cDialog_ProjectSettings.Activate(sProject)==true)
+  if (cDialog_ProjectSettings.Activate(cProject)==true)
   {
    CDocument_Main *cDocument_Main_Ptr=GetDocument();
    //просим добавить проект
-   if (cDocument_Main_Ptr->AddProject(sProject)==false)
+   if (cDocument_Main_Ptr->AddProject(cProject)==false)
    {
     MessageBox("Не удалось создать проект!","Ошибка",MB_OK);
    }
@@ -317,19 +317,19 @@ afx_msg void CTreeView_Kit::OnCommand_Menu_List_AddProject(void)
 afx_msg void CTreeView_Kit::OnCommand_Menu_List_EditProject(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- SUser sUser_Selected;
- if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
- SProject sProject;
- if (cDocument_Main_Ptr->FindByProjectGUID(sUser_Selected.UserGUID,sProject)==false) return;//такого проекта нет в базе
+ CUser cUser_Selected;
+ if (cDocument_Main_Ptr->GetSelectedUser(cUser_Selected)==false) return;//нет выбранного элемента
+ CProject cProject;
+ if (cDocument_Main_Ptr->FindByProjectGUID(cUser_Selected.GetUserGUID(),cProject)==false) return;//такого проекта нет в базе
 
  while(1)
  {
   CDialog_ProjectSettings cDialog_ProjectSettings((LPCSTR)IDD_DIALOG_PROJECT_SETTINGS,this);
-  if (cDialog_ProjectSettings.Activate(sProject)==true)
+  if (cDialog_ProjectSettings.Activate(cProject)==true)
   {
    CDocument_Main *cDocument_Main_Ptr=GetDocument();
    //просим изменить проект
-   if (cDocument_Main_Ptr->ChangeProject(sProject)==false)
+   if (cDocument_Main_Ptr->ChangeProject(cProject)==false)
    {
     MessageBox("Не удалось изменить проект!","Ошибка",MB_OK);
    }
@@ -344,12 +344,12 @@ afx_msg void CTreeView_Kit::OnCommand_Menu_List_EditProject(void)
 afx_msg void CTreeView_Kit::OnCommand_Menu_List_DeleteProject(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
- SUser sUser_Selected;
- if (cDocument_Main_Ptr->GetSelectedUser(sUser_Selected)==false) return;//нет выбранного элемента
- SProject sProject;
- if (cDocument_Main_Ptr->FindByProjectGUID(sUser_Selected.UserGUID,sProject)==false) return;//такого проекта нет в базе
+ CUser cUser_Selected;
+ if (cDocument_Main_Ptr->GetSelectedUser(cUser_Selected)==false) return;//нет выбранного элемента
+ CProject cProject;
+ if (cDocument_Main_Ptr->FindByProjectGUID(cUser_Selected.GetUserGUID(),cProject)==false) return;//такого проекта нет в базе
  if (MessageBox("Удалить выбранный проект?","Подтверждение",MB_YESNO|MB_DEFBUTTON2)!=IDYES) return;
- cDocument_Main_Ptr->DeleteProject(sProject); 
+ cDocument_Main_Ptr->DeleteProject(cProject); 
 }
 
 //====================================================================================================
@@ -372,9 +372,9 @@ void CTreeView_Kit::UpdateTree(void)
   while(iterator!=iterator_end)
   {
    SColleagueInTreeView &sColleagueInTreeView=*iterator;
-   SUser sUser;  
-   bool is_finded=cDocument_Main_Ptr->FindByUserGUIDAndResetChangeData(sColleagueInTreeView.ColleagueGUID,sUser);
-   if (is_finded==false || sUser.ChangeData==true)//сотрудника нет в базе или его данные должны быть изменены
+   CUser cUser;  
+   bool is_finded=cDocument_Main_Ptr->FindByUserGUIDAndResetChangeData(sColleagueInTreeView.ColleagueGUID,cUser);
+   if (is_finded==false || cUser.GetChangeData()==true)//сотрудника нет в базе или его данные должны быть изменены
    {
     //удаляем сотрудника
 	cTreeCtrl.DeleteItem(sColleagueInTreeView.hTREEITEM_Colleague);
@@ -387,19 +387,19 @@ void CTreeView_Kit::UpdateTree(void)
   }
    //добавление сотрудников
   CVectorUser cVectorUser=cDocument_Main_Ptr->GetCVectorUser();
-  vector<SUser> &vector_SUser=cVectorUser.GetVectorSUser();
-  size_t size=vector_SUser.size();
+  vector<CUser> &vector_CUser=cVectorUser.GetVectorCUser();
+  size_t size=vector_CUser.size();
   for(size_t n=0;n<size;n++)
   {
-   SUser &sUser=vector_SUser[n];
+   CUser &cUser=vector_CUser[n];
    SColleagueInTreeView sColleagueInTreeView;
    //ищем сотрудника
-   bool is_finded=FindColleagueByGUID(sUser.UserGUID,sColleagueInTreeView);
+   bool is_finded=FindColleagueByGUID(cUser.GetUserGUID(),sColleagueInTreeView);
    if (is_finded==false)//добавляем в список
    {
-    sColleagueInTreeView.ColleagueGUID=sUser.UserGUID;
-	if (sUser.Leader==true) sColleagueInTreeView.hTREEITEM_Colleague=InsertItem(hTREEITEM_Colleague,sUser.Name,GetColleagueLeaderImageIndex(),GetSelectedColleagueLeaderImageIndex(),true);
-	                   else sColleagueInTreeView.hTREEITEM_Colleague=InsertItem(hTREEITEM_Colleague,sUser.Name,GetColleagueImageIndex(),GetSelectedColleagueImageIndex(),true);
+    sColleagueInTreeView.ColleagueGUID=cUser.GetUserGUID();
+	if (cUser.GetLeader()==true) sColleagueInTreeView.hTREEITEM_Colleague=InsertItem(hTREEITEM_Colleague,cUser.GetName(),GetColleagueLeaderImageIndex(),GetSelectedColleagueLeaderImageIndex(),true);
+	                        else sColleagueInTreeView.hTREEITEM_Colleague=InsertItem(hTREEITEM_Colleague,cUser.GetName(),GetColleagueImageIndex(),GetSelectedColleagueImageIndex(),true);
 	sColleagueInTreeView.hTREEITEM_Parent=hTREEITEM_Colleague;
     list_SColleagueInTreeView.push_back(sColleagueInTreeView);
    }
@@ -408,41 +408,41 @@ void CTreeView_Kit::UpdateTree(void)
  if (hTREEITEM_Projects!=NULL)
  {
   //сканируем дерево проектов и добавляем или удаляем проекты
-  list<SProjectInTreeView>::iterator iterator=list_SProjectInTreeView.begin();
-  list<SProjectInTreeView>::iterator iterator_end=list_SProjectInTreeView.end();  
+  list<CProjectInTreeView>::iterator iterator=list_CProjectInTreeView.begin();
+  list<CProjectInTreeView>::iterator iterator_end=list_CProjectInTreeView.end();  
   //удаление проектов
   while(iterator!=iterator_end)
   {
-   SProjectInTreeView &sProjectInTreeView=*iterator;
-   SProject sProject;  
-   bool is_finded=cDocument_Main_Ptr->FindByProjectGUIDAndResetChangeData(sProjectInTreeView.ProjectGUID,sProject);
-   if (is_finded==false || sProject.ChangeData==true)//проекта нет в базе или его данные должны быть изменены
+   CProjectInTreeView &cProjectInTreeView=*iterator;
+   CProject cProject;  
+   bool is_finded=cDocument_Main_Ptr->FindByProjectGUIDAndResetChangeData(cProjectInTreeView.ProjectGUID,cProject);
+   if (is_finded==false || cProject.GetChangeData()==true)//проекта нет в базе или его данные должны быть изменены
    {
     //удаляем проект
-	cTreeCtrl.DeleteItem(sProjectInTreeView.hTREEITEM_Project);
-    list_SProjectInTreeView.erase(iterator);
-    iterator=list_SProjectInTreeView.begin();
-    iterator_end=list_SProjectInTreeView.end();
+	cTreeCtrl.DeleteItem(cProjectInTreeView.hTREEITEM_Project);
+    list_CProjectInTreeView.erase(iterator);
+    iterator=list_CProjectInTreeView.begin();
+    iterator_end=list_CProjectInTreeView.end();
 	continue;
    }
    iterator++;
   }
    //добавление проектов
   CVectorProject cVectorProject=cDocument_Main_Ptr->GetCVectorProject();
-  vector<SProject> &vector_SProject=cVectorProject.GetVectorSProject();
-  size_t size=vector_SProject.size();
+  vector<CProject> &vector_CProject=cVectorProject.GetVectorCProject();
+  size_t size=vector_CProject.size();
   for(size_t n=0;n<size;n++)
   {
-   SProject &sProject=vector_SProject[n];
-   SProjectInTreeView sProjectInTreeView;
+   CProject &cProject=vector_CProject[n];
+   CProjectInTreeView cProjectInTreeView;
    //ищемпроект
-   bool is_finded=FindProjectByGUID(sProject.ProjectGUID,sProjectInTreeView);
+   bool is_finded=FindProjectByGUID(cProject.GetProjectGUID(),cProjectInTreeView);
    if (is_finded==false)//добавляем в список
    {
-    sProjectInTreeView.ProjectGUID=sProject.ProjectGUID;
-	sProjectInTreeView.hTREEITEM_Project=InsertItem(hTREEITEM_Projects,sProject.ProjectName,GetProjectImageIndex(),GetSelectedProjectImageIndex(),true);
-	sProjectInTreeView.hTREEITEM_Parent=hTREEITEM_Projects;
-    list_SProjectInTreeView.push_back(sProjectInTreeView);
+    cProjectInTreeView.ProjectGUID=cProject.GetProjectGUID();
+	cProjectInTreeView.hTREEITEM_Project=InsertItem(hTREEITEM_Projects,cProject.GetProjectName(),GetProjectImageIndex(),GetSelectedProjectImageIndex(),true);
+	cProjectInTreeView.hTREEITEM_Parent=hTREEITEM_Projects;
+    list_CProjectInTreeView.push_back(cProjectInTreeView);
    }
   }
  }
@@ -492,14 +492,14 @@ bool CTreeView_Kit::FindColleagueByGUID(const CSafeString &guid,SColleagueInTree
 //----------------------------------------------------------------------------------------------------
 //найти проект по GUID
 //----------------------------------------------------------------------------------------------------
-bool CTreeView_Kit::FindProjectByGUID(const CSafeString &guid,SProjectInTreeView &sProjectInTreeView)
+bool CTreeView_Kit::FindProjectByGUID(const CSafeString &guid,CProjectInTreeView &cProjectInTreeView)
 {
- list<SProjectInTreeView>::iterator iterator=list_SProjectInTreeView.begin();
- list<SProjectInTreeView>::iterator iterator_end=list_SProjectInTreeView.end();
+ list<CProjectInTreeView>::iterator iterator=list_CProjectInTreeView.begin();
+ list<CProjectInTreeView>::iterator iterator_end=list_CProjectInTreeView.end();
  while(iterator!=iterator_end)
  {
-  sProjectInTreeView=*iterator;
-  if (sProjectInTreeView.ProjectGUID.Compare(guid)==0) return(true);
+  cProjectInTreeView=*iterator;
+  if (cProjectInTreeView.ProjectGUID.Compare(guid)==0) return(true);
   iterator++;
  }
  return(false); 

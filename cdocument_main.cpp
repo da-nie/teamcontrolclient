@@ -116,18 +116,18 @@ void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   vector<STask> vector_STask=sProtectedVariables.cVectorTask.CreateVectorSTaskByFromUserGUID(sProtectedVariables.MyGUID);
-   size_t size=vector_STask.size();
+   vector<CTask> vector_CTask=sProtectedVariables.cVectorTask.CreateVectorCTaskByFromUserGUID(sProtectedVariables.MyGUID);
+   size_t size=vector_CTask.size();
    for(size_t n=0;n<size;n++)
    {
-    STask &sTask=vector_STask[n];
-    if (sTask.State==TASK_STATE_FINISHED)
+    CTask &cTask=vector_CTask[n];
+    if (cTask.GetState()==TASK_STATE_FINISHED)
 	{
-     if (sTask.cDate>cDate) continue;
+     if (cTask.GetDate()>cDate) continue;
      //удаляем из очереди заданий все упоминания о задании
-     while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(sTask.TaskGUID)==true);
-     sTask.TaskType=TASK_TYPE_DELETED;
-     sProtectedVariables.cVectorTask_TransferToServer.PushBack(sTask);
+     while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(cTask.GetTaskGUID())==true);
+     cTask.SetTaskType(TASK_TYPE_DELETED);
+     sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
      sProtectedVariables.OnUpdateView=true;
 	}
    }
@@ -190,12 +190,12 @@ void CDocument_Main::SaveState(void)
 //----------------------------------------------------------------------------------------------------
 //найти пользователя по GUID и сбросить новизну данных
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser &sUser)
+bool CDocument_Main::FindByUserGUIDAndResetChangeData(const CSafeString &guid,CUser &cUser)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   return(sProtectedVariables.cVectorUser.FindByUserGUIDAndResetChangeData(guid,sUser));
+   return(sProtectedVariables.cVectorUser.FindByUserGUIDAndResetChangeData(guid,cUser));
   }
  }
  return(false);
@@ -203,12 +203,12 @@ bool CDocument_Main::FindByUserGUIDAndResetChangeData(const CSafeString &guid,SU
 //----------------------------------------------------------------------------------------------------
 //найти пользователя по GUID
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByUserGUID(const CSafeString &guid,SUser &sUser)
+bool CDocument_Main::FindByUserGUID(const CSafeString &guid,CUser &cUser)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   return(sProtectedVariables.cVectorUser.FindByUserGUID(guid,sUser));
+   return(sProtectedVariables.cVectorUser.FindByUserGUID(guid,cUser));
   }
  }
  return(false);
@@ -217,12 +217,12 @@ bool CDocument_Main::FindByUserGUID(const CSafeString &guid,SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 //найти проект по GUID и сбросить новизну данных
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByProjectGUIDAndResetChangeData(const CSafeString &guid,SProject &sProject)
+bool CDocument_Main::FindByProjectGUIDAndResetChangeData(const CSafeString &guid,CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   return(sProtectedVariables.cVectorProject.FindByProjectGUIDAndResetChangeData(guid,sProject));
+   return(sProtectedVariables.cVectorProject.FindByProjectGUIDAndResetChangeData(guid,cProject));
   }
  }
  return(false);
@@ -230,12 +230,12 @@ bool CDocument_Main::FindByProjectGUIDAndResetChangeData(const CSafeString &guid
 //----------------------------------------------------------------------------------------------------
 //найти проект по GUID
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::FindByProjectGUID(const CSafeString &guid,SProject &sProject)
+bool CDocument_Main::FindByProjectGUID(const CSafeString &guid,CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   return(sProtectedVariables.cVectorProject.FindByProjectGUID(guid,sProject));
+   return(sProtectedVariables.cVectorProject.FindByProjectGUID(guid,cProject));
   }
  }
  return(false);
@@ -435,12 +435,12 @@ void CDocument_Main::SetProjectBook(CVectorProject &cVectorProject_Set)
 //----------------------------------------------------------------------------------------------------
 //был удалён пользователь
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnDeletedUser(const SUser &sUser)
+void CDocument_Main::OnDeletedUser(const CUser &cUser)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorUser.DeleteByUserGUID(sUser.UserGUID);
+   sProtectedVariables.cVectorUser.DeleteByUserGUID(cUser.GetUserGUID());
    sProtectedVariables.OnUpdateView=true;
   }
  }
@@ -450,12 +450,12 @@ void CDocument_Main::OnDeletedUser(const SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 //был добавлен пользователь
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnAddedUser(const SUser &sUser)
+void CDocument_Main::OnAddedUser(const CUser &cUser)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorUser.AddNew(sUser);
+   sProtectedVariables.cVectorUser.AddNew(cUser);
    sProtectedVariables.OnUpdateView=true;
   }
  }
@@ -465,12 +465,12 @@ void CDocument_Main::OnAddedUser(const SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 //был изменён пользователь
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnChangedUser(const SUser &sUser)
+void CDocument_Main::OnChangedUser(const CUser &cUser)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorUser.ChangeByUserGUID(sUser.UserGUID,sUser);
+   sProtectedVariables.cVectorUser.ChangeByUserGUID(cUser.GetUserGUID(),cUser);
    sProtectedVariables.OnUpdateView=true;
   }
  }
@@ -482,12 +482,12 @@ void CDocument_Main::OnChangedUser(const SUser &sUser)
 //----------------------------------------------------------------------------------------------------
 //было удалёно задание
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnDeletedTask(const STask &sTask)
+void CDocument_Main::OnDeletedTask(const CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorTask.DeleteByTaskGUID(sTask.TaskGUID);
+   sProtectedVariables.cVectorTask.DeleteByTaskGUID(cTask.GetTaskGUID());
    sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
@@ -498,12 +498,12 @@ void CDocument_Main::OnDeletedTask(const STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //было добавлено задание
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnAddedTask(const STask &sTask)
+void CDocument_Main::OnAddedTask(const CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorTask.AddNew(sTask);
+   sProtectedVariables.cVectorTask.AddNew(cTask);
    sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
@@ -514,12 +514,12 @@ void CDocument_Main::OnAddedTask(const STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //было изменёно задание
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnChangedTask(const STask &sTask)
+void CDocument_Main::OnChangedTask(const CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {   
-   sProtectedVariables.cVectorTask.ChangeByTaskGUID(sTask.TaskGUID,sTask);
+   sProtectedVariables.cVectorTask.ChangeByTaskGUID(cTask.GetTaskGUID(),cTask);
    sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
@@ -532,12 +532,12 @@ void CDocument_Main::OnChangedTask(const STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //был удалён проект
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnDeletedProject(const SProject &sProject)
+void CDocument_Main::OnDeletedProject(const CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorProject.DeleteByProjectGUID(sProject.ProjectGUID);
+   sProtectedVariables.cVectorProject.DeleteByProjectGUID(cProject.GetProjectGUID());
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }
@@ -547,12 +547,12 @@ void CDocument_Main::OnDeletedProject(const SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //был добавлен проект
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnAddedProject(const SProject &sProject)
+void CDocument_Main::OnAddedProject(const CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorProject.AddNew(sProject);
+   sProtectedVariables.cVectorProject.AddNew(cProject);
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }
@@ -562,12 +562,12 @@ void CDocument_Main::OnAddedProject(const SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //был изменён проект
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::OnChangedProject(const SProject &sProject)
+void CDocument_Main::OnChangedProject(const CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {   
-   sProtectedVariables.cVectorProject.ChangeByProjectGUID(sProject.ProjectGUID,sProject);
+   sProtectedVariables.cVectorProject.ChangeByProjectGUID(cProject.GetProjectGUID(),cProject);
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }
@@ -580,10 +580,10 @@ void CDocument_Main::OnChangedProject(const SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //установить выбранного пользователя
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::SetSelectedUser(const SUser &sUser)
+void CDocument_Main::SetSelectedUser(const CUser &cUser)
 {
  sProtectedVariables.UserIsSelected=true;
- sProtectedVariables.sUser_Selected=sUser;
+ sProtectedVariables.cUser_Selected=cUser;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -607,22 +607,22 @@ void CDocument_Main::ResetSelectedUser(void)
 //----------------------------------------------------------------------------------------------------
 //получить выбранного пользователя
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::GetSelectedUser(SUser &sUser)
+bool CDocument_Main::GetSelectedUser(CUser &cUser)
 {
  if (sProtectedVariables.UserIsSelected==false) return(false);
- sUser=sProtectedVariables.sUser_Selected;
+ cUser=sProtectedVariables.cUser_Selected;
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //добавить задание
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::AddTask(STask &sTask)
+bool CDocument_Main::AddTask(CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sTask.TaskType=TASK_TYPE_ADDED;
-   sProtectedVariables.cVectorTask_TransferToServer.PushBack(sTask);
+   cTask.SetTaskType(TASK_TYPE_ADDED);
+   sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
    sProtectedVariables.OnUpdateView=true;
   }
  }
@@ -631,15 +631,15 @@ bool CDocument_Main::AddTask(STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //удалить задание
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::DeleteTask(STask &sTask)
+bool CDocument_Main::DeleteTask(CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    //удаляем из очереди заданий все упоминания о задании
-   while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(sTask.TaskGUID)==true);
-   sTask.TaskType=TASK_TYPE_DELETED;
-   sProtectedVariables.cVectorTask_TransferToServer.PushBack(sTask);
+   while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(cTask.GetTaskGUID())==true);
+   cTask.SetTaskType(TASK_TYPE_DELETED);
+   sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
    sProtectedVariables.OnUpdateView=true;
   }
  }
@@ -648,15 +648,15 @@ bool CDocument_Main::DeleteTask(STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //изменить задание
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::ChangeTask(STask &sTask)
+bool CDocument_Main::ChangeTask(CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    //удаляем из очереди заданий все упоминания о задании
-   while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(sTask.TaskGUID)==true);
-   sTask.TaskType=TASK_TYPE_CHANGED;
-   sProtectedVariables.cVectorTask_TransferToServer.PushBack(sTask);
+   while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(cTask.GetTaskGUID())==true);
+   cTask.SetTaskType(TASK_TYPE_CHANGED);
+   sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }
@@ -667,13 +667,13 @@ bool CDocument_Main::ChangeTask(STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //добавить проект
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::AddProject(SProject &sProject)
+bool CDocument_Main::AddProject(CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProject.ProjectType=PROJECT_TYPE_ADDED;
-   sProtectedVariables.cVectorProject_TransferToServer.PushBack(sProject);
+   cProject.SetProjectType(PROJECT_TYPE_ADDED);
+   sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
    sProtectedVariables.OnUpdateView=true;
   }
  }
@@ -682,15 +682,15 @@ bool CDocument_Main::AddProject(SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //удалить проект
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::DeleteProject(SProject &sProject)
+bool CDocument_Main::DeleteProject(CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    //удаляем из очереди заданий все упоминания о проекте
-   while(sProtectedVariables.cVectorProject_TransferToServer.DeleteByProjectGUID(sProject.ProjectGUID)==true);
-   sProject.ProjectType=PROJECT_TYPE_DELETED;
-   sProtectedVariables.cVectorProject_TransferToServer.PushBack(sProject);
+   while(sProtectedVariables.cVectorProject_TransferToServer.DeleteByProjectGUID(cProject.GetProjectGUID())==true);
+   cProject.SetProjectType(PROJECT_TYPE_DELETED);
+   sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
    sProtectedVariables.OnUpdateView=true;
   }
  }
@@ -699,15 +699,15 @@ bool CDocument_Main::DeleteProject(SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //изменить проект
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::ChangeProject(SProject &sProject)
+bool CDocument_Main::ChangeProject(CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    //удаляем из очереди заданий все упоминания о проекте
-   while(sProtectedVariables.cVectorProject_TransferToServer.DeleteByProjectGUID(sProject.ProjectGUID)==true);
-   sProject.ProjectType=PROJECT_TYPE_CHANGED;
-   sProtectedVariables.cVectorProject_TransferToServer.PushBack(sProject);
+   while(sProtectedVariables.cVectorProject_TransferToServer.DeleteByProjectGUID(cProject.GetProjectGUID())==true);
+   cProject.SetProjectType(PROJECT_TYPE_CHANGED);
+   sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
   }
@@ -719,69 +719,69 @@ bool CDocument_Main::ChangeProject(SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByForUserGUID(const CSafeString &guid)
+vector<CTask> CDocument_Main::CreateVectorCTaskByForUserGUID(const CSafeString &guid)
 {
- vector<STask> vector_STask;
+ vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   vector_STask=sProtectedVariables.cVectorTask.CreateVectorSTaskByForUserGUID(guid);
+   vector_CTask=sProtectedVariables.cVectorTask.CreateVectorCTaskByForUserGUID(guid);
   }
  }
- return(vector_STask);
+ return(vector_CTask);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByFromUserGUID(const CSafeString &guid)
+vector<CTask> CDocument_Main::CreateVectorCTaskByFromUserGUID(const CSafeString &guid)
 {
- vector<STask> vector_STask;
+ vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   vector_STask=sProtectedVariables.cVectorTask.CreateVectorSTaskByFromUserGUID(guid);
+   vector_CTask=sProtectedVariables.cVectorTask.CreateVectorCTaskByFromUserGUID(guid);
   }
  }
- return(vector_STask);
+ return(vector_CTask);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя один для которого задание от пользователя два
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
+vector<CTask> CDocument_Main::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
 {
- vector<STask> vector_STask;
+ vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   vector_STask=sProtectedVariables.cVectorTask.CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(guid_one,guid_two);
+   vector_CTask=sProtectedVariables.cVectorTask.CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(guid_one,guid_two);
   }
  }
- return(vector_STask);
+ return(vector_CTask);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по проекту от пользователя
 //----------------------------------------------------------------------------------------------------
-vector<STask> CDocument_Main::CreateVectorSTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
+vector<CTask> CDocument_Main::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
 {
- vector<STask> vector_STask;
+ vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   vector_STask=sProtectedVariables.cVectorTask.CreateVectorSTaskByProjectGUIDFromUserGUID(guid_project,guid_from_user);
+   vector_CTask=sProtectedVariables.cVectorTask.CreateVectorCTaskByProjectGUIDFromUserGUID(guid_project,guid_from_user);
   }
  }
- return(vector_STask);
+ return(vector_CTask);
 }
 
 //----------------------------------------------------------------------------------------------------
 //получить задание для передачи на сервер
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::PopTaskTransferToServer(STask &sTask)
+bool CDocument_Main::PopTaskTransferToServer(CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   return(sProtectedVariables.cVectorTask_TransferToServer.PopBack(sTask));
+   return(sProtectedVariables.cVectorTask_TransferToServer.PopBack(cTask));
   }
  }
  return(false);
@@ -789,16 +789,16 @@ bool CDocument_Main::PopTaskTransferToServer(STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //добавить задание для передачи на сервер
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::PushTaskTransferToServer(const STask &sTask)
+void CDocument_Main::PushTaskTransferToServer(const CTask &cTask)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    //если в списке уже есть такое задание, то не добавляем, так как этой функцией сетевая часть возвращает задание в очередь,
    //а если в очереди появилось новое такое задание, то про старое (которое возвращается) нужно забыть
-   STask sTask_Local;
-   if (sProtectedVariables.cVectorTask_TransferToServer.FindByTaskGUID(sTask.TaskGUID,sTask_Local)==true) return;
-   sProtectedVariables.cVectorTask_TransferToServer.PushBack(sTask);
+   CTask cTask_Local;
+   if (sProtectedVariables.cVectorTask_TransferToServer.FindByTaskGUID(cTask.GetTaskGUID(),cTask_Local)==true) return;
+   sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
   }
  }
 }
@@ -806,12 +806,12 @@ void CDocument_Main::PushTaskTransferToServer(const STask &sTask)
 //----------------------------------------------------------------------------------------------------
 //получить проект для передачи на сервер
 //----------------------------------------------------------------------------------------------------
-bool CDocument_Main::PopProjectTransferToServer(SProject &sProject)
+bool CDocument_Main::PopProjectTransferToServer(CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   return(sProtectedVariables.cVectorProject_TransferToServer.PopBack(sProject));
+   return(sProtectedVariables.cVectorProject_TransferToServer.PopBack(cProject));
   }
  }
  return(false);
@@ -819,16 +819,16 @@ bool CDocument_Main::PopProjectTransferToServer(SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 //добавить проект для передачи на сервер
 //----------------------------------------------------------------------------------------------------
-void CDocument_Main::PushProjectTransferToServer(const SProject &sProject)
+void CDocument_Main::PushProjectTransferToServer(const CProject &cProject)
 {
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    //если в списке уже есть такой проект, то не добавляем, так как этой функцией сетевая часть возвращает проект в очередь,
    //а если в очереди появился новый такой проект, то про старый (который возвращается) нужно забыть
-   SProject sProject_Local;
-   if (sProtectedVariables.cVectorProject_TransferToServer.FindByProjectGUID(sProject.ProjectGUID,sProject_Local)==true) return;
-   sProtectedVariables.cVectorProject_TransferToServer.PushBack(sProject);
+   CProject cProject_Local;
+   if (sProtectedVariables.cVectorProject_TransferToServer.FindByProjectGUID(cProject.GetProjectGUID(),cProject_Local)==true) return;
+   sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
   }
  }
 }
@@ -876,10 +876,10 @@ void CDocument_Main::FindAllMyParam(void)
   {
    sProtectedVariables.Leader=false;
    sProtectedVariables.MyName="";
-   SUser sUser;
-   if (sProtectedVariables.cVectorUser.FindByUserGUID(sProtectedVariables.MyGUID,sUser)==false) return;
-   sProtectedVariables.Leader=sUser.Leader;
-   sProtectedVariables.MyName=sUser.Name;
+   CUser cUser;
+   if (sProtectedVariables.cVectorUser.FindByUserGUID(sProtectedVariables.MyGUID,cUser)==false) return;
+   sProtectedVariables.Leader=cUser.GetLeader();
+   sProtectedVariables.MyName=cUser.GetName();
   }
  } 
 }

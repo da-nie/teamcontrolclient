@@ -52,7 +52,7 @@ CThreadClient::~CThreadClient()
 //----------------------------------------------------------------------------------------------------
 //сохранение массива заданий
 //----------------------------------------------------------------------------------------------------
-void CThreadClient::SaveTaskVector(char *filename,const vector<STask> &vector_STask)
+void CThreadClient::SaveTaskVector(char *filename,const vector<CTask> &vector_CTask)
 {
 
 }
@@ -200,16 +200,16 @@ bool CThreadClient::TaskProcessing(SOCKET socket_server,bool &on_exit)
 { 
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return(true);
- STask sTask;
- if (cDocument_Main_Ptr->PopTaskTransferToServer(sTask)==false) return(true);
+ CTask cTask;
+ if (cDocument_Main_Ptr->PopTaskTransferToServer(cTask)==false) return(true);
  SERVER_COMMAND command=SERVER_COMMAND_NOTHING;
- if (sTask.TaskType==TASK_TYPE_DELETED) command=SERVER_COMMAND_DELETED_TASK;
- if (sTask.TaskType==TASK_TYPE_ADDED) command=SERVER_COMMAND_ADDED_TASK;
- if (sTask.TaskType==TASK_TYPE_CHANGED) command=SERVER_COMMAND_CHANGED_TASK;
+ if (cTask.GetTaskType()==TASK_TYPE_DELETED) command=SERVER_COMMAND_DELETED_TASK;
+ if (cTask.GetTaskType()==TASK_TYPE_ADDED) command=SERVER_COMMAND_ADDED_TASK;
+ if (cTask.GetTaskType()==TASK_TYPE_CHANGED) command=SERVER_COMMAND_CHANGED_TASK;
  if (command==SERVER_COMMAND_NOTHING) return(true);
- bool ret=cTransceiver_Task.SendTaskDataToServerInPackage(socket_server,sTask,command,cEvent_Exit,on_exit);
+ bool ret=cTransceiver_Task.SendTaskDataToServerInPackage(socket_server,cTask,command,cEvent_Exit,on_exit);
  //в случае ошибки возвращаем задание обратно в очередь
- if (ret==false || on_exit==true) cDocument_Main_Ptr->PushTaskTransferToServer(sTask);
+ if (ret==false || on_exit==true) cDocument_Main_Ptr->PushTaskTransferToServer(cTask);
  cDocument_Main_Ptr->SaveState();
  return(true);
 }
@@ -220,16 +220,16 @@ bool CThreadClient::ProjectProcessing(SOCKET socket_server,bool &on_exit)
 { 
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return(true);
- SProject sProject;
- if (cDocument_Main_Ptr->PopProjectTransferToServer(sProject)==false) return(true);
+ CProject cProject;
+ if (cDocument_Main_Ptr->PopProjectTransferToServer(cProject)==false) return(true);
  SERVER_COMMAND command=SERVER_COMMAND_NOTHING;
- if (sProject.ProjectType==PROJECT_TYPE_DELETED) command=SERVER_COMMAND_DELETED_PROJECT;
- if (sProject.ProjectType==PROJECT_TYPE_ADDED) command=SERVER_COMMAND_ADDED_PROJECT;
- if (sProject.ProjectType==PROJECT_TYPE_CHANGED) command=SERVER_COMMAND_CHANGED_PROJECT;
+ if (cProject.GetProjectType()==PROJECT_TYPE_DELETED) command=SERVER_COMMAND_DELETED_PROJECT;
+ if (cProject.GetProjectType()==PROJECT_TYPE_ADDED) command=SERVER_COMMAND_ADDED_PROJECT;
+ if (cProject.GetProjectType()==PROJECT_TYPE_CHANGED) command=SERVER_COMMAND_CHANGED_PROJECT;
  if (command==SERVER_COMMAND_NOTHING) return(true);
- bool ret=cTransceiver_Project.SendProjectDataToServerInPackage(socket_server,sProject,command,cEvent_Exit,on_exit);
+ bool ret=cTransceiver_Project.SendProjectDataToServerInPackage(socket_server,cProject,command,cEvent_Exit,on_exit);
  //в случае ошибки возвращаем задание обратно в очередь
- if (ret==false || on_exit==true) cDocument_Main_Ptr->PushProjectTransferToServer(sProject);
+ if (ret==false || on_exit==true) cDocument_Main_Ptr->PushProjectTransferToServer(cProject);
  cDocument_Main_Ptr->SaveState();
  return(true);
 }
@@ -429,10 +429,10 @@ void CThreadClient::ExecuteAnswer_GetUserBook(SOCKET socket_server,SERVER_COMMAN
  offset+=sizeof(SServerAnswer::SHeader);
  while(offset<size)
  {
-  SUser sUser;
-  if (cTransceiver_User.ReadSUserInArray(ptr,offset,size,sUser)==false) break;
-  sUser.ChangeData=false;
-  cVectorUser.AddNew(sUser);
+  CUser cUser;
+  if (cTransceiver_User.ReadCUserInArray(ptr,offset,size,cUser)==false) break;
+  cUser.SetChangeData(false);
+  cVectorUser.AddNew(cUser);
  } 
  cDocument_Main_Ptr->SetUserBook(cVectorUser);
  WorkingMode=WORKING_MODE_GET_TASK_BOOK; 
@@ -453,11 +453,11 @@ void CThreadClient::ExecuteAnswer_GetTaskBook(SOCKET socket_server,SERVER_COMMAN
  offset+=sizeof(SServerAnswer::SHeader);   
  while(offset<size)
  {
-  STask sTask;
-  if (cTransceiver_Task.ReadSTaskInArray(ptr,offset,size,sTask)==false) break;
-  sTask.ChangeData=false;
-  sTask.TaskType=TASK_TYPE_NONE;
-  cVectorTask.PushBack(sTask);
+  CTask cTask;
+  if (cTransceiver_Task.ReadCTaskInArray(ptr,offset,size,cTask)==false) break;
+  cTask.SetChangeData(false);
+  cTask.SetTaskType(TASK_TYPE_NONE);
+  cVectorTask.PushBack(cTask);
  } 
  cDocument_Main_Ptr->SetTaskBook(cVectorTask);
  WorkingMode=WORKING_MODE_GET_PROJECT_BOOK;
@@ -478,11 +478,11 @@ void CThreadClient::ExecuteAnswer_GetProjectBook(SOCKET socket_server,SERVER_COM
  offset+=sizeof(SServerAnswer::SHeader);   
  while(offset<size)
  {
-  SProject sProject;
-  if (cTransceiver_Project.ReadSProjectInArray(ptr,offset,size,sProject)==false) break;
-  sProject.ChangeData=false;
-  sProject.ProjectType=PROJECT_TYPE_NONE;
-  cVectorProject.PushBack(sProject);
+  CProject cProject;
+  if (cTransceiver_Project.ReadCProjectInArray(ptr,offset,size,cProject)==false) break;
+  cProject.SetChangeData(false);
+  cProject.SetProjectType(PROJECT_TYPE_NONE);
+  cVectorProject.PushBack(cProject);
  } 
  cDocument_Main_Ptr->SetProjectBook(cVectorProject);
  WorkingMode=WORKING_MODE_WAIT;
@@ -544,12 +544,12 @@ void CThreadClient::ExecuteAnswer_GetDeletedUser(SOCKET socket_server,SERVER_COM
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу пользователей
- SUser sUser;
+ CUser cUser;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_User.GetUserAnswer(ptr,size,sUser)==false) return;
- sUser.ChangeData=false;
- cDocument_Main_Ptr->OnDeletedUser(sUser);
+ if (cTransceiver_User.GetUserAnswer(ptr,size,cUser)==false) return;
+ cUser.SetChangeData(false);
+ cDocument_Main_Ptr->OnDeletedUser(cUser);
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение данных добавленного сотрудника
@@ -558,13 +558,13 @@ void CThreadClient::ExecuteAnswer_GetAddedUser(SOCKET socket_server,SERVER_COMMA
 {
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
- SUser sUser;
+ CUser cUser;
  //обновляем базу пользователей
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_User.GetUserAnswer(ptr,size,sUser)==false) return;
- sUser.ChangeData=false;
- cDocument_Main_Ptr->OnAddedUser(sUser);
+ if (cTransceiver_User.GetUserAnswer(ptr,size,cUser)==false) return;
+ cUser.SetChangeData(false);
+ cDocument_Main_Ptr->OnAddedUser(cUser);
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение данных изменённого сотрудника
@@ -574,12 +574,12 @@ void CThreadClient::ExecuteAnswer_GetChangedUser(SOCKET socket_server,SERVER_COM
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу пользователей
- SUser sUser;
+ CUser cUser;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_User.GetUserAnswer(ptr,size,sUser)==false) return;
- sUser.ChangeData=true;
- cDocument_Main_Ptr->OnChangedUser(sUser);
+ if (cTransceiver_User.GetUserAnswer(ptr,size,cUser)==false) return;
+ cUser.SetChangeData(true);
+ cDocument_Main_Ptr->OnChangedUser(cUser);
 }
 
 
@@ -593,13 +593,13 @@ void CThreadClient::ExecuteAnswer_GetDeletedTask(SOCKET socket_server,SERVER_COM
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу заданий
- STask sTask;
+ CTask cTask;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_Task.GetTaskAnswer(ptr,size,sTask)==false) return;
- sTask.ChangeData=false;
- sTask.TaskType=TASK_TYPE_NONE;
- cDocument_Main_Ptr->OnDeletedTask(sTask);
+ if (cTransceiver_Task.GetTaskAnswer(ptr,size,cTask)==false) return;
+ cTask.SetChangeData(false);
+ cTask.SetTaskType(TASK_TYPE_NONE);
+ cDocument_Main_Ptr->OnDeletedTask(cTask);
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение данных добавленного задания
@@ -609,13 +609,13 @@ void CThreadClient::ExecuteAnswer_GetAddedTask(SOCKET socket_server,SERVER_COMMA
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу заданий
- STask sTask;
+ CTask cTask;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_Task.GetTaskAnswer(ptr,size,sTask)==false) return;
- sTask.ChangeData=false;
- sTask.TaskType=TASK_TYPE_NONE;
- cDocument_Main_Ptr->OnAddedTask(sTask);
+ if (cTransceiver_Task.GetTaskAnswer(ptr,size,cTask)==false) return;
+ cTask.SetChangeData(false);
+ cTask.SetTaskType(TASK_TYPE_NONE);
+ cDocument_Main_Ptr->OnAddedTask(cTask);
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение данных изменённого задания
@@ -625,13 +625,13 @@ void CThreadClient::ExecuteAnswer_GetChangedTask(SOCKET socket_server,SERVER_COM
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу заданий
- STask sTask;
+ CTask cTask;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_Task.GetTaskAnswer(ptr,size,sTask)==false) return;
- sTask.ChangeData=true;
- sTask.TaskType=TASK_TYPE_NONE;
- cDocument_Main_Ptr->OnChangedTask(sTask);
+ if (cTransceiver_Task.GetTaskAnswer(ptr,size,cTask)==false) return;
+ cTask.SetChangeData(true);
+ cTask.SetTaskType(TASK_TYPE_NONE);
+ cDocument_Main_Ptr->OnChangedTask(cTask);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -642,13 +642,13 @@ void CThreadClient::ExecuteAnswer_GetDeletedProject(SOCKET socket_server,SERVER_
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу заданий
- SProject sProject;
+ CProject cProject;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_Project.GetProjectAnswer(ptr,size,sProject)==false) return;
- sProject.ChangeData=false;
- sProject.ProjectType=PROJECT_TYPE_NONE;
- cDocument_Main_Ptr->OnDeletedProject(sProject);
+ if (cTransceiver_Project.GetProjectAnswer(ptr,size,cProject)==false) return;
+ cProject.SetChangeData(false);
+ cProject.SetProjectType(PROJECT_TYPE_NONE);
+ cDocument_Main_Ptr->OnDeletedProject(cProject);
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение данных добавленного проекта
@@ -658,13 +658,13 @@ void CThreadClient::ExecuteAnswer_GetAddedProject(SOCKET socket_server,SERVER_CO
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу заданий
- SProject sProject;
+ CProject cProject;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_Project.GetProjectAnswer(ptr,size,sProject)==false) return;
- sProject.ChangeData=false;
- sProject.ProjectType=PROJECT_TYPE_NONE;
- cDocument_Main_Ptr->OnAddedProject(sProject);
+ if (cTransceiver_Project.GetProjectAnswer(ptr,size,cProject)==false) return;
+ cProject.SetChangeData(false);
+ cProject.SetProjectType(PROJECT_TYPE_NONE);
+ cDocument_Main_Ptr->OnAddedProject(cProject);
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение данных изменённого проекта
@@ -674,13 +674,13 @@ void CThreadClient::ExecuteAnswer_GetChangedProject(SOCKET socket_server,SERVER_
  on_exit=false;
  if (cDocument_Main_Ptr==NULL) return;
  //обновляем базу заданий
- SProject sProject;
+ CProject cProject;
  size_t size=vector_Data.size();
  char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
- if (cTransceiver_Project.GetProjectAnswer(ptr,size,sProject)==false) return;
- sProject.ChangeData=true;
- sProject.ProjectType=PROJECT_TYPE_NONE;
- cDocument_Main_Ptr->OnChangedProject(sProject);
+ if (cTransceiver_Project.GetProjectAnswer(ptr,size,cProject)==false) return;
+ cProject.SetChangeData(true);
+ cProject.SetProjectType(PROJECT_TYPE_NONE);
+ cDocument_Main_Ptr->OnChangedProject(cProject);
 }
 
 

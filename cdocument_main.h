@@ -71,7 +71,7 @@ class CDocument_Main:public CDocument
   //структура защищённых переменных
   struct SProtectedVariables
   {
-   SUser sUser_Selected;//выбранный пользователь
+   CUser cUser_Selected;//выбранный пользователь
    bool UserIsSelected;//есть ли выбраный пользователь
    bool OnShow;//нужно ли показать окно
 
@@ -114,11 +114,11 @@ class CDocument_Main:public CDocument
   void SetNotReadTaskState(bool state);//задать, есть ли непрочитанные задания
 
   void SaveState(void);//сохранить состояние
-  bool FindByUserGUIDAndResetChangeData(const CSafeString &guid,SUser &sUser);//найти пользователя по GUID и сбросить новизну данных
-  bool FindByUserGUID(const CSafeString &guid,SUser &sUser);//найти пользователя по GUID
+  bool FindByUserGUIDAndResetChangeData(const CSafeString &guid,CUser &cUser);//найти пользователя по GUID и сбросить новизну данных
+  bool FindByUserGUID(const CSafeString &guid,CUser &cUser);//найти пользователя по GUID
 
-  bool FindByProjectGUIDAndResetChangeData(const CSafeString &guid,SProject &sProject);//найти проект по GUID и сбросить новизну данных
-  bool FindByProjectGUID(const CSafeString &guid,SProject &sProject);//найти проект по GUID
+  bool FindByProjectGUIDAndResetChangeData(const CSafeString &guid,CProject &cProject);//найти проект по GUID и сбросить новизну данных
+  bool FindByProjectGUID(const CSafeString &guid,CProject &cProject);//найти проект по GUID
 
   void GetMyParam(bool &on_line,CSafeString &guid,CSafeString &name,bool &leader);//получить наши параметры
   void SetMyParam(const bool &on_line,const CSafeString &guid,const CSafeString &name,const bool &leader);//задать наши параметры
@@ -137,40 +137,40 @@ class CDocument_Main:public CDocument
   void SetTaskBook(CVectorTask &cVectorTask_Set);//задать список заданий
   void SetProjectBook(CVectorProject &cVectorProject_Set);//задать список проектов
 
-  void OnDeletedUser(const SUser &sUser);//был удалён пользователь
-  void OnAddedUser(const SUser &sUser);//был добавлен пользователь
-  void OnChangedUser(const SUser &sUser);//был изменён пользователь
+  void OnDeletedUser(const CUser &cUser);//был удалён пользователь
+  void OnAddedUser(const CUser &cUser);//был добавлен пользователь
+  void OnChangedUser(const CUser &cUser);//был изменён пользователь
 
-  void OnDeletedTask(const STask &sTask);//было удалёно задание
-  void OnAddedTask(const STask &sTask);//было добавлено задание
-  void OnChangedTask(const STask &sTask);//было изменёно задание
+  void OnDeletedTask(const CTask &cTask);//было удалёно задание
+  void OnAddedTask(const CTask &cTask);//было добавлено задание
+  void OnChangedTask(const CTask &cTask);//было изменёно задание
 
-  void OnDeletedProject(const SProject &sProject);//был удалён проект
-  void OnAddedProject(const SProject &sProject);//был добавлен проект
-  void OnChangedProject(const SProject &sProject);//был изменёно задание
+  void OnDeletedProject(const CProject &cProject);//был удалён проект
+  void OnAddedProject(const CProject &cProject);//был добавлен проект
+  void OnChangedProject(const CProject &cProject);//был изменёно задание
 
-  void SetSelectedUser(const SUser &sUser);//установить выбранного пользователя
+  void SetSelectedUser(const CUser &cUser);//установить выбранного пользователя
   void ResetSelectedUser(void);//отменить выбор пользователя
-  bool GetSelectedUser(SUser &sUser);//получить выбранного пользователя
+  bool GetSelectedUser(CUser &cUser);//получить выбранного пользователя
 
-  bool AddTask(STask &sTask);//добавить задание
-  bool DeleteTask(STask &sTask);//удалить задание
-  bool ChangeTask(STask &sTask);//изменить задание
+  bool AddTask(CTask &cTask);//добавить задание
+  bool DeleteTask(CTask &cTask);//удалить задание
+  bool ChangeTask(CTask &cTask);//изменить задание
 
-  bool AddProject(SProject &sProject);//добавить проект
-  bool DeleteProject(SProject &sProject);//удалить проект
-  bool ChangeProject(SProject &sProject);//изменить проект
+  bool AddProject(CProject &cProject);//добавить проект
+  bool DeleteProject(CProject &cProject);//удалить проект
+  bool ChangeProject(CProject &cProject);//изменить проект
 
-  vector<STask> CreateVectorSTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
-  vector<STask> CreateVectorSTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
-  vector<STask> CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
-  vector<STask> CreateVectorSTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
+  vector<CTask> CreateVectorCTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
+  vector<CTask> CreateVectorCTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
+  vector<CTask> CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
+  vector<CTask> CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
 
-  bool PopTaskTransferToServer(STask &sTask);//получить задание для передачи на сервер
-  void PushTaskTransferToServer(const STask &sTask);//добавить задание для передачи на сервер
+  bool PopTaskTransferToServer(CTask &cTask);//получить задание для передачи на сервер
+  void PushTaskTransferToServer(const CTask &cTask);//добавить задание для передачи на сервер
 
-  bool PopProjectTransferToServer(SProject &sProject);//получить проект для передачи на сервер
-  void PushProjectTransferToServer(const SProject &sProject);//добавить проект для передачи на сервер
+  bool PopProjectTransferToServer(CProject &cProject);//получить проект для передачи на сервер
+  void PushProjectTransferToServer(const CProject &cProject);//добавить проект для передачи на сервер
 
   bool GetOnShowAndResetOnShow(void);//получить, нужно ли показать окно и сбросить флаг необходимости показа
 

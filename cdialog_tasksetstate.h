@@ -21,7 +21,7 @@ class CDialog_TaskSetState:public CDialog
 {
  protected:
   //-Переменные класса-------------------------------------------------------
-  STask sTask_Local;//редактируемое задание
+  CTask cTask_Local;//редактируемое задание
   //пиктограммы
   HBITMAP hBitmap_TaskDone;
   HBITMAP hBitmap_TaskIsRunning;
@@ -38,7 +38,7 @@ class CDialog_TaskSetState:public CDialog
   afx_msg void OnCancel(void);//нажали ESC
   afx_msg BOOL OnInitDialog(void);//инициализация диалога
   //-Функции класса----------------------------------------------------------
-  bool Activate(STask& sTask);//запустить диалог
+  bool Activate(CTask& cTask);//запустить диалог
   //-Функции обработки сообщений класса--------------------------------------
   DECLARE_MESSAGE_MAP()
   afx_msg void OnDestroy(void);//уничтожение окна

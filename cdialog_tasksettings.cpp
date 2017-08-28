@@ -46,8 +46,8 @@ afx_msg void CDialog_TaskSettings::OnCancel(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
 {
- vector_SUser_Local.clear();
- vector_SProject_Local.clear();
+ vector_CUser_Local.clear();
+ vector_CProject_Local.clear();
 
  CRect cRect;
  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->GetClientRect(cRect);
@@ -68,32 +68,32 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
   size_t size;
   long selected_index=0;
   CVectorUser cVector_User=cDocument_Main_Local_Ptr->GetCVectorUser();
-  vector<SUser> &vector_SUser=cVector_User.GetVectorSUser();
-  vector_SUser_Local=vector_SUser;
-  size=vector_SUser_Local.size();
+  vector<CUser> &vector_CUser=cVector_User.GetVectorCUser();
+  vector_CUser_Local=vector_CUser;
+  size=vector_CUser_Local.size();
   for(n=0;n<size;n++)
   {
-   SUser sUser=vector_SUser_Local[n];
-   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->AddString(sUser.Name);
-   if (sUser.UserGUID.Compare(sTask_Local.ForUserGUID)==0) selected_index=n;
+   CUser cUser=vector_CUser_Local[n];
+   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->AddString(cUser.GetName());   
+   if (cUser.IsUserGUID(cTask_Local.GetForUserGUID())==true) selected_index=n;
   }
   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->SetCurSel(selected_index);
 
   CVectorProject cVector_Project=cDocument_Main_Local_Ptr->GetCVectorProject();
-  vector<SProject> &vector_SProject=cVector_Project.GetVectorSProject();
-  vector_SProject_Local=vector_SProject;
-  size=vector_SProject_Local.size();
+  vector<CProject> &vector_CProject=cVector_Project.GetVectorCProject();
+  vector_CProject_Local=vector_CProject;
+  size=vector_CProject_Local.size();
   selected_index=0;   
   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->AddString("Без проекта");
   for(n=0;n<size;n++)
   {
-   SProject sProject=vector_SProject_Local[n];
-   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->AddString(sProject.ProjectName);
-   if (sProject.ProjectGUID.Compare(sTask_Local.ProjectGUID)==0) selected_index=n+1;
+   CProject cProject=vector_CProject_Local[n];
+   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->AddString(cProject.GetProjectName());
+   if (cProject.IsProjectGUID(cTask_Local.GetProjectGUID())==true) selected_index=n+1;
   }
   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->SetCurSel(selected_index);
  }
- CTime cTime(sTask_Local.cDate.GetYear(),sTask_Local.cDate.GetMonth(),sTask_Local.cDate.GetDay(),0,0,0); 
+ CTime cTime(cTask_Local.GetDate().GetYear(),cTask_Local.GetDate().GetMonth(),cTask_Local.GetDate().GetDay(),0,0,0); 
  ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetTime(&cTime); 
  SYSTEMTIME system_time;
  GetLocalTime(&system_time);
@@ -101,8 +101,8 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  CTime cTime_Max(2037,12,31,0,0,0);
  ((CDateTimeCtrl *)GetDlgItem(IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM))->SetRange(&cTime_Min,&cTime_Max);
 
- ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetWindowText(sTask_Local.Task);
- ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_ANSWER))->SetWindowText(sTask_Local.Answer);
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->SetWindowText(cTask_Local.GetTask());
+ ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_ANSWER))->SetWindowText(cTask_Local.GetAnswer());
 
  if (NewTask==true) 
  {
@@ -122,15 +122,15 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
 //----------------------------------------------------------------------------------------------------
 //запуск диалога
 //----------------------------------------------------------------------------------------------------
-bool CDialog_TaskSettings::Activate(STask &sTask,CDocument_Main *cDocument_Main_Ptr,bool new_task)
+bool CDialog_TaskSettings::Activate(CTask &cTask,CDocument_Main *cDocument_Main_Ptr,bool new_task)
 {
- sTask_Local=sTask;
+ cTask_Local=cTask;
  cDocument_Main_Local_Ptr=cDocument_Main_Ptr;
  NewTask=new_task;
  long ret=DoModal();
  if (ret==0)
  {
-  sTask=sTask_Local;
+  cTask=cTask_Local;
   return(true);
  }
  return(false);
@@ -163,32 +163,32 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
   return;
  } 
  size_t size;
- sTask_Local.cDate.SetDate(cTime.GetYear(),cTime.GetMonth(),cTime.GetDay());
- sTask_Local.Task=task;
- if (NewTask==true) sTask_Local.Index=0;//номер вернёт сервер
- sTask_Local.State=TASK_STATE_NO_READ;
+ cTask_Local.SetDate(CDate(cTime.GetYear(),cTime.GetMonth(),cTime.GetDay()));
+ cTask_Local.SetTask(task);
+ if (NewTask==true) cTask_Local.SetIndex(0);//номер вернёт сервер
+ cTask_Local.SetState(TASK_STATE_NO_READ);
  //считываем пользователя, которому предназначена задача
- size=vector_SUser_Local.size();
+ size=vector_CUser_Local.size();
  long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
  if (user_index<size)
  {
-  SUser &sUser=vector_SUser_Local[user_index];
-  sTask_Local.ForUserGUID=sUser.UserGUID;
+  CUser &cUser=vector_CUser_Local[user_index];
+  cTask_Local.SetForUserGUID(cUser.GetUserGUID());
  }
  //считываем проект, которому предназначена задача
- size=vector_SProject_Local.size();
+ size=vector_CProject_Local.size();
  long project_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT))->GetCurSel();
  if (project_index==0)//без проекта
  {
-  sTask_Local.ProjectGUID="";
+  cTask_Local.SetProjectGUID("");
  }
  else
  {
   project_index--;
   if (project_index<size)
   {
-   SProject sProject=vector_SProject_Local[project_index];
-   sTask_Local.ProjectGUID=sProject.ProjectGUID;
+   CProject cProject=vector_CProject_Local[project_index];
+   cTask_Local.SetProjectGUID(cProject.GetProjectGUID());
   }
  }
  EndDialog(0);
@@ -205,7 +205,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Cancel(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnCommand_Button_TaskFinished(void)
 {
- sTask_Local.State=TASK_STATE_FINISHED;
+ cTask_Local.SetState(TASK_STATE_FINISHED);
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
@@ -214,12 +214,12 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_TaskFinished(void)
 afx_msg void CDialog_TaskSettings::OnSelChange_ComboBox_User(void)
 {
  //считываем пользователя, которому предназначена задача
- size_t size=vector_SUser_Local.size();
+ size_t size=vector_CUser_Local.size();
  long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
  if (user_index<size)
  {
-  SUser &sUser=vector_SUser_Local[user_index];
-  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE))->SetWindowText(sUser.Telephone);  
+  CUser &cUser=vector_CUser_Local[user_index];
+  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE))->SetWindowText(cUser.GetTelephone());
  }
  else 
  {

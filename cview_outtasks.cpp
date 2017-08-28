@@ -60,13 +60,13 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
- vector<STask> vector_STask_Local;
+ vector<CTask> vector_CTask_Local;
 
- SUser sUser;
- if (cDocument_Main_Ptr->GetSelectedUser(sUser)==false)
+ CUser cUser;
+ if (cDocument_Main_Ptr->GetSelectedUser(cUser)==false)
  {
   CView_Base::OnUpdate(pSender,lHint,pHint);	
-  UpdateTask(vector_STask_Local);
+  UpdateTask(vector_CTask_Local);
   return;
  }
  CSafeString guid;
@@ -74,31 +74,31 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  bool on_line;
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
- if (sUser.UserGUID.Compare(ALL_USER_GUID)==0)//выбраны сразу все пользователи
+ if (cUser.IsUserGUID(ALL_USER_GUID)==true)//выбраны сразу все пользователи
  {
-  vector_STask_Local=cDocument_Main_Ptr->CreateVectorSTaskByFromUserGUID(guid); 
+  vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByFromUserGUID(guid); 
   VisibleFromUser=false;
   VisibleForUser=true;
  }
  else 
  {
   //проверим, не выбран ли проект, а не пользователь
-  SUser sUser_Out;
-  if (cDocument_Main_Ptr->GetCVectorUser().FindByUserGUID(sUser.UserGUID,sUser_Out)==false)//такого ползовател€ нет в базе
+  CUser cUser_Out;
+  if (cDocument_Main_Ptr->GetCVectorUser().FindByUserGUID(cUser.GetUserGUID(),cUser_Out)==false)//такого ползовател€ нет в базе
   {
-   vector_STask_Local=cDocument_Main_Ptr->CreateVectorSTaskByProjectGUIDFromUserGUID(sUser.UserGUID,guid);
+   vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByProjectGUIDFromUserGUID(cUser.GetUserGUID(),guid);
    VisibleFromUser=true;
    VisibleForUser=true;
   }
   else//был выбран пользовател€
   {
-   vector_STask_Local=cDocument_Main_Ptr->CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(sUser.UserGUID,guid); 
+   vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(cUser.GetUserGUID(),guid); 
    VisibleFromUser=false;
    VisibleForUser=false;
   }
  }
  CView_Base::OnUpdate(pSender,lHint,pHint);	
- UpdateTask(vector_STask_Local);
+ UpdateTask(vector_CTask_Local);
 }
 //====================================================================================================
 //функции обработки сообщений класса
@@ -164,11 +164,11 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskRepeat(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- sTask.State=TASK_STATE_NO_READ;
- if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+ cTask.SetState(TASK_STATE_NO_READ);
+ if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Ќе удалось изменить задание!","ќшибка",MB_OK);
  }
@@ -182,10 +182,10 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskDelete(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  if (MessageBox("”далить выбранное задание?","ѕодтверждение",MB_YESNO|MB_DEFBUTTON2)!=IDYES) return;
- cDocument_Main_Ptr->DeleteTask(sTask); 
+ cDocument_Main_Ptr->DeleteTask(cTask); 
 }
 //----------------------------------------------------------------------------------------------------
 //изменить задание
@@ -196,20 +196,20 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskEdit(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
- CSafeString for_user_guid=sTask.ForUserGUID;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
+ CSafeString for_user_guid=cTask.GetForUserGUID();
  while(1)
  {
   CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
-  if (cDialog_TaskSettings.Activate(sTask,cDocument_Main_Ptr,false)==true)
+  if (cDialog_TaskSettings.Activate(cTask,cDocument_Main_Ptr,false)==true)
   {
-   if (sTask.ForUserGUID.Compare(for_user_guid)!=0)//у задани€ помен€лс€ адресат
+   if (cTask.IsForUserGUID(for_user_guid)!=0)//у задани€ помен€лс€ адресат
    {
-    sTask.Answer="";//стираем комментарий старого адресата	;
+    cTask.SetAnswer("");//стираем комментарий старого адресата	;
    }
    //просим изменить задание
-   if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+   if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
    {
     MessageBox("Ќе удалось изменить задание!","ќшибка",MB_OK);
    }
@@ -227,11 +227,11 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_SetTaskFinished(void)
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
- STask sTask;
- if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,sTask)==false) return;
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
  //просим изменить задание
- sTask.State=TASK_STATE_FINISHED;
- if (cDocument_Main_Ptr->ChangeTask(sTask)==false)
+ cTask.SetState(TASK_STATE_FINISHED);
+ if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
  {
   MessageBox("Ќе удалось изменить задание!","ќшибка",MB_OK);
  }

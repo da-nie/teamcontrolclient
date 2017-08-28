@@ -28,22 +28,12 @@ bool CVectorProject::Save(char *filename)
  fwrite("PLV",sizeof(unsigned char),3,file);
  fwrite(&Version,sizeof(unsigned long),1,file);
 
- size_t size=vector_SProject.size();
+ size_t size=vector_CProject.size();
  fwrite(&size,sizeof(size_t),1,file);
  for(size_t n=0;n<size;n++)
  {
-  const SProject &sProject=vector_SProject[n]; 
-  //заполняем заголовок
-  SHeader sHeader;
-  sHeader.ProjectNameSize=sProject.ProjectName.GetLength();
-  sHeader.ProjectGUIDSize=sProject.ProjectGUID.GetLength();
-  sHeader.ProjectType=sProject.ProjectType;
-  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
-  const char *s_ptr;
-  s_ptr=sProject.ProjectName;
-  fwrite(s_ptr,sProject.ProjectName.GetLength(),1,file);
-  s_ptr=sProject.ProjectGUID;
-  fwrite(s_ptr,sProject.ProjectGUID.GetLength(),1,file);
+  const CProject &cProject=vector_CProject[n]; 
+  if (cProject.Save(file)==false) break;
  }
  fclose(file);
  return(true);
@@ -53,7 +43,7 @@ bool CVectorProject::Save(char *filename)
 //----------------------------------------------------------------------------------------------------
 bool CVectorProject::Load(char *filename)
 {
- vector_SProject.clear();
+ vector_CProject.clear();
 
  FILE *file=fopen(filename,"rb");
  if (file==NULL) return(false);
@@ -71,26 +61,9 @@ bool CVectorProject::Load(char *filename)
  fread(&size,sizeof(size_t),1,file);
  for(size_t n=0;n<size;n++)
  {
-  SHeader sHeader;
-  fread(&sHeader,sizeof(SHeader),1,file);
-  char *project_guid=new char[sHeader.ProjectGUIDSize+1];
-  char *project_name=new char[sHeader.ProjectNameSize+1];
- 
-  fread(project_name,sizeof(char),sHeader.ProjectNameSize,file);
-  fread(project_guid,sizeof(char),sHeader.ProjectGUIDSize,file);  
- 
-  project_name[sHeader.ProjectNameSize]=0;
-  project_guid[sHeader.ProjectGUIDSize]=0;
-
-  SProject sProject;
-  sProject.ProjectName=project_name;
-  sProject.ProjectGUID=project_guid;
-  sProject.ProjectType=sHeader.ProjectType;
-
-  delete[](project_name);
-  delete[](project_guid);
-
-  vector_SProject.push_back(sProject);
+  CProject cProject;
+  if (cProject.Load(file)==false) break;
+  vector_CProject.push_back(cProject);
  }
  fclose(file);
  return(true);
@@ -98,9 +71,9 @@ bool CVectorProject::Load(char *filename)
 //----------------------------------------------------------------------------------------------------
 //добавить новый элемент
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::AddNew(const SProject &sProject)
+bool CVectorProject::AddNew(const CProject &cProject)
 {
- vector_SProject.push_back(sProject);
+ vector_CProject.push_back(cProject);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
@@ -108,33 +81,33 @@ bool CVectorProject::AddNew(const SProject &sProject)
 //----------------------------------------------------------------------------------------------------
 void CVectorProject::Clear(void)
 {
- vector_SProject.clear();
+ vector_CProject.clear();
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID проекта
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::FindByProjectGUID(const CSafeString &guid,SProject &sProject)
+bool CVectorProject::FindByProjectGUID(const CSafeString &guid,CProject &cProject)
 {
- size_t size=vector_SProject.size();
+ size_t size=vector_CProject.size();
  for(size_t n=0;n<size;n++)
  {
-  sProject=vector_SProject[n];
-  if (sProject.ProjectGUID.Compare(guid)==0) return(true);
+  cProject=vector_CProject[n];
+  if (cProject.IsProjectGUID(guid)==true) return(true);
  }
  return(false);
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID проекта и отметить, что данные не изменены
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::FindByProjectGUIDAndResetChangeData(const CSafeString &guid,SProject &sProject)
+bool CVectorProject::FindByProjectGUIDAndResetChangeData(const CSafeString &guid,CProject &cProject)
 {
- size_t size=vector_SProject.size();
+ size_t size=vector_CProject.size();
  for(size_t n=0;n<size;n++)
  {
-  sProject=vector_SProject[n];
-  if (sProject.ProjectGUID.Compare(guid)==0)
+  cProject=vector_CProject[n];
+  if (cProject.IsProjectGUID(guid)==true)
   {
-   vector_SProject[n].ChangeData=false;
+   vector_CProject[n].SetChangeData(false);
    return(true);
   }
  }
@@ -145,13 +118,13 @@ bool CVectorProject::FindByProjectGUIDAndResetChangeData(const CSafeString &guid
 //----------------------------------------------------------------------------------------------------
 bool CVectorProject::DeleteByProjectGUID(const CSafeString &guid)
 {
- size_t size=vector_SProject.size();
+ size_t size=vector_CProject.size();
  for(size_t n=0;n<size;n++)
  {
-  SProject &sProject_Local=vector_SProject[n];
-  if (sProject_Local.ProjectGUID.Compare(guid)==0)
+  CProject &cProject_Local=vector_CProject[n];
+  if (cProject_Local.IsProjectGUID(guid)==true)
   { 
-   vector_SProject.erase(vector_SProject.begin()+n);
+   vector_CProject.erase(vector_CProject.begin()+n);
    return(true);
   }
  }
@@ -160,15 +133,15 @@ bool CVectorProject::DeleteByProjectGUID(const CSafeString &guid)
 //----------------------------------------------------------------------------------------------------
 //заменить по GUID проекта
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::ChangeByProjectGUID(const CSafeString &guid,const SProject &sProject)
+bool CVectorProject::ChangeByProjectGUID(const CSafeString &guid,const CProject &cProject)
 {
- size_t size=vector_SProject.size();
+ size_t size=vector_CProject.size();
  for(size_t n=0;n<size;n++)
  {
-  SProject &sProject_Local=vector_SProject[n];
-  if (sProject_Local.ProjectGUID.Compare(guid)==0)
+  CProject &cProject_Local=vector_CProject[n];
+  if (cProject_Local.IsProjectGUID(guid)==true)
   { 
-   sProject_Local=sProject;
+   cProject_Local=cProject;
    return(true);
   }
  }
@@ -179,31 +152,31 @@ bool CVectorProject::ChangeByProjectGUID(const CSafeString &guid,const SProject 
 //----------------------------------------------------------------------------------------------------
 size_t CVectorProject::Size(void)
 {
- return(vector_SProject.size());
+ return(vector_CProject.size());
 }
 //----------------------------------------------------------------------------------------------------
 //получить последний проект и удалить его
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::PopBack(SProject &sProject)
+bool CVectorProject::PopBack(CProject &cProject)
 {
- size_t size=vector_SProject.size();
+ size_t size=vector_CProject.size();
  if (size==0) return(false);
- sProject=vector_SProject[size-1];
- vector_SProject.pop_back();
+ cProject=vector_CProject[size-1];
+ vector_CProject.pop_back();
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //добавить проект в конец
 //----------------------------------------------------------------------------------------------------
-bool CVectorProject::PushBack(const SProject &sProject)
+bool CVectorProject::PushBack(const CProject &cProject)
 {
- vector_SProject.push_back(sProject);
+ vector_CProject.push_back(cProject);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //получить ссылку на вектор проектов
 //----------------------------------------------------------------------------------------------------
-vector<SProject>& CVectorProject::GetVectorSProject(void)
+vector<CProject>& CVectorProject::GetVectorCProject(void)
 {
- return(vector_SProject);
+ return(vector_CProject);
 }

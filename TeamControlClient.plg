@@ -6,13 +6,48 @@
 --------------------Configuration: TeamControlClient - Win32 Release--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\WINDOWS\TEMP\RSP102.tmp" with contents
+Creating command line "rc.exe /l 0x419 /fo"Release/Resource.res" /d "NDEBUG" /d "_AFXDLL" "E:\TeamControl\TeamControlClient\Resource.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP238.tmp" with contents
 [
 /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXDLL" /Fp"Release/TeamControlClient.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"E:\TeamControl\TeamControlClient\cbitmapcell.cpp"
+"E:\TeamControl\TeamControlClient\cdate.cpp"
+"E:\TeamControl\TeamControlClient\cdialog_about.cpp"
+"E:\TeamControl\TeamControlClient\cdialog_clientsettings.cpp"
+"E:\TeamControl\TeamControlClient\cdialog_deletefinishedtask.cpp"
+"E:\TeamControl\TeamControlClient\cdialog_projectsettings.cpp"
+"E:\TeamControl\TeamControlClient\cdialog_tasksetstate.cpp"
+"E:\TeamControl\TeamControlClient\cdialog_tasksettings.cpp"
+"E:\TeamControl\TeamControlClient\cdialog_usersettings.cpp"
+"E:\TeamControl\TeamControlClient\cdocument_main.cpp"
+"E:\TeamControl\TeamControlClient\cfillcell.cpp"
+"E:\TeamControl\TeamControlClient\cframecell.cpp"
+"E:\TeamControl\TeamControlClient\cframewnd_main.cpp"
+"E:\TeamControl\TeamControlClient\cicell.cpp"
+"E:\TeamControl\TeamControlClient\clinetextcell.cpp"
+"E:\TeamControl\TeamControlClient\cproject.cpp"
+"E:\TeamControl\TeamControlClient\csafestring.cpp"
+"E:\TeamControl\TeamControlClient\ctask.cpp"
+"E:\TeamControl\TeamControlClient\ctextcell.cpp"
+"E:\TeamControl\TeamControlClient\cthreadclient.cpp"
+"E:\TeamControl\TeamControlClient\ctransceiver.cpp"
+"E:\TeamControl\TeamControlClient\ctransceiver_autorization.cpp"
+"E:\TeamControl\TeamControlClient\ctransceiver_file.cpp"
+"E:\TeamControl\TeamControlClient\ctransceiver_project.cpp"
+"E:\TeamControl\TeamControlClient\ctransceiver_task.cpp"
+"E:\TeamControl\TeamControlClient\ctransceiver_user.cpp"
+"E:\TeamControl\TeamControlClient\ctreeview_kit.cpp"
+"E:\TeamControl\TeamControlClient\cuser.cpp"
+"E:\TeamControl\TeamControlClient\cvector_project.cpp"
+"E:\TeamControl\TeamControlClient\cvector_task.cpp"
+"E:\TeamControl\TeamControlClient\cvector_user.cpp"
+"E:\TeamControl\TeamControlClient\cview_base.cpp"
+"E:\TeamControl\TeamControlClient\cview_mytasks.cpp"
 "E:\TeamControl\TeamControlClient\cview_outtasks.cpp"
+"E:\TeamControl\TeamControlClient\main.cpp"
 ]
-Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP102.tmp" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP103.tmp" with contents
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP238.tmp" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP239.tmp" with contents
 [
 ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlClient.pdb" /machine:I386 /out:"Release/TeamControlClient.exe" 
 .\Release\cbitmapcell.obj
@@ -30,7 +65,9 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\cframewnd_main.obj
 .\Release\cicell.obj
 .\Release\clinetextcell.obj
+.\Release\cproject.obj
 .\Release\csafestring.obj
+.\Release\ctask.obj
 .\Release\ctextcell.obj
 .\Release\cthreadclient.obj
 .\Release\ctransceiver.obj
@@ -40,6 +77,7 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\ctransceiver_task.obj
 .\Release\ctransceiver_user.obj
 .\Release\ctreeview_kit.obj
+.\Release\cuser.obj
 .\Release\cvector_project.obj
 .\Release\cvector_task.obj
 .\Release\cvector_user.obj
@@ -49,10 +87,45 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\main.obj
 .\Release\Resource.res
 ]
-Creating command line "link.exe @C:\WINDOWS\TEMP\RSP103.tmp"
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP239.tmp"
 <h3>Output Window</h3>
+Compiling resources...
 Compiling...
+cbitmapcell.cpp
+cdate.cpp
+cdialog_about.cpp
+cdialog_clientsettings.cpp
+cdialog_deletefinishedtask.cpp
+cdialog_projectsettings.cpp
+cdialog_tasksetstate.cpp
+cdialog_tasksettings.cpp
+cdialog_usersettings.cpp
+cdocument_main.cpp
+cfillcell.cpp
+cframecell.cpp
+cframewnd_main.cpp
+cicell.cpp
+clinetextcell.cpp
+cproject.cpp
+csafestring.cpp
+ctask.cpp
+ctextcell.cpp
+cthreadclient.cpp
+ctransceiver.cpp
+ctransceiver_autorization.cpp
+ctransceiver_file.cpp
+ctransceiver_project.cpp
+ctransceiver_task.cpp
+ctransceiver_user.cpp
+ctreeview_kit.cpp
+cuser.cpp
+cvector_project.cpp
+cvector_task.cpp
+cvector_user.cpp
+cview_base.cpp
+cview_mytasks.cpp
 cview_outtasks.cpp
+main.cpp
 Linking...
 
 

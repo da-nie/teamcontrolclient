@@ -151,7 +151,15 @@ SOURCE=.\clinetextcell.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\cproject.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\csafestring.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ctask.cpp
 # End Source File
 # Begin Source File
 
@@ -188,6 +196,10 @@ SOURCE=.\ctransceiver_user.cpp
 # Begin Source File
 
 SOURCE=.\ctreeview_kit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cuser.cpp
 # End Source File
 # Begin Source File
 
@@ -287,11 +299,19 @@ SOURCE=.\clinetextcell.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\cproject.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\craiiccriticalsection.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\csafestring.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ctask.h
 # End Source File
 # Begin Source File
 
@@ -328,6 +348,10 @@ SOURCE=.\ctransceiver_user.h
 # Begin Source File
 
 SOURCE=.\ctreeview_kit.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cuser.h
 # End Source File
 # Begin Source File
 

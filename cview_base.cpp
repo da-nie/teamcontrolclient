@@ -274,9 +274,9 @@ CDocument_Main* CView_Base::GetDocument(void)
 //----------------------------------------------------------------------------------------------------
 //обновить задани€ в списке
 //----------------------------------------------------------------------------------------------------
-void CView_Base::UpdateTask(vector<STask> &vector_STask_Local)
+void CView_Base::UpdateTask(vector<CTask> &vector_CTask_Local)
 {
- vector_STask.clear();
+ vector_CTask.clear();
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
  SShowState sShowState;
@@ -288,28 +288,28 @@ void CView_Base::UpdateTask(vector<STask> &vector_STask_Local)
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
 
- vector_STask.clear();
- size_t size=vector_STask_Local.size();
+ vector_CTask.clear();
+ size_t size=vector_CTask_Local.size();
  for(size_t n=0;n<size;n++)
  {  
-  long state=vector_STask_Local[n].State;
+  long state=vector_CTask_Local[n].GetState();
   if (TaskIsVisible(sShowState,state)==false) continue;
-  SUser sUser;
-  cDocument_Main_Ptr->FindByUserGUID(vector_STask_Local[n].FromUserGUID,sUser);
-  vector_STask_Local[n].FromUser=sUser.Name;
-  cDocument_Main_Ptr->FindByUserGUID(vector_STask_Local[n].ForUserGUID,sUser);
-  vector_STask_Local[n].ForUser=sUser.Name;
-  vector_STask.push_back(vector_STask_Local[n]);
+  CUser cUser;
+  cDocument_Main_Ptr->FindByUserGUID(vector_CTask_Local[n].GetFromUserGUID(),cUser);
+  vector_CTask_Local[n].SetFromUser(cUser.GetName());
+  cDocument_Main_Ptr->FindByUserGUID(vector_CTask_Local[n].GetForUserGUID(),cUser);
+  vector_CTask_Local[n].SetForUser(cUser.GetName());
+  vector_CTask.push_back(vector_CTask_Local[n]);
  }
 
- if (vector_STask.size()==0)
+ if (vector_CTask.size()==0)
  {
   cScrollBar_ShiftItem.SetScrollRange(0,0,TRUE);
   cScrollBar_ShiftItem.EnableWindow(FALSE);
  }
  else
  {
-  cScrollBar_ShiftItem.SetScrollRange(0,vector_STask.size()-1,TRUE);
+  cScrollBar_ShiftItem.SetScrollRange(0,vector_CTask.size()-1,TRUE);
   cScrollBar_ShiftItem.EnableWindow(TRUE);
  }
  return;
@@ -327,7 +327,7 @@ void CView_Base::DrawTasks(CDC *pDC)
 
  vector_SCell_Task.clear();
  //выводим список задач к этому пользователю
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  CRect cRect_DrawArea;
  cRect_DrawArea.left=cRect.left;
  cRect_DrawArea.right=cRect.right;
@@ -337,7 +337,7 @@ void CView_Base::DrawTasks(CDC *pDC)
  SYSTEMTIME system_time;
  GetLocalTime(&system_time);
 
- CDate cDate(system_time.wYear,system_time.wMonth,system_time.wDay);//текущее врем€ дл€ сравнени€ с временем заданий
+ CDate cDate_Current(system_time.wYear,system_time.wMonth,system_time.wDay);//текущее врем€ дл€ сравнени€ с временем заданий
 
  //выводим название столбца
  cLineTextCell_ColumnName.SetText(ColumnName);
@@ -354,31 +354,32 @@ void CView_Base::DrawTasks(CDC *pDC)
  for(size_t n=task_index;n<size;n++)
  {
   if (cRect_DrawArea.top>cRect.bottom) break;
-  STask &sTask=vector_STask[n];
+  CTask &cTask=vector_CTask[n];
   char str_date[255];
-  sprintf(str_date,"ƒо %02i.%02i.%04i [є %i]",sTask.cDate.GetDay(),sTask.cDate.GetMonth(),sTask.cDate.GetYear(),sTask.Index);
+  const CDate& cDate=cTask.GetDate();
+  sprintf(str_date,"ƒо %02i.%02i.%04i [є %i]",cDate.GetDay(),cDate.GetMonth(),cDate.GetYear(),cTask.GetIndex());
   cTextCell_TaskDate.SetText(str_date);
-  /*if (sTask.State==TASK_STATE_DONE) cTextCell_Task.SetStrikeOut(true);
+  /*if (cTask.State==TASK_STATE_DONE) cTextCell_Task.SetStrikeOut(true);
                                else cTextCell_Task.SetStrikeOut(false);
 							   */
   cTextCell_Task.SetStrikeOut(false);
-  cTextCell_Task.SetText(sTask.Task);
+  cTextCell_Task.SetText(cTask.GetTask());
   //кому это задание
-  cTextCell_ForUser.SetText("ƒл€: "+sTask.ForUser);
+  cTextCell_ForUser.SetText("ƒл€: "+cTask.GetForUser());
   //от кого задание
-  cTextCell_FromUser.SetText("ќт: "+sTask.FromUser);
+  cTextCell_FromUser.SetText("ќт: "+cTask.GetFromUser());
   //узнаем размеры изображени€
   CBitmap *cBitmap_Ptr=NULL;
-  if (sTask.State==TASK_STATE_NO_READ)
+  if (cTask.GetState()==TASK_STATE_NO_READ)
   {
    if (FlashState==true) cBitmap_Ptr=&cBitmap_TaskNotReadFrameOne;
                     else cBitmap_Ptr=&cBitmap_TaskNotReadFrameOneFlash;
   }
-  if (sTask.State==TASK_STATE_READED) cBitmap_Ptr=&cBitmap_TaskReaded;
-  if (sTask.State==TASK_STATE_CANCELED) cBitmap_Ptr=&cBitmap_TaskCanceled;
-  if (sTask.State==TASK_STATE_IS_RUNNING) cBitmap_Ptr=&cBitmap_TaskIsRunning;
-  if (sTask.State==TASK_STATE_DONE) cBitmap_Ptr=&cBitmap_TaskDone;
-  if (sTask.State==TASK_STATE_FINISHED) cBitmap_Ptr=&cBitmap_TaskFinished;
+  if (cTask.GetState()==TASK_STATE_READED) cBitmap_Ptr=&cBitmap_TaskReaded;
+  if (cTask.GetState()==TASK_STATE_CANCELED) cBitmap_Ptr=&cBitmap_TaskCanceled;
+  if (cTask.GetState()==TASK_STATE_IS_RUNNING) cBitmap_Ptr=&cBitmap_TaskIsRunning;
+  if (cTask.GetState()==TASK_STATE_DONE) cBitmap_Ptr=&cBitmap_TaskDone;
+  if (cTask.GetState()==TASK_STATE_FINISHED) cBitmap_Ptr=&cBitmap_TaskFinished;
   cBitmapCell_TaskState.SetBitmap(cBitmap_Ptr);
   CSize cSize_TaskState;
   cBitmapCell_TaskState.GetSize(pDC,cRect_DrawArea,cSize_TaskState);
@@ -405,7 +406,7 @@ void CView_Base::DrawTasks(CDC *pDC)
   CRect cRect_TaskState=CRect(cRect_DrawArea.left,cRect_DrawArea.top,cRect_DrawArea.left+GetTastStateHorizontalOffset()*2+cSize_TaskState.cx,cRect_DrawArea.bottom);
   //заменим фон дл€ выбранного задани€
   COLORREF color=RGB(250,250,230);
-  if (SelectedTaskGUID.Compare(sTask.TaskGUID)==0)
+  if (cTask.IsTaskGUID(SelectedTaskGUID)==true)
   {
    color=RGB(230,230,250);	  
    cFillCell.SetBackgroundColor(color);
@@ -413,10 +414,10 @@ void CView_Base::DrawTasks(CDC *pDC)
   }
   //закрашиваем срок
   CRect cRect_TextDateArea=CRect(cRect_TextArea.left,cRect_TextArea.top,cRect_TextArea.right,cRect_TextArea.top+cSize_TaskDate.cy);  
-  if (cDate>sTask.cDate) color=RGB(255,0,0);//просроченное задание
-  //if (sTask_CurrentDate<sTask) color=RGB(250,250,230);//ещЄ есть врем€
-  if (cDate==sTask.cDate) color=RGB(255,255,0);//сегодн€шн€€ дата
-  if (sTask.State==TASK_STATE_FINISHED) color=RGB(0,255,0);//задание завершено
+  if (cDate_Current>cTask.GetDate()) color=RGB(255,0,0);//просроченное задание
+  //if (cTaskGetDate()>cDate_Current) color=RGB(250,250,230);//ещЄ есть врем€
+  if (cDate_Current==cTask.GetDate()) color=RGB(255,255,0);//сегодн€шн€€ дата
+  if (cTask.GetState()==TASK_STATE_FINISHED) color=RGB(0,255,0);//задание завершено
    
   cFillCell.SetBackgroundColor(color);
   cFillCell.Draw(pDC,cRect_TextDateArea);
@@ -446,7 +447,7 @@ void CView_Base::DrawTasks(CDC *pDC)
   cFrameCell.Draw(pDC,cRect_DrawArea);
 
   SCell sCell;
-  sCell.GUID=sTask.TaskGUID;
+  sCell.GUID=cTask.GetTaskGUID();
   sCell.cRect=cRect_DrawArea;
   vector_SCell_Task.push_back(sCell);
 

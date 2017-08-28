@@ -28,39 +28,12 @@ bool CVectorTask::Save(char *filename)
  fwrite("TLV",sizeof(unsigned char),3,file);
  fwrite(&Version,sizeof(unsigned long),1,file);
 
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  fwrite(&size,sizeof(size_t),1,file);
  for(size_t n=0;n<size;n++)
  {
-  const STask &sTask=vector_STask[n]; 
-  //заполняем заголовок
-  SHeader sHeader;
-  sHeader.FromUserGUIDSize=sTask.FromUserGUID.GetLength();
-  sHeader.ForUserGUIDSize=sTask.ForUserGUID.GetLength();
-  sHeader.ProjectGUIDSize=sTask.ProjectGUID.GetLength();
-  sHeader.TaskSize=sTask.Task.GetLength();
-  sHeader.TaskGUIDSize=sTask.TaskGUID.GetLength();
-  sHeader.AnswerSize=sTask.Answer.GetLength();
-  sHeader.Year=sTask.cDate.GetYear();
-  sHeader.Month=sTask.cDate.GetMonth();
-  sHeader.Day=sTask.cDate.GetDay();
-  sHeader.State=sTask.State;
-  sHeader.TaskType=sTask.TaskType;
-  sHeader.Index=sTask.Index;
-  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
-  const char *s_ptr;
-  s_ptr=sTask.FromUserGUID;
-  fwrite(s_ptr,sTask.FromUserGUID.GetLength(),1,file);
-  s_ptr=sTask.ForUserGUID;
-  fwrite(s_ptr,sTask.ForUserGUID.GetLength(),1,file);
-  s_ptr=sTask.ProjectGUID;
-  fwrite(s_ptr,sTask.ProjectGUID.GetLength(),1,file);
-  s_ptr=sTask.Task;
-  fwrite(s_ptr,sTask.Task.GetLength(),1,file);
-  s_ptr=sTask.TaskGUID;
-  fwrite(s_ptr,sTask.TaskGUID.GetLength(),1,file);
-  s_ptr=sTask.Answer;
-  fwrite(s_ptr,sTask.Answer.GetLength(),1,file);
+  const CTask &cTask=vector_CTask[n]; 
+  if (cTask.Save(file)==false) break;
  }
  fclose(file);
  return(true);
@@ -70,7 +43,7 @@ bool CVectorTask::Save(char *filename)
 //----------------------------------------------------------------------------------------------------
 bool CVectorTask::Load(char *filename)
 {
- vector_STask.clear();
+ vector_CTask.clear();
 
  FILE *file=fopen(filename,"rb");
  if (file==NULL) return(false);
@@ -88,49 +61,9 @@ bool CVectorTask::Load(char *filename)
 
  for(size_t n=0;n<size;n++)
  {
-  SHeader sHeader;
-  fread(&sHeader,sizeof(SHeader),1,file);
-  char *from_user_guid=new char[sHeader.FromUserGUIDSize+1];
-  char *for_user_guid=new char[sHeader.ForUserGUIDSize+1];
-  char *project_guid=new char[sHeader.ProjectGUIDSize+1];
-  char *task=new char[sHeader.TaskSize+1];
-  char *task_guid=new char[sHeader.TaskGUIDSize+1];
-  char *answer=new char[sHeader.AnswerSize+1];
- 
-  fread(from_user_guid,sizeof(char),sHeader.FromUserGUIDSize,file);
-  fread(for_user_guid,sizeof(char),sHeader.ForUserGUIDSize,file);
-  fread(project_guid,sizeof(char),sHeader.ProjectGUIDSize,file);
-  fread(task,sizeof(char),sHeader.TaskSize,file);
-  fread(task_guid,sizeof(char),sHeader.TaskGUIDSize,file);
-  fread(answer,sizeof(char),sHeader.AnswerSize,file);
- 
-  from_user_guid[sHeader.FromUserGUIDSize]=0;
-  for_user_guid[sHeader.ForUserGUIDSize]=0;
-  project_guid[sHeader.ProjectGUIDSize]=0;
-  task[sHeader.TaskSize]=0;
-  task_guid[sHeader.TaskGUIDSize]=0;
-  answer[sHeader.AnswerSize]=0;
-
-  STask sTask;
-  sTask.FromUserGUID=from_user_guid;
-  sTask.ForUserGUID=for_user_guid;
-  sTask.ProjectGUID=project_guid;
-  sTask.Task=task;
-  sTask.TaskGUID=task_guid;
-  sTask.Answer=answer;
-
-  sTask.State=sHeader.State;
-  sTask.cDate.SetDate(sHeader.Year,sHeader.Month,sHeader.Day);
-  sTask.TaskType=sHeader.TaskType;
-  sTask.Index=sHeader.Index;
-
-  delete[](from_user_guid);
-  delete[](for_user_guid);
-  delete[](project_guid);
-  delete[](task);
-  delete[](task_guid);
-  delete[](answer);
-  vector_STask.push_back(sTask);
+  CTask cTask;
+  if (cTask.Load(file)==false) break;
+  vector_CTask.push_back(cTask);
  } 
  fclose(file);
  return(true);
@@ -138,9 +71,9 @@ bool CVectorTask::Load(char *filename)
 //----------------------------------------------------------------------------------------------------
 //добавить новый элемент
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::AddNew(const STask &sTask)
+bool CVectorTask::AddNew(const CTask &cTask)
 {
- vector_STask.push_back(sTask);
+ vector_CTask.push_back(cTask);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
@@ -148,64 +81,64 @@ bool CVectorTask::AddNew(const STask &sTask)
 //----------------------------------------------------------------------------------------------------
 void CVectorTask::Clear(void)
 {
- vector_STask.clear();
+ vector_CTask.clear();
 }
 //----------------------------------------------------------------------------------------------------
 //сортировка заданий по дате по возрастанию
 //----------------------------------------------------------------------------------------------------
 void CVectorTask::SortByDate(void)
 {
- sort(vector_STask.begin(),vector_STask.end());
+ sort(vector_CTask.begin(),vector_CTask.end());
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID задания
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByTaskGUID(const CSafeString &guid,STask &sTask)
+bool CVectorTask::FindByTaskGUID(const CSafeString &guid,CTask &cTask)
 {
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  sTask=vector_STask[n];
-  if (sTask.TaskGUID.Compare(guid)==0) return(true);
+  cTask=vector_CTask[n];
+  if (cTask.IsTaskGUID(guid)==true) return(true);
  }
  return(false);
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByFromUserGUID(const CSafeString &guid,STask &sTask)
+bool CVectorTask::FindByFromUserGUID(const CSafeString &guid,CTask &cTask)
 {
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  sTask=vector_STask[n];
-  if (sTask.FromUserGUID.Compare(guid)==0) return(true);
+  cTask=vector_CTask[n];
+  if (cTask.IsFromUserGUID(guid)==true) return(true);
  }
  return(false);
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByForUserGUID(const CSafeString &guid,STask &sTask)
+bool CVectorTask::FindByForUserGUID(const CSafeString &guid,CTask &cTask)
 {
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  sTask=vector_STask[n];
-  if (sTask.ForUserGUID.Compare(guid)==0) return(true);
+  cTask=vector_CTask[n];
+  if (cTask.IsForUserGUID(guid)==true) return(true);
  }
  return(false);
 }
 //----------------------------------------------------------------------------------------------------
 //найти по GUID проекта
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::FindByProjectGUID(const CSafeString &guid,STask &sTask)
+bool CVectorTask::FindByProjectGUID(const CSafeString &guid,CTask &cTask)
 {
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  sTask=vector_STask[n];
-  if (sTask.ProjectGUID.Compare(guid)==0) return(true);
+  cTask=vector_CTask[n];
+  if (cTask.IsProjectGUID(guid)==true) return(true);
  }
  return(false);
 }
@@ -214,13 +147,13 @@ bool CVectorTask::FindByProjectGUID(const CSafeString &guid,STask &sTask)
 //----------------------------------------------------------------------------------------------------
 bool CVectorTask::DeleteByTaskGUID(const CSafeString &guid)
 {
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  STask &sTask_Local=vector_STask[n];
-  if (sTask_Local.TaskGUID.Compare(guid)==0)
+  CTask &cTask_Local=vector_CTask[n];
+  if (cTask_Local.IsTaskGUID(guid)==true)
   { 
-   vector_STask.erase(vector_STask.begin()+n);
+   vector_CTask.erase(vector_CTask.begin()+n);
    return(true);
   }
  }
@@ -229,15 +162,15 @@ bool CVectorTask::DeleteByTaskGUID(const CSafeString &guid)
 //----------------------------------------------------------------------------------------------------
 //заменить по GUID задания
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::ChangeByTaskGUID(const CSafeString &guid,const STask &sTask)
+bool CVectorTask::ChangeByTaskGUID(const CSafeString &guid,const CTask &cTask)
 {
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  STask &sTask_Local=vector_STask[n];
-  if (sTask_Local.TaskGUID.Compare(guid)==0)
+  CTask &cTask_Local=vector_CTask[n];
+  if (cTask_Local.IsTaskGUID(guid)==true)
   { 
-   sTask_Local=sTask;
+   cTask_Local=cTask;
    return(true);
   }
  }
@@ -248,90 +181,90 @@ bool CVectorTask::ChangeByTaskGUID(const CSafeString &guid,const STask &sTask)
 //----------------------------------------------------------------------------------------------------
 size_t CVectorTask::Size(void)
 {
- return(vector_STask.size());
+ return(vector_CTask.size());
 }
 //----------------------------------------------------------------------------------------------------
 //получить последнее задание и удалить его
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::PopBack(STask &sTask)
+bool CVectorTask::PopBack(CTask &cTask)
 {
- size_t size=vector_STask.size();
+ size_t size=vector_CTask.size();
  if (size==0) return(false);
- sTask=vector_STask[size-1];
- vector_STask.pop_back();
+ cTask=vector_CTask[size-1];
+ vector_CTask.pop_back();
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //добавить задание в конец
 //----------------------------------------------------------------------------------------------------
-bool CVectorTask::PushBack(const STask &sTask)
+bool CVectorTask::PushBack(const CTask &cTask)
 {
- vector_STask.push_back(sTask);
+ vector_CTask.push_back(cTask);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //получить ссылку на вектор задач
 //----------------------------------------------------------------------------------------------------
-vector<STask>& CVectorTask::GetVectorSTask(void)
+vector<CTask>& CVectorTask::GetVectorCTask(void)
 {
- return(vector_STask);
+ return(vector_CTask);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByForUserGUID(const CSafeString &guid)
+vector<CTask> CVectorTask::CreateVectorCTaskByForUserGUID(const CSafeString &guid)
 {
- vector<STask> vector_STask_Out;
- size_t size=vector_STask.size();
+ vector<CTask> vector_CTask_Out;
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  STask sTask=vector_STask[n];
-  if (sTask.ForUserGUID.Compare(guid)==0) vector_STask_Out.push_back(sTask);
+  CTask cTask=vector_CTask[n];
+  if (cTask.IsForUserGUID(guid)==true) vector_CTask_Out.push_back(cTask);
  }
- return(vector_STask_Out);
+ return(vector_CTask_Out);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByFromUserGUID(const CSafeString &guid)
+vector<CTask> CVectorTask::CreateVectorCTaskByFromUserGUID(const CSafeString &guid)
 {
- vector<STask> vector_STask_Out;
- size_t size=vector_STask.size();
+ vector<CTask> vector_CTask_Out;
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  STask sTask=vector_STask[n];
-  if (sTask.FromUserGUID.Compare(guid)==0) vector_STask_Out.push_back(sTask);
+  CTask cTask=vector_CTask[n];
+  if (cTask.IsFromUserGUID(guid)==true) vector_CTask_Out.push_back(cTask);
  }
- return(vector_STask_Out);
+ return(vector_CTask_Out);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя один для которого задание от пользователя два
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
+vector<CTask> CVectorTask::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
 {
- vector<STask> vector_STask_Out;
- size_t size=vector_STask.size();
+ vector<CTask> vector_CTask_Out;
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  STask sTask=vector_STask[n];
-  if (sTask.ForUserGUID.Compare(guid_one)==0 && sTask.FromUserGUID.Compare(guid_two)==0) vector_STask_Out.push_back(sTask);
+  CTask cTask=vector_CTask[n];
+  if (cTask.IsForUserGUID(guid_one)==true && cTask.IsFromUserGUID(guid_two)==true) vector_CTask_Out.push_back(cTask);
  }
- return(vector_STask_Out);
+ return(vector_CTask_Out);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по проекту от пользователя
 //----------------------------------------------------------------------------------------------------
-vector<STask> CVectorTask::CreateVectorSTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
+vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
 {
- vector<STask> vector_STask_Out;
- size_t size=vector_STask.size();
+ vector<CTask> vector_CTask_Out;
+ size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
-  STask sTask=vector_STask[n];
-  if (sTask.FromUserGUID.Compare(guid_from_user)==0)
+  CTask cTask=vector_CTask[n];
+  if (cTask.IsFromUserGUID(guid_from_user)==true)
   {
-   if (sTask.ProjectGUID.Compare(guid_project)==0) vector_STask_Out.push_back(sTask);
+   if (cTask.IsProjectGUID(guid_project)==true) vector_CTask_Out.push_back(cTask);
   }
  }
- return(vector_STask_Out);
+ return(vector_CTask_Out);
 }
