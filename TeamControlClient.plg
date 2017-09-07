@@ -7,7 +7,7 @@
 </h3>
 <h3>Command Lines</h3>
 Creating command line "rc.exe /l 0x419 /fo"Release/Resource.res" /d "NDEBUG" /d "_AFXDLL" "D:\Working\TeamControl\TeamControlClient\Resource.rc"" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP63D.tmp" with contents
+Creating temporary file "C:\WINDOWS\TEMP\RSP6E3.tmp" with contents
 [
 /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXDLL" /Fp"Release/TeamControlClient.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
 "D:\Working\TeamControl\TeamControlClient\cbitmapcell.cpp"
@@ -33,6 +33,7 @@ Creating temporary file "C:\WINDOWS\TEMP\RSP63D.tmp" with contents
 "D:\Working\TeamControl\TeamControlClient\ctransceiver.cpp"
 "D:\Working\TeamControl\TeamControlClient\ctransceiver_autorization.cpp"
 "D:\Working\TeamControl\TeamControlClient\ctransceiver_file.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver_ping.cpp"
 "D:\Working\TeamControl\TeamControlClient\ctransceiver_project.cpp"
 "D:\Working\TeamControl\TeamControlClient\ctransceiver_task.cpp"
 "D:\Working\TeamControl\TeamControlClient\ctransceiver_user.cpp"
@@ -45,10 +46,9 @@ Creating temporary file "C:\WINDOWS\TEMP\RSP63D.tmp" with contents
 "D:\Working\TeamControl\TeamControlClient\cview_mytasks.cpp"
 "D:\Working\TeamControl\TeamControlClient\cview_outtasks.cpp"
 "D:\Working\TeamControl\TeamControlClient\main.cpp"
-"D:\Working\TeamControl\TeamControlClient\ctransceiver_ping.cpp"
 ]
-Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP63D.tmp" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP63E.tmp" with contents
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP6E3.tmp" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP6E4.tmp" with contents
 [
 ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlClient.pdb" /machine:I386 /out:"Release/TeamControlClient.exe" 
 .\Release\cbitmapcell.obj
@@ -74,6 +74,7 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\ctransceiver.obj
 .\Release\ctransceiver_autorization.obj
 .\Release\ctransceiver_file.obj
+.\Release\ctransceiver_ping.obj
 .\Release\ctransceiver_project.obj
 .\Release\ctransceiver_task.obj
 .\Release\ctransceiver_user.obj
@@ -87,9 +88,8 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\cview_outtasks.obj
 .\Release\main.obj
 .\Release\Resource.res
-.\Release\ctransceiver_ping.obj
 ]
-Creating command line "link.exe @C:\WINDOWS\TEMP\RSP63E.tmp"
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP6E4.tmp"
 <h3>Output Window</h3>
 Compiling resources...
 Compiling...
@@ -116,6 +116,7 @@ cthreadclient.cpp
 ctransceiver.cpp
 ctransceiver_autorization.cpp
 ctransceiver_file.cpp
+ctransceiver_ping.cpp
 ctransceiver_project.cpp
 ctransceiver_task.cpp
 ctransceiver_user.cpp
@@ -128,7 +129,6 @@ cview_base.cpp
 cview_mytasks.cpp
 cview_outtasks.cpp
 main.cpp
-ctransceiver_ping.cpp
 Linking...
 
 
