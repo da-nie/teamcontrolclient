@@ -22,6 +22,7 @@
 #include "ctransceiver_project.h"
 #include "ctransceiver_file.h"
 #include "ctransceiver_autorization.h"
+#include "ctransceiver_ping.h"
 
 using namespace std;
 
@@ -75,6 +76,7 @@ class CThreadClient
 
   WORKING_MODE WorkingMode;//текущий режим работы с сервером
 
+  CTransceiver_Ping cTransceiver_Ping;//приёмо-передатчик данных сообщения для проверки связи
   CTransceiver_User cTransceiver_User;//приёмо-передатчик данных пользователей
   CTransceiver_Task cTransceiver_Task;//приёмо-передатчик данных заданий
   CTransceiver_Project cTransceiver_Project;//приёмо-передатчик данных проектов
@@ -95,6 +97,7 @@ class CThreadClient
   bool LinkProcessing(SOCKET socket_server,bool &on_exit);//обработка обмена с сервером
   bool TaskProcessing(SOCKET socket_server,bool &on_exit);//обработка заданий
   bool ProjectProcessing(SOCKET socket_server,bool &on_exit);//обработка проектов
+  bool PingProcessing(SOCKET socket_server,bool &on_exit);//обработка сообщений проверки связи
 
   bool ExecuteCommand_GetClientProgrammCRC(SOCKET socket_server,bool &on_exit);//выполнение команды запроса контрольной суммы программы на сервере
   bool ExecuteCommand_GetClientProgrammAndLoader(SOCKET socket_server,bool &on_exit);//выполнение команды запроса программы и загрузчика

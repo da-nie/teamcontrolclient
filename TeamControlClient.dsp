@@ -183,6 +183,10 @@ SOURCE=.\ctransceiver_file.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ctransceiver_ping.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ctransceiver_project.cpp
 # End Source File
 # Begin Source File
@@ -332,6 +336,10 @@ SOURCE=.\ctransceiver_autorization.h
 # Begin Source File
 
 SOURCE=.\ctransceiver_file.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ctransceiver_ping.h
 # End Source File
 # Begin Source File
 

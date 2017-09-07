@@ -31,6 +31,8 @@
 #define ABOUT_TIMER_MAX_CONTER (3000/FRAME_WND_TIMER_PERIOD)
 //время на смену иконки в трее
 #define SYSTRAY_CHANGE_ICON_COUNTER (500/FRAME_WND_TIMER_PERIOD)
+//периодичность проверки связи
+#define PING_COUNTER_MAX_VALUE (60000/FRAME_WND_TIMER_PERIOD)
 
 //====================================================================================================
 //класс рамки окна
@@ -52,6 +54,8 @@ class CFrameWnd_Main:public CFrameWnd
   long AboutCounter;//счётчик показа окна о программе
 
   long ChangeSysTrayIconCounter;//счётчик для смены иконки в трее
+
+  long PingCounter;//счётчик для проверки связи
  public:
   //-Конструктор класса------------------------------------------------------
   CFrameWnd_Main(void);

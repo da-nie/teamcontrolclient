@@ -851,6 +851,37 @@ bool CDocument_Main::GetOnShowAndResetOnShow(void)
  return(ret);
 }
 //----------------------------------------------------------------------------------------------------
+//получить, нужно ли отправл€ть сообщение дл€ проверки св€зи и сбросить его
+//----------------------------------------------------------------------------------------------------
+bool CDocument_Main::GetSendPingAndReset(void)
+{
+ bool ret;
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   ret=sProtectedVariables.SendPing;
+   sProtectedVariables.SendPing=false;
+  }
+ }
+ return(ret);
+}
+
+//----------------------------------------------------------------------------------------------------
+//задать, нужно ли отправл€ть сообщение дл€ проверки св€зи
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::SetSendPing(bool state)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   sProtectedVariables.SendPing=state;
+  }
+ }
+}
+
+
+
+//----------------------------------------------------------------------------------------------------
 //цикл обработки
 //----------------------------------------------------------------------------------------------------
 void CDocument_Main::Processing(void)

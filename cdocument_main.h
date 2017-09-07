@@ -97,6 +97,7 @@ class CDocument_Main:public CDocument
 
    SShowState sShowState;//настройки отображения данных
 
+   bool SendPing;//нужно ли отправить сообщение для проверки связи
 
    CCriticalSection cCriticalSection;//критическая секция для доступа к структуре
   } sProtectedVariables;
@@ -173,6 +174,9 @@ class CDocument_Main:public CDocument
   void PushProjectTransferToServer(const CProject &cProject);//добавить проект для передачи на сервер
 
   bool GetOnShowAndResetOnShow(void);//получить, нужно ли показать окно и сбросить флаг необходимости показа
+
+  bool GetSendPingAndReset(void);//получить, нужно ли отправлять сообщение для проверки связи и сбросить его
+  void SetSendPing(bool state);//задать, нужно ли отправлять сообщение для проверки связи
 
   void Processing(void);//цикл обработки
  protected:

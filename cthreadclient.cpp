@@ -190,6 +190,7 @@ bool CThreadClient::LinkProcessing(SOCKET socket_server,bool &on_exit)
  {
   if (TaskProcessing(socket_server,on_exit)==false) return(false);
   if (ProjectProcessing(socket_server,on_exit)==false) return(false);
+  if (PingProcessing(socket_server,on_exit)==false) return(false);
  }
  return(true);
 }
@@ -211,6 +212,7 @@ bool CThreadClient::TaskProcessing(SOCKET socket_server,bool &on_exit)
  //в случае ошибки возвращаем задание обратно в очередь
  if (ret==false || on_exit==true) cDocument_Main_Ptr->PushTaskTransferToServer(cTask);
  cDocument_Main_Ptr->SaveState();
+ if (on_exit==true) return(false);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
@@ -231,6 +233,19 @@ bool CThreadClient::ProjectProcessing(SOCKET socket_server,bool &on_exit)
  //в случае ошибки возвращаем задание обратно в очередь
  if (ret==false || on_exit==true) cDocument_Main_Ptr->PushProjectTransferToServer(cProject);
  cDocument_Main_Ptr->SaveState();
+ if (on_exit==true) return(false);
+ return(true);
+}
+//----------------------------------------------------------------------------------------------------
+//обработка сообщений проверки связи
+//----------------------------------------------------------------------------------------------------
+bool CThreadClient::PingProcessing(SOCKET socket_server,bool &on_exit)
+{ 
+ on_exit=false;
+ if (cDocument_Main_Ptr==NULL) return(true);
+ if (cDocument_Main_Ptr->GetSendPingAndReset()==false) return(true);
+ cTransceiver_Ping.SendPingDataToServerInPackage(socket_server,SERVER_COMMAND_PING,cEvent_Exit,on_exit);
+ if (on_exit==true) return(false);
  return(true);
 }
 

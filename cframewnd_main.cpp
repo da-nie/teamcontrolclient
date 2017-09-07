@@ -37,6 +37,7 @@ CFrameWnd_Main::CFrameWnd_Main(void)
  hIcon_SysTray=NULL;
  hIcon_SysTray_NotRead=NULL;
  hIcon_SysTray_NotReadInverse=NULL;
+ PingCounter=PING_COUNTER_MAX_VALUE;
 }
 //====================================================================================================
 //деструктор класса
@@ -199,6 +200,12 @@ afx_msg void CFrameWnd_Main::OnTimer(UINT nIDEvent)
  if (nIDEvent==ID_TIMER_FRAMEWND_MAIN)
  { 
   CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
+  if (PingCounter>0) PingCounter--;
+  else
+  {
+   if (cDocument_Main_Ptr!=NULL) cDocument_Main_Ptr->SetSendPing(true);
+   PingCounter=PING_COUNTER_MAX_VALUE;
+  }
   bool not_read_task=false;
   if (cDocument_Main_Ptr!=NULL)
   {
