@@ -38,6 +38,7 @@ bool CTransceiver_Task::ReadCTaskInArray(char *ptr,size_t &offset,size_t max_len
  if (length>max_length) return(false);
 
  cTask.SetDate(CDate(sServerAnswer_cTaskDataHeader_Ptr->Year,sServerAnswer_cTaskDataHeader_Ptr->Month,sServerAnswer_cTaskDataHeader_Ptr->Day)); 
+ cTask.SetAnswerNotRead(sServerAnswer_cTaskDataHeader_Ptr->AnswerNotRead);
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_NO_READ) cTask.SetStateNoRead();
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_READED) cTask.SetStateReaded();
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_CANCELED) cTask.SetStateCancelled();
@@ -90,6 +91,7 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const CTask &c
  sServerCommand_cTaskDataHeader.Year=cDate.GetYear();
  sServerCommand_cTaskDataHeader.Month=cDate.GetMonth();
  sServerCommand_cTaskDataHeader.Day=cDate.GetDay();
+ sServerCommand_cTaskDataHeader.AnswerNotRead=cTask.GetAnswerNotRead();
 
  if (cTask.IsStateNoRead()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_NO_READ;
  if (cTask.IsStateReaded()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_READED;

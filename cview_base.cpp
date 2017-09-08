@@ -139,10 +139,14 @@ afx_msg void CView_Base::OnInitialUpdate(void)
 
  cBitmap_TaskNotReadFrameOne.LoadBitmap(IDB_BITMAP_TASK_NOT_READ_FRAME_ONE);
  cBitmap_TaskNotReadFrameOneFlash.LoadBitmap(IDB_BITMAP_TASK_NOT_READ_FRAME_TWO);
- cBitmap_TaskDone.LoadBitmap(IDB_BITMAP_TASK_DONE);
- cBitmap_TaskReaded.LoadBitmap(IDB_BITMAP_TASK_READED);
- cBitmap_TaskIsRunning.LoadBitmap(IDB_BITMAP_TASK_IS_RUNNING);
- cBitmap_TaskCanceled.LoadBitmap(IDB_BITMAP_TASK_CANCELED);
+ cBitmap_TaskDoneFrameOne.LoadBitmap(IDB_BITMAP_TASK_DONE_FRAME_ONE);
+ cBitmap_TaskDoneFrameTwo.LoadBitmap(IDB_BITMAP_TASK_DONE_FRAME_TWO);
+ cBitmap_TaskReadedFrameOne.LoadBitmap(IDB_BITMAP_TASK_READED_FRAME_ONE);
+ cBitmap_TaskReadedFrameTwo.LoadBitmap(IDB_BITMAP_TASK_READED_FRAME_TWO);
+ cBitmap_TaskIsRunningFrameOne.LoadBitmap(IDB_BITMAP_TASK_IS_RUNNING_FRAME_ONE);
+ cBitmap_TaskIsRunningFrameTwo.LoadBitmap(IDB_BITMAP_TASK_IS_RUNNING_FRAME_TWO);
+ cBitmap_TaskCanceledFrameOne.LoadBitmap(IDB_BITMAP_TASK_CANCELED_FRAME_ONE);
+ cBitmap_TaskCanceledFrameTwo.LoadBitmap(IDB_BITMAP_TASK_CANCELED_FRAME_TWO);
  cBitmap_TaskFinished.LoadBitmap(IDB_BITMAP_TASK_FINISHED);
 
  CView::OnInitialUpdate();
@@ -374,10 +378,26 @@ void CView_Base::DrawTasks(CDC *pDC)
    if (FlashState==true) cBitmap_Ptr=&cBitmap_TaskNotReadFrameOne;
                     else cBitmap_Ptr=&cBitmap_TaskNotReadFrameOneFlash;
   }
-  if (cTask.IsStateReaded()==true) cBitmap_Ptr=&cBitmap_TaskReaded;
-  if (cTask.IsStateCancelled()==true) cBitmap_Ptr=&cBitmap_TaskCanceled;
-  if (cTask.IsStateIsRunning()==true) cBitmap_Ptr=&cBitmap_TaskIsRunning;
-  if (cTask.IsStateDone()==true) cBitmap_Ptr=&cBitmap_TaskDone;
+  if (cTask.IsStateReaded()==true)
+  {
+   if (FlashState==true || cTask.IsAnswerNotRead()==false) cBitmap_Ptr=&cBitmap_TaskReadedFrameOne;
+                                                     else cBitmap_Ptr=&cBitmap_TaskReadedFrameTwo;
+  }
+  if (cTask.IsStateCancelled()==true) 
+  {
+   if (FlashState==true || cTask.IsAnswerNotRead()==false) cBitmap_Ptr=&cBitmap_TaskCanceledFrameOne;
+                                                     else cBitmap_Ptr=&cBitmap_TaskCanceledFrameTwo;
+  }
+  if (cTask.IsStateIsRunning()==true)
+  {
+   if (FlashState==true || cTask.IsAnswerNotRead()==false) cBitmap_Ptr=&cBitmap_TaskIsRunningFrameOne;
+                                                     else cBitmap_Ptr=&cBitmap_TaskIsRunningFrameTwo;
+  }
+  if (cTask.IsStateDone()==true)
+  {
+   if (FlashState==true || cTask.IsAnswerNotRead()==false) cBitmap_Ptr=&cBitmap_TaskDoneFrameOne;
+                                                     else cBitmap_Ptr=&cBitmap_TaskDoneFrameTwo;
+  }
   if (cTask.IsStateFinished()==true) cBitmap_Ptr=&cBitmap_TaskFinished;
   cBitmapCell_TaskState.SetBitmap(cBitmap_Ptr);
   CSize cSize_TaskState;

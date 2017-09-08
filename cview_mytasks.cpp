@@ -171,7 +171,7 @@ afx_msg void CView_MyTasks::OnLButtonDblClk(UINT nFlags,CPoint point)
    else break;
   }
   else break;
- }
+ } 
 }
 
 //----------------------------------------------------------------------------------------------------

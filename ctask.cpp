@@ -14,6 +14,7 @@ CTask::CTask(void)
  State=TASK_STATE_NO_READ;
  cDate.SetDate(0,0,0);
  Answer="";
+ AnswerNotRead=false;
 }
 //====================================================================================================
 //деструктор класса
@@ -102,6 +103,13 @@ const CSafeString& CTask::GetFromUser(void) const
 {
  return(FromUser);
 }
+//----------------------------------------------------------------------------------------------------
+//получить, прочитан ли ответ на задание
+//----------------------------------------------------------------------------------------------------
+bool CTask::GetAnswerNotRead(void) const
+{
+ return(AnswerNotRead);
+}
 
 //----------------------------------------------------------------------------------------------------
 //задать индекс
@@ -179,6 +187,13 @@ void CTask::SetForUser(const char *for_user)
 void CTask::SetFromUser(const char *from_user)
 {
  FromUser=from_user;
+}
+//----------------------------------------------------------------------------------------------------
+//установить, прочитан ли ответ на задание
+//----------------------------------------------------------------------------------------------------
+void CTask::SetAnswerNotRead(bool state)
+{
+ AnswerNotRead=state;
 }
 //----------------------------------------------------------------------------------------------------
 //установить, что задание не прочитано
@@ -375,7 +390,13 @@ bool CTask::IsTaskGUID(const char *guid) const
  if (TaskGUID.Compare(const_cast<char*>(guid))==0) return(true);    
  return(false);
 }
-
+//----------------------------------------------------------------------------------------------------
+//прочитан ли ответ на задание
+//----------------------------------------------------------------------------------------------------
+bool CTask::IsAnswerNotRead(void) const
+{
+ return(AnswerNotRead); 
+}
 
 //----------------------------------------------------------------------------------------------------
 //сохранить данные
@@ -396,6 +417,7 @@ bool CTask::Save(FILE *file) const
  sHeader.State=State;
  sHeader.TaskType=TaskType;
  sHeader.Index=Index;
+ sHeader.AnswerNotRead=AnswerNotRead;
  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
  const char *s_ptr;
  s_ptr=FromUserGUID;
@@ -451,6 +473,7 @@ bool CTask::Load(FILE *file)
  cDate.SetDate(sHeader.Year,sHeader.Month,sHeader.Day);
  TaskType=sHeader.TaskType;
  Index=sHeader.Index;
+ AnswerNotRead=sHeader.AnswerNotRead;
 
  delete[](from_user_guid);
  delete[](for_user_guid);

@@ -41,10 +41,15 @@ class CView_Base:public CView
 
   CBitmap cBitmap_TaskNotReadFrameOne;//пиктограмма "задание не прочитано"
   CBitmap cBitmap_TaskNotReadFrameOneFlash;//инверсная пиктограмма "задание не прочитано"
-  CBitmap cBitmap_TaskDone;//пиктограмма "задание выполнено"
-  CBitmap cBitmap_TaskReaded;//пиктограмма "задание прочитано"
-  CBitmap cBitmap_TaskIsRunning;//пиктограмма "задание выполняется"
-  CBitmap cBitmap_TaskCanceled;//пиктограмма "задание отклонено"
+  CBitmap cBitmap_TaskDoneFrameOne;//пиктограмма "задание выполнено"
+  CBitmap cBitmap_TaskDoneFrameTwo;//пиктограмма "задание выполнено"
+  CBitmap cBitmap_TaskReadedFrameOne;//пиктограмма "задание прочитано"
+  CBitmap cBitmap_TaskReadedFrameTwo;//пиктограмма "задание прочитано"
+  CBitmap cBitmap_TaskIsRunningFrameOne;//пиктограмма "задание выполняется"
+  CBitmap cBitmap_TaskIsRunningFrameTwo;//пиктограмма "задание выполняется"
+  CBitmap cBitmap_TaskCanceledFrameOne;//пиктограмма "задание отклонено"
+  CBitmap cBitmap_TaskCanceledFrameTwo;//пиктограмма "задание отклонено"
+
   CBitmap cBitmap_TaskFinished;//пиктограмма "задание завершено"
 
   CScrollBar cScrollBar_ShiftItem;//полоса прокрутки списка задач

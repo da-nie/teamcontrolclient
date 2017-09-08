@@ -203,11 +203,11 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskEdit(void)
  {
   CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
   if (cDialog_TaskSettings.Activate(cTask,cDocument_Main_Ptr,false)==true)
-  {
-   if (cTask.IsForUserGUID(for_user_guid)!=0)//у задания поменялся адресат
+  {   
+   if (cTask.IsForUserGUID(for_user_guid)==false)//у задания поменялся адресат
    {
     cTask.SetAnswer("");//стираем комментарий старого адресата	;
-   }
+   }   
    //просим изменить задание
    if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
    {

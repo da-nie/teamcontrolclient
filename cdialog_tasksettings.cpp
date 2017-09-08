@@ -130,7 +130,7 @@ bool CDialog_TaskSettings::Activate(CTask &cTask,CDocument_Main *cDocument_Main_
  long ret=DoModal();
  if (ret==0)
  {
-  cTask=cTask_Local;
+  cTask=cTask_Local;  
   return(true);
  }
  return(false);
@@ -167,6 +167,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  cTask_Local.SetTask(task);
  if (NewTask==true) cTask_Local.SetIndex(0);//номер вернёт сервер
  cTask_Local.SetStateNoRead();
+ cTask_Local.SetAnswerNotRead(false);
  //считываем пользователя, которому предназначена задача
  size=vector_CUser_Local.size();
  long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
@@ -198,13 +199,15 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnCommand_Button_Cancel(void)
 {
- EndDialog(-1);
+ cTask_Local.SetAnswerNotRead(false);
+ EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
 //подтверждение, что задание выполнено
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnCommand_Button_TaskFinished(void)
 {
+ cTask_Local.SetAnswerNotRead(false);
  cTask_Local.SetStateFinished();
  EndDialog(0);
 }

@@ -57,16 +57,27 @@ IDB_BITMAP_MENU_ADD_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_add_task.bmp"
 IDB_BITMAP_MENU_DELETE_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_delete_task.bmp"
 IDB_BITMAP_MENU_EDIT_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_edit_task.bmp"
 IDB_BITMAP_MENU_REPEAT_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_repeat_task.bmp"
+
 IDB_BITMAP_TASK_NOT_READ_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_not_read_frame_one.bmp"
 IDB_BITMAP_TASK_NOT_READ_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_not_read_frame_two.bmp"
-IDB_BITMAP_TASK_IS_RUNNING BITMAP  DISCARDABLE     "Bitmap\\task_is_running.bmp"
-IDB_BITMAP_TASK_DONE    BITMAP  DISCARDABLE     "Bitmap\\task_done.bmp"
+
+IDB_BITMAP_TASK_IS_RUNNING_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_is_running_frame_one.bmp"
+IDB_BITMAP_TASK_IS_RUNNING_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_is_running_frame_two.bmp"
+
+IDB_BITMAP_TASK_DONE_FRAME_ONE    BITMAP  DISCARDABLE     "Bitmap\\task_done_frame_one.bmp"
+IDB_BITMAP_TASK_DONE_FRAME_TWO    BITMAP  DISCARDABLE     "Bitmap\\task_done_frame_two.bmp"
+
 IDB_BITMAP_MENU_TASK_DONE BITMAP  DISCARDABLE     "Bitmap\\menu_task_done.bmp"
 IDB_BITMAP_MENU_TASK_IS_RUNNING BITMAP  DISCARDABLE     "Bitmap\\menu_task_is_running.bmp"
 IDB_BITMAP_MENU_TASK_READED BITMAP  DISCARDABLE     "Bitmap\\menu_task_readed.bmp"
 IDB_BITMAP_MENU_USER_INFO BITMAP  DISCARDABLE     "Bitmap\\menu_user_info.bmp"
-IDB_BITMAP_TASK_CANCELED BITMAP  DISCARDABLE     "Bitmap\\task_canceled.bmp"
-IDB_BITMAP_TASK_READED  BITMAP  DISCARDABLE     "Bitmap\\task_readed.bmp"
+
+IDB_BITMAP_TASK_CANCELED_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_canceled_frame_one.bmp"
+IDB_BITMAP_TASK_CANCELED_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_canceled_frame_two.bmp"
+
+IDB_BITMAP_TASK_READED_FRAME_ONE  BITMAP  DISCARDABLE     "Bitmap\\task_readed_frame_one.bmp"
+IDB_BITMAP_TASK_READED_FRAME_TWO  BITMAP  DISCARDABLE     "Bitmap\\task_readed_frame_two.bmp"
+
 IDB_BITMAP_TASK_FINISHED BITMAP  DISCARDABLE     "Bitmap\\task_finished.bmp"
 IDB_BITMAP_MENU_TASK_FINISHED BITMAP  DISCARDABLE     "Bitmap\\menu_task_finished.bmp"
 IDB_BITMAP_TOOLBAR_MAIN BITMAP  DISCARDABLE     "Bitmap\\toolbar_main.bmp"

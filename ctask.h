@@ -52,7 +52,8 @@ class CTask
    long State;//состояние
    long Year;//год
    long Month;//месяц
-   long Day;//число    
+   long Day;//число  
+   bool AnswerNotRead;//задание не прочитано
    TASK_TYPE TaskType;//тип задания
   };
   #pragma pack()
@@ -63,6 +64,7 @@ class CTask
   CSafeString ProjectGUID;//по проекту
   CSafeString Task;//задание
   long State;//состояние
+  bool AnswerNotRead;//задание не прочитано
   CDate cDate;//срок
   CSafeString TaskGUID;//идентификатор задания
   CSafeString Answer;//ответ на задание
@@ -113,6 +115,7 @@ class CTask
   const bool& GetChangeData(void) const;//получить, изменились ли данные задания
   const CSafeString& GetForUser(void) const;//получить имя пользователя для которого задание
   const CSafeString& GetFromUser(void) const;//получить имя пользователя от которого задание
+  bool GetAnswerNotRead(void) const;//получить, прочитан ли ответ на задание
 
   void SetIndex(const long& index);//задать индекс
   void SetFromUserGUID(const char *from_user_guid);//задать уникальный идентификатор от какого пользователя задание
@@ -126,6 +129,7 @@ class CTask
   void SetChangeData(const bool& change_data);//задать изменились ли данные задания
   void SetForUser(const char *for_user);//задать имя пользователя для которого задание
   void SetFromUser(const char *from_user);//задать имя пользователя от которого задание
+  void SetAnswerNotRead(bool state);//установить, прочитан ли ответ на задание
 
   void SetStateNoRead(void);//установить, что задание не прочитано
   void SetStateReaded(void);//установить, что задание прочитано и ожидает выполнения
@@ -133,6 +137,7 @@ class CTask
   void SetStateDone(void);//установить, что задание выполнено
   void SetStateCancelled(void);//установить, что задание отклонено
   void SetStateFinished(void);//установить, что задание завершено
+  
 
   void MarkForWork(void);//отметить для работы
   void MarkForDelete(void);//отметить для удаления
@@ -156,6 +161,7 @@ class CTask
   bool IsFromUserGUID(const char *guid) const;//это задание от пользователя с уникальным идентификатором
   bool IsProjectGUID(const char *guid) const;//это задание по проекту с уникальным идентификатором
   bool IsTaskGUID(const char *guid) const;//верный ли TaskGUID
+  bool IsAnswerNotRead(void) const;//прочитан ли ответ на задание
 
   bool Save(FILE *file) const;//сохранить данные
   bool Load(FILE *file);//загрузить данные
