@@ -198,8 +198,13 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
 //отменить настройки
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnCommand_Button_Cancel(void)
-{
+{ 
  cTask_Local.SetAnswerNotRead(false);
+ if (NewTask==true)
+ {
+  EndDialog(-1);
+  return;
+ }
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
