@@ -115,13 +115,13 @@ afx_msg void CView_MyTasks::OnRButtonDown(UINT nFlags,CPoint point)
  {
   SCell &sCell=vector_SCell_Task[n];
   if (SelectedTaskGUID.Compare(sCell.GUID)==0)//выбранное задание находится в списке отображения
-  {
+  {   
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SET_DONE,MF_BYCOMMAND,&cBitmap_MenuList_TaskDone,&cBitmap_MenuList_TaskDone);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SET_READED,MF_BYCOMMAND,&cBitmap_MenuList_SetTaskReaded,&cBitmap_MenuList_SetTaskReaded);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SET_IS_RUNNING,MF_BYCOMMAND,&cBitmap_MenuList_SetTaskIsRunning,&cBitmap_MenuList_SetTaskIsRunning);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SET_CANCELED,MF_BYCOMMAND,&cBitmap_MenuList_SetTaskCanceled,&cBitmap_MenuList_SetTaskCanceled);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_MY_TASK_SEND,MF_BYCOMMAND,&cBitmap_MenuList_SendTask,&cBitmap_MenuList_SendTask);
-   cMenu_List.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN|TPM_LEFTBUTTON,mpoint.x,mpoint.y,this); 	
+   cMenu_List.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN|TPM_LEFTBUTTON,mpoint.x,mpoint.y,this);
    return;
   }
  }
@@ -233,6 +233,8 @@ afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskIsRunning(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CView_MyTasks::OnCommand_Menu_List_SetTaskCanceled(void)
 {
+ MessageBox("Возможность отклонить задание из меню была отключена, так как требуется оставить комментарий. Пожалуйста, сделайте двойной щелчок левой кнопкой мышки по заданию для вызова диалога.","Ошибка",MB_OK);
+ return;
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
  //получаем выбранное задание

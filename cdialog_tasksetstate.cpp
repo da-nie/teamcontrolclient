@@ -127,8 +127,13 @@ afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskDone(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSetState::OnCommand_Button_TaskCancel(void)
 {
- cTask_Local.SetStateCancelled();
  ReadAnswer();
+ if (cTask_Local.GetAnswer().GetLength()==0)
+ {
+  MessageBox("Требуется указать в комментарии причину отклонения задания!","Ошибка",MB_OK);
+  return;
+ }
+ cTask_Local.SetStateCancelled(); 
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
