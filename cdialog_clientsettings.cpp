@@ -61,10 +61,10 @@ afx_msg BOOL CDialog_ClientSettings::OnInitDialog(void)
   HKEY hKey;
   if (RegOpenKey(HKEY_LOCAL_MACHINE,KeyName,&hKey)==ERROR_SUCCESS)
   {
-   unsigned char buffer[MAX_PATH];
+   unsigned char str_buffer[MAX_PATH];
    DWORD dwType=REG_SZ;
    DWORD dwLength=MAX_PATH; 
-   if (RegQueryValueEx(hKey,"Team Control Client",NULL,&dwType,buffer,&dwLength)==ERROR_SUCCESS) AutoLoad=true;
+   if (RegQueryValueEx(hKey,"Team Control Client",NULL,&dwType,str_buffer,&dwLength)==ERROR_SUCCESS) AutoLoad=true;
    RegCloseKey(hKey);
   }
   if (AutoLoad==true) ((CButton *)GetDlgItem(IDC_CHECK_DIALOG_CLIENT_SETTINGS_RUN_ON_WINDOWS))->SetCheck(1);

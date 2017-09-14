@@ -124,7 +124,11 @@ bool CTransceiver::SendData(SOCKET socket_server,const char *package,long size,C
   //спрашиваем, не готов ли сокет передавать данные
   if (select(0,0,&Writen,&Exeption,&timeout)>0)
   {
-   if (FD_ISSET(socket_server,&Exeption)) return(false);
+   if (FD_ISSET(socket_server,&Exeption))
+   {
+    on_exit=true;
+	return(false);
+   }
    if (FD_ISSET(socket_server,&Writen))
    {
     long ret=send(socket_server,package+offset,size,0);
@@ -136,6 +140,7 @@ bool CTransceiver::SendData(SOCKET socket_server,const char *package,long size,C
       Pause(1);
       continue;
      }
+     on_exit=true;
      return(false);
 	}
     size-=ret;
@@ -144,7 +149,7 @@ bool CTransceiver::SendData(SOCKET socket_server,const char *package,long size,C
   }
   else
   {
-   return(true);
+   continue;
   }
  }
  return(true);

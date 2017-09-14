@@ -254,8 +254,8 @@ bool CThreadClient::PingProcessing(SOCKET socket_server,bool &on_exit)
 //----------------------------------------------------------------------------------------------------
 bool CThreadClient::ExecuteCommand_GetClientProgrammCRC(SOCKET socket_server,bool &on_exit)
 {
- on_exit=false;
- WorkingMode=WORKING_MODE_AUTORIZATION;
+ on_exit=false; 
+ WorkingMode=WORKING_MODE_WAIT_CLIENT_PROGRAMM_CRC;
  return(cTransceiver_File.GetClientProgrammCRC(socket_server,cEvent_Exit,on_exit));
 }
 //----------------------------------------------------------------------------------------------------
@@ -264,6 +264,7 @@ bool CThreadClient::ExecuteCommand_GetClientProgrammCRC(SOCKET socket_server,boo
 bool CThreadClient::ExecuteCommand_GetClientProgrammAndLoader(SOCKET socket_server,bool &on_exit)
 {
  on_exit=false;
+ WorkingMode=WORKING_MODE_WAIT_UPDATE;
  return(cTransceiver_File.GetClientProgrammAndLoader(socket_server,cEvent_Exit,on_exit));
 }
 //----------------------------------------------------------------------------------------------------
@@ -343,7 +344,7 @@ void CThreadClient::NewDataFromServer(SOCKET socket_server,char *data,unsigned l
     sServerAnswer_sHeader=*(reinterpret_cast<SServerAnswer::SHeader*>(&vector_Data[0]));
     //расшифровываем принятые данные
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_CLIENT_PROGRAMM_CRC) ExecuteAnswer_ClientProgrammCRC(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
-    if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_CLIENT_PROGRAMM_AND_LOADER) ExecuteAnswer_ClientProgrammAndLoader(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);	
+    if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_CLIENT_PROGRAMM_AND_LOADER) ExecuteAnswer_ClientProgrammAndLoader(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_USER_BOOK) ExecuteAnswer_GetUserBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_TASK_BOOK) ExecuteAnswer_GetTaskBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_PROJECT_BOOK) ExecuteAnswer_GetProjectBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
@@ -373,15 +374,13 @@ void CThreadClient::NewDataFromServer(SOCKET socket_server,char *data,unsigned l
   }
   //добавляем байт в буфер
   vector_Data.push_back(byte);
-  size_t cmd_length=vector_Data.size();
-  //if (cmd_length>=MAX_PACKAGE_LENGTH) vector_Data.clear();//превысили размер команды  
  }
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение контрольной суммы клиентской программы на сервере
 //----------------------------------------------------------------------------------------------------
 void CThreadClient::ExecuteAnswer_ClientProgrammCRC(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit)
-{ 
+{
  on_exit=false;
  //считываем CRC программы
  size_t size=vector_Data.size();
@@ -411,6 +410,7 @@ void CThreadClient::ExecuteAnswer_ClientProgrammCRC(SOCKET socket_server,SERVER_
  }
  fclose(file);
  if (crc16!=file_crc16) ExecuteCommand_GetClientProgrammAndLoader(socket_server,on_exit);//запрашиваем обновление программы  
+                   else WorkingMode=WORKING_MODE_AUTORIZATION;//Переходим к авторизации
 }
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение клиентской программы и загрузчика и выполнение обновления
@@ -426,6 +426,7 @@ void CThreadClient::ExecuteAnswer_ClientProgrammAndLoader(SOCKET socket_server,S
  //перезапускаемся
  if (cDocument_Main_Ptr==NULL) return;
  cDocument_Main_Ptr->RestartWithLoader();
+ WorkingMode=WORKING_MODE_AUTORIZATION;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -596,9 +597,6 @@ void CThreadClient::ExecuteAnswer_GetChangedUser(SOCKET socket_server,SERVER_COM
  cUser.SetChangeData(true);
  cDocument_Main_Ptr->OnChangedUser(cUser);
 }
-
-
-
 
 //----------------------------------------------------------------------------------------------------
 //обработка ответа: получение данных удалённого задания

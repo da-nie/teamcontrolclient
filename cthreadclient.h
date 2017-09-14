@@ -37,6 +37,10 @@ enum WORKING_MODE
  WORKING_MODE_WAIT,
  //получение контрольной суммы программы на сервере
  WORKING_MODE_GET_CLIENT_PROGRAMM_CRC,
+ //ожидание контрольной суммы программы
+ WORKING_MODE_WAIT_CLIENT_PROGRAMM_CRC,
+ //ожидание обновления программы
+ WORKING_MODE_WAIT_UPDATE,
  //получение клиентской программы и загрузчика с сервера
  WORKING_MODE_GET_CLIENT_PROGRAMM_AND_LOADER,
  //авторизация
@@ -66,12 +70,14 @@ class CThreadClient
  //дружественные функции
  friend UINT ThreadClient(LPVOID pParam);//функция потока
  protected:
+
+  vector<unsigned char> vector_Data;//принятые данные
+
   CEvent cEvent_Exit;//требование на выход из потока
   CWinThread *cWinThread_Thread;//поток обработки
   CDocument_Main *cDocument_Main_Ptr;//указатель на документ
   char *Buffer;//буфер приёма/передачи   
 
-  vector<unsigned char> vector_Data;//принятые данные
   bool StuffingEnabled;//включён ли байтстаффинг
 
   WORKING_MODE WorkingMode;//текущий режим работы с сервером
