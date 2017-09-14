@@ -483,7 +483,19 @@ SOURCE=.\Bitmap\systray_icon_not_read_inverse.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\Bitmap\task_canceled_frame_two.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Bitmap\task_done_frame_two.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Bitmap\task_finished_big.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Bitmap\task_is_running_frame_two.bmp
 # End Source File
 # Begin Source File
 
@@ -492,6 +504,10 @@ SOURCE=.\Bitmap\task_not_read_frame_two.bmp
 # Begin Source File
 
 SOURCE=.\Bitmap\task_readed.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Bitmap\task_readed_frame_two.bmp
 # End Source File
 # Begin Source File
 

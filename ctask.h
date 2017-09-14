@@ -54,6 +54,7 @@ class CTask
    long Month;//месяц
    long Day;//число  
    bool AnswerNotRead;//задание не прочитано
+   bool PlannedPosition;//задание является плановой позицией
    TASK_TYPE TaskType;//тип задания
   };
   #pragma pack()
@@ -65,6 +66,7 @@ class CTask
   CSafeString Task;//задание
   long State;//состояние
   bool AnswerNotRead;//задание не прочитано
+  bool PlannedPosition;//задание является плановой позицией
   CDate cDate;//срок
   CSafeString TaskGUID;//идентификатор задания
   CSafeString Answer;//ответ на задание
@@ -116,6 +118,7 @@ class CTask
   const CSafeString& GetForUser(void) const;//получить имя пользователя для которого задание
   const CSafeString& GetFromUser(void) const;//получить имя пользователя от которого задание
   bool GetAnswerNotRead(void) const;//получить, прочитан ли ответ на задание
+  bool GetPlannedPosition(void) const;//получить, является ли задание плановой позицией
 
   void SetIndex(const long& index);//задать индекс
   void SetFromUserGUID(const char *from_user_guid);//задать уникальный идентификатор от какого пользователя задание
@@ -130,14 +133,14 @@ class CTask
   void SetForUser(const char *for_user);//задать имя пользователя для которого задание
   void SetFromUser(const char *from_user);//задать имя пользователя от которого задание
   void SetAnswerNotRead(bool state);//установить, прочитан ли ответ на задание
+  void SetPlannedPosition(bool state);//установить, является ли задание плановой позицией
 
   void SetStateNoRead(void);//установить, что задание не прочитано
   void SetStateReaded(void);//установить, что задание прочитано и ожидает выполнения
   void SetStateIsRunning(void);//установить, что задание выполняется
   void SetStateDone(void);//установить, что задание выполнено
   void SetStateCancelled(void);//установить, что задание отклонено
-  void SetStateFinished(void);//установить, что задание завершено
-  
+  void SetStateFinished(void);//установить, что задание завершено  
 
   void MarkForWork(void);//отметить для работы
   void MarkForDelete(void);//отметить для удаления
@@ -162,6 +165,7 @@ class CTask
   bool IsProjectGUID(const char *guid) const;//это задание по проекту с уникальным идентификатором
   bool IsTaskGUID(const char *guid) const;//верный ли TaskGUID
   bool IsAnswerNotRead(void) const;//прочитан ли ответ на задание
+  bool IsPlannedPosition(void) const;//является ли задание плановой позицией
 
   bool Save(FILE *file) const;//сохранить данные
   bool Load(FILE *file);//загрузить данные

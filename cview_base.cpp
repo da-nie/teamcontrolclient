@@ -80,6 +80,21 @@ CView_Base::CView_Base()
  Logfont_ColumnName.lfPitchAndFamily=DEFAULT_PITCH;  
  strcpy(Logfont_ColumnName.lfFaceName,"Arial"); 
 
+ Logfont_PlannedPosition.lfHeight=18;
+ Logfont_PlannedPosition.lfWidth=0; 
+ Logfont_PlannedPosition.lfEscapement=0;
+ Logfont_PlannedPosition.lfOrientation=0; 
+ Logfont_PlannedPosition.lfWeight=FW_BOLD; 
+ Logfont_PlannedPosition.lfItalic=0;
+ Logfont_PlannedPosition.lfUnderline=0; 
+ Logfont_PlannedPosition.lfStrikeOut=0; 
+ Logfont_PlannedPosition.lfCharSet=DEFAULT_CHARSET; 
+ Logfont_PlannedPosition.lfOutPrecision=OUT_DEFAULT_PRECIS; 
+ Logfont_PlannedPosition.lfClipPrecision=CLIP_DEFAULT_PRECIS;
+ Logfont_PlannedPosition.lfQuality=DEFAULT_QUALITY; 
+ Logfont_PlannedPosition.lfPitchAndFamily=DEFAULT_PITCH;  
+ strcpy(Logfont_PlannedPosition.lfFaceName,"Arial Black"); 
+
  FlashState=false;
  SelectedTaskGUID="";
 
@@ -95,6 +110,9 @@ CView_Base::CView_Base()
  cTextCell_FromUser.SetTextFont(Logfont_FromUser);
  cTextCell_FromUser.SetTextColor(RGB(127,0,255));
 
+ cTextCell_PlannedPosition.SetTextFont(Logfont_PlannedPosition);
+ cTextCell_PlannedPosition.SetTextColor(RGB(255,64,64));
+
  cLineTextCell_ColumnName.SetTextFont(Logfont_ColumnName);
  cLineTextCell_ColumnName.SetTextColor(RGB(0,0,0));
 
@@ -102,6 +120,8 @@ CView_Base::CView_Base()
  cFrameCell.SetBorderColor(RGB(0,0,0));
 
  cTextCell_Task.SetStrikeOutColor(RGB(192,192,192));
+
+ cTextCell_PlannedPosition.SetText("ѕЋјЌќ¬јя ѕќ«»÷»я !");
 
  VisibleFromUser=true;
  VisibleForUser=true;
@@ -410,15 +430,18 @@ void CView_Base::DrawTasks(CDC *pDC)
   cTextCell_ForUser.GetSize(pDC,cRect_TextArea,cSize_ForUser);
   CSize cSize_FromUser;
   cTextCell_FromUser.GetSize(pDC,cRect_TextArea,cSize_FromUser);
+  CSize cSize_PlannedPosition;
+  cTextCell_PlannedPosition.GetSize(pDC,cRect_TextArea,cSize_PlannedPosition);
   CSize cSize_Task;
-  cTextCell_Task.GetSize(pDC,cRect_TextArea,cSize_Task);  
+  cTextCell_Task.GetSize(pDC,cRect_TextArea,cSize_Task);
 
   if (VisibleFromUser==false) cSize_FromUser=CSize(0,0);
   if (VisibleForUser==false) cSize_ForUser=CSize(0,0);
+  if (cTask.IsPlannedPosition()==false) cSize_PlannedPosition=CSize(0,0);
 
   //модифицируем размеры €чейки под изображение
-  long cell_height=cSize_TaskDate.cy+cSize_Task.cy+cSize_ForUser.cy+cSize_FromUser.cy;
-  if (cell_height<GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy) cell_height=GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy;
+  long cell_height=cSize_TaskDate.cy+cSize_Task.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy;
+  if (cell_height<GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy) cell_height=GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy;
   cRect_TextArea.bottom=cRect_TextArea.top+cell_height;  
   cRect_DrawArea.bottom=cRect_DrawArea.top+cell_height;
   //модифицируем размеры €чейки изображени€ по ширине
@@ -459,8 +482,13 @@ void CView_Base::DrawTasks(CDC *pDC)
    CRect cRect_ForUserArea=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_FromUser.cy,cRect_TextArea.right,cRect_TextArea.bottom);
    cTextCell_ForUser.Draw(pDC,cRect_ForUserArea);
   }
+  if (cTask.IsPlannedPosition()==true) 
+  {
+   CRect cRect_PlannedPosition=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_FromUser.cy+cSize_ForUser.cy,cRect_TextArea.right,cRect_TextArea.bottom);
+   cTextCell_PlannedPosition.Draw(pDC,cRect_PlannedPosition);
+  }
 
-  CRect cRect_TaskArea=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_ForUser.cy+cSize_FromUser.cy,cRect_TextArea.right,cRect_TextArea.bottom);
+  CRect cRect_TaskArea=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy,cRect_TextArea.right,cRect_TextArea.bottom);
   cTextCell_Task.Draw(pDC,cRect_TaskArea);
   //выведем рамку  
   cFrameCell.Draw(pDC,cRect_DrawArea);

@@ -60,6 +60,7 @@ class CView_Base:public CView
   CTextCell cTextCell_Task;//текст в €чейке
   CTextCell cTextCell_ForUser;//текст в €чейке
   CTextCell cTextCell_FromUser;//текст в €чейке
+  CTextCell cTextCell_PlannedPosition;//текст в €чейке
   CBitmapCell cBitmapCell_TaskState;//изображение в €чейке
   CFrameCell cFrameCell_TaskState;//рамка €чейки с состо€нием задачи
   CLineTextCell cLineTextCell_ColumnName;//текст назначени€ столбца
@@ -68,10 +69,11 @@ class CView_Base:public CView
   LOGFONT Logfont_TaskDate;//шрифт дл€ вывода срока задачи
   LOGFONT Logfont_FromUser;//шрифт дл€ вывода от кого
   LOGFONT Logfont_ForUser;//шрифт дл€ вывода дл€ кого
+  LOGFONT Logfont_PlannedPosition;//шрифт дл€ вывода планова€ ли позици€
   LOGFONT Logfont_ColumnName;//шрифт дл€ вывода назначени€ столбца
 
   bool VisibleFromUser;//выводить ли от кого
-  bool VisibleForUser;//выводить ли дл€ кого
+  bool VisibleForUser;//выводить ли дл€ кого  
 
   CSafeString ColumnName;//название стобца дл€ вида
 

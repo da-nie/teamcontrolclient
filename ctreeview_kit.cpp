@@ -251,6 +251,8 @@ afx_msg void CTreeView_Kit::OnCommand_Menu_List_AddTask(void)
  CTask cTask;
  SYSTEMTIME system_time;
  GetLocalTime(&system_time);
+ cTask.SetPlannedPosition(false);
+ cTask.SetAnswerNotRead(false);
  cTask.SetDate(CDate(system_time.wYear,system_time.wMonth,system_time.wDay));
  cTask.SetForUserGUID(cUser_Selected.GetUserGUID());
  while(1)

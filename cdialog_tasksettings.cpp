@@ -114,7 +114,8 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
   ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED))->ShowWindow(SW_SHOW);
   ((CStatic *)GetDlgItem(IDC_STATIC_DIALOG_TASK_SETTINGS_TASK_FINISHED))->ShowWindow(SW_SHOW);
  }
-
+ if (cTask_Local.IsPlannedPosition()==true) ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->SetCheck(1);
+                                       else ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->SetCheck(0);
  OnSelChange_ComboBox_User();
 
  return(CDialog::OnInitDialog());
@@ -161,7 +162,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  {
   MessageBox("Неверная дата!","Ошибка",MB_OK);
   return;
- } 
+ }
  size_t size;
  cTask_Local.SetDate(CDate(cTime.GetYear(),cTime.GetMonth(),cTime.GetDay()));
  cTask_Local.SetTask(task);
@@ -192,6 +193,9 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
    cTask_Local.SetProjectGUID(cProject.GetProjectGUID());
   }
  }
+
+ if (((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->GetCheck()) cTask_Local.SetPlannedPosition(true);
+                                                                                else cTask_Local.SetPlannedPosition(false);
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------

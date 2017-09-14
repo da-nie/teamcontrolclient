@@ -15,6 +15,7 @@ CTask::CTask(void)
  cDate.SetDate(0,0,0);
  Answer="";
  AnswerNotRead=false;
+ PlannedPosition=false;
 }
 //====================================================================================================
 //деструктор класса
@@ -110,7 +111,13 @@ bool CTask::GetAnswerNotRead(void) const
 {
  return(AnswerNotRead);
 }
-
+//----------------------------------------------------------------------------------------------------
+//получить, является ли задание плановой позицией
+//----------------------------------------------------------------------------------------------------
+bool CTask::GetPlannedPosition(void) const
+{
+ return(PlannedPosition);
+}
 //----------------------------------------------------------------------------------------------------
 //задать индекс
 //----------------------------------------------------------------------------------------------------
@@ -194,6 +201,13 @@ void CTask::SetFromUser(const char *from_user)
 void CTask::SetAnswerNotRead(bool state)
 {
  AnswerNotRead=state;
+}
+//----------------------------------------------------------------------------------------------------
+//установить, является ли задание плановой позицией
+//----------------------------------------------------------------------------------------------------
+void CTask::SetPlannedPosition(bool state)
+{
+ PlannedPosition=state;
 }
 //----------------------------------------------------------------------------------------------------
 //установить, что задание не прочитано
@@ -397,7 +411,13 @@ bool CTask::IsAnswerNotRead(void) const
 {
  return(AnswerNotRead); 
 }
-
+//----------------------------------------------------------------------------------------------------
+//является ли задание плановой позицией
+//----------------------------------------------------------------------------------------------------
+bool CTask::IsPlannedPosition(void) const
+{
+ return(PlannedPosition);
+}
 //----------------------------------------------------------------------------------------------------
 //сохранить данные
 //----------------------------------------------------------------------------------------------------
@@ -418,6 +438,7 @@ bool CTask::Save(FILE *file) const
  sHeader.TaskType=TaskType;
  sHeader.Index=Index;
  sHeader.AnswerNotRead=AnswerNotRead;
+ sHeader.PlannedPosition=PlannedPosition;
  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
  const char *s_ptr;
  s_ptr=FromUserGUID;
@@ -474,6 +495,7 @@ bool CTask::Load(FILE *file)
  TaskType=sHeader.TaskType;
  Index=sHeader.Index;
  AnswerNotRead=sHeader.AnswerNotRead;
+ PlannedPosition=sHeader.PlannedPosition;
 
  delete[](from_user_guid);
  delete[](for_user_guid);
