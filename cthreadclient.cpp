@@ -158,7 +158,13 @@ bool CThreadClient::LinkProcessing(SOCKET socket_server,bool &on_exit)
  timeout.tv_sec=0;
  timeout.tv_usec=timeout_us;//таймаут на события
  //спрашиваем, не случилось ли чего с сокетами?
- if (select(0,&Readen,0,&Exeption,&timeout)>0)
+ long ret=select(0,&Readen,0,&Exeption,&timeout);
+ if (ret<0)
+ {
+  on_exit=true;
+  return(false);//требуется переподключение
+ }
+ if (ret>0)
  {
   //не произошло ли исключение на сокете сервера?
   if (FD_ISSET(socket_server,&Exeption)) 
@@ -547,9 +553,29 @@ void CThreadClient::ExecuteAnswer_AutorizationOk(SOCKET socket_server,SERVER_COM
 void CThreadClient::ExecuteAnswer_Error(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit)
 {
  on_exit=false;
- if (WorkingMode==WORKING_MODE_CHECK_AUTORIZATION)//проверка запроса авторизации
+ if (command==SERVER_COMMAND_AUTORIZATION)
  {
-  WorkingMode=WORKING_MODE_AUTORIZATION;
+  if (WorkingMode==WORKING_MODE_CHECK_AUTORIZATION)//была проверка запроса авторизации
+  {  
+   WorkingMode=WORKING_MODE_AUTORIZATION;
+  }
+ }
+
+ if (command==SERVER_COMMAND_GET_CLIENT_PROGRAMM_CRC)
+ {
+  if (WorkingMode==WORKING_MODE_WAIT_CLIENT_PROGRAMM_CRC)//был запрос контрольной суммы программы на сервере
+  {
+   WorkingMode=WORKING_MODE_AUTORIZATION;
+  }
+ }
+
+
+ if (command==SERVER_COMMAND_GET_CLIENT_PROGRAMM_AND_LOADER)
+ {
+  if (WorkingMode==WORKING_MODE_WAIT_UPDATE)//было ожидание программы с сервера
+  {
+   WorkingMode=WORKING_MODE_AUTORIZATION;
+  }
  }
 }
 //----------------------------------------------------------------------------------------------------

@@ -110,7 +110,6 @@ enum SERVER_ANSWER
 
  //проверка связи
  SERVER_ANSWER_PING=17
-
 };
 
 //задание не прочитано

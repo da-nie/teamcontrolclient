@@ -122,7 +122,13 @@ bool CTransceiver::SendData(SOCKET socket_server,const char *package,long size,C
   timeout.tv_sec=0;
   timeout.tv_usec=5000;
   //спрашиваем, не готов ли сокет передавать данные
-  if (select(0,0,&Writen,&Exeption,&timeout)>0)
+  long ret=select(0,0,&Writen,&Exeption,&timeout);
+  if (ret<0)//разрыв соединения
+  {
+   on_exit=true;
+   return(false);
+  }
+  if (ret>0)
   {
    if (FD_ISSET(socket_server,&Exeption))
    {
