@@ -9,6 +9,7 @@
 //====================================================================================================
 CTransceiver_Project::CTransceiver_Project(void)
 {
+ Version=1;
 }
 //====================================================================================================
 //деструктор класса
@@ -28,6 +29,10 @@ bool CTransceiver_Project::ReadCProjectInArray(char *ptr,size_t &offset,size_t m
  if (offset+sizeof(SServerAnswer::CProjectDataHeader)>max_length) return(false);
  SServerAnswer::CProjectDataHeader *sServerAnswer_cProjectDataHeader_Ptr=reinterpret_cast<SServerAnswer::CProjectDataHeader*>(ptr+offset);
  offset+=sizeof(SServerAnswer::CProjectDataHeader);
+
+ if (sServerAnswer_cProjectDataHeader_Ptr->Signature[0]!='P' || sServerAnswer_cProjectDataHeader_Ptr->Signature[1]!='L' || sServerAnswer_cProjectDataHeader_Ptr->Signature[2]!='V') return(false);
+ if (sServerAnswer_cProjectDataHeader_Ptr->Version!=Version) return(false);
+
  long length=offset;
  length+=sServerAnswer_cProjectDataHeader_Ptr->ProjectNameSize;
  length+=sServerAnswer_cProjectDataHeader_Ptr->ProjectGUIDSize;

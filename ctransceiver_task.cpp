@@ -9,6 +9,7 @@
 //====================================================================================================
 CTransceiver_Task::CTransceiver_Task(void)
 {
+ Version=1;
 }
 //====================================================================================================
 //деструктор класса
@@ -28,6 +29,9 @@ bool CTransceiver_Task::ReadCTaskInArray(char *ptr,size_t &offset,size_t max_len
  if (offset+sizeof(SServerAnswer::CTaskDataHeader)>max_length) return(false);
  SServerAnswer::CTaskDataHeader *sServerAnswer_cTaskDataHeader_Ptr=reinterpret_cast<SServerAnswer::CTaskDataHeader*>(ptr+offset);
  offset+=sizeof(SServerAnswer::CTaskDataHeader);
+ if (sServerAnswer_cTaskDataHeader_Ptr->Signature[0]!='T' || sServerAnswer_cTaskDataHeader_Ptr->Signature[1]!='L' || sServerAnswer_cTaskDataHeader_Ptr->Signature[2]!='V') return(false);
+ if (sServerAnswer_cTaskDataHeader_Ptr->Version!=Version) return(false);
+
  long length=offset;
  length+=sServerAnswer_cTaskDataHeader_Ptr->ForUserGUIDSize;
  length+=sServerAnswer_cTaskDataHeader_Ptr->FromUserGUIDSize;
@@ -35,11 +39,15 @@ bool CTransceiver_Task::ReadCTaskInArray(char *ptr,size_t &offset,size_t max_len
  length+=sServerAnswer_cTaskDataHeader_Ptr->TaskGUIDSize;
  length+=sServerAnswer_cTaskDataHeader_Ptr->TaskSize;
  length+=sServerAnswer_cTaskDataHeader_Ptr->AnswerSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->AnswerReferenceSize;
+ length+=sServerAnswer_cTaskDataHeader_Ptr->TaskReferenceSize;
  if (length>max_length) return(false);
 
  cTask.SetDate(CDate(sServerAnswer_cTaskDataHeader_Ptr->Year,sServerAnswer_cTaskDataHeader_Ptr->Month,sServerAnswer_cTaskDataHeader_Ptr->Day)); 
  cTask.SetAnswerNotRead(sServerAnswer_cTaskDataHeader_Ptr->AnswerNotRead);
  cTask.SetPlannedPosition(sServerAnswer_cTaskDataHeader_Ptr->PlannedPosition);
+ cTask.SetAnswerReferenceExist(sServerAnswer_cTaskDataHeader_Ptr->AnswerReferenceExist);
+ cTask.SetTaskReferenceExist(sServerAnswer_cTaskDataHeader_Ptr->TaskReferenceExist);
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_NO_READ) cTask.SetStateNoRead();
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_READED) cTask.SetStateReaded();
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_CANCELED) cTask.SetStateCancelled();
@@ -73,6 +81,14 @@ bool CTransceiver_Task::ReadCTaskInArray(char *ptr,size_t &offset,size_t max_len
  cTask.SetAnswer(str);
  offset+=sServerAnswer_cTaskDataHeader_Ptr->AnswerSize;
 
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->AnswerReferenceSize);
+ cTask.SetAnswerReference(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->AnswerReferenceSize;
+
+ SetString(str,ptr+offset,sServerAnswer_cTaskDataHeader_Ptr->TaskReferenceSize);
+ cTask.SetTaskReference(str);
+ offset+=sServerAnswer_cTaskDataHeader_Ptr->TaskReferenceSize;
+
  return(true); 
 }
 //----------------------------------------------------------------------------------------------------
@@ -82,18 +98,27 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const CTask &c
 {
  on_exit=false;
  SServerCommand::CTaskDataHeader sServerCommand_cTaskDataHeader;
+ sServerCommand_cTaskDataHeader.Signature[0]='T';
+ sServerCommand_cTaskDataHeader.Signature[1]='L';
+ sServerCommand_cTaskDataHeader.Signature[2]='V';
+ sServerCommand_cTaskDataHeader.Version=Version;
+
  sServerCommand_cTaskDataHeader.FromUserGUIDSize=cTask.GetFromUserGUID().GetLength();
  sServerCommand_cTaskDataHeader.ForUserGUIDSize=cTask.GetForUserGUID().GetLength();
  sServerCommand_cTaskDataHeader.ProjectGUIDSize=cTask.GetProjectGUID().GetLength();
  sServerCommand_cTaskDataHeader.TaskSize=cTask.GetTask().GetLength();
  sServerCommand_cTaskDataHeader.TaskGUIDSize=cTask.GetTaskGUID().GetLength();
  sServerCommand_cTaskDataHeader.AnswerSize=cTask.GetAnswer().GetLength();
+ sServerCommand_cTaskDataHeader.AnswerReferenceSize=cTask.GetAnswerReference().GetLength();
+ sServerCommand_cTaskDataHeader.TaskReferenceSize=cTask.GetTaskReference().GetLength();
  const CDate& cDate=cTask.GetDate();
  sServerCommand_cTaskDataHeader.Year=cDate.GetYear();
  sServerCommand_cTaskDataHeader.Month=cDate.GetMonth();
  sServerCommand_cTaskDataHeader.Day=cDate.GetDay();
  sServerCommand_cTaskDataHeader.AnswerNotRead=cTask.GetAnswerNotRead();
  sServerCommand_cTaskDataHeader.PlannedPosition=cTask.GetPlannedPosition();
+ sServerCommand_cTaskDataHeader.AnswerReferenceExist=cTask.GetAnswerReferenceExist();
+ sServerCommand_cTaskDataHeader.TaskReferenceExist=cTask.GetTaskReferenceExist();
 
  if (cTask.IsStateNoRead()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_NO_READ;
  if (cTask.IsStateReaded()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_READED;
@@ -115,7 +140,11 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const CTask &c
  if (on_exit==true) return(true);
  if (SendPart(socket_server,cTask.GetTaskGUID(),cTask.GetTaskGUID().GetLength(),cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);
- return(SendPart(socket_server,cTask.GetAnswer(),cTask.GetAnswer().GetLength(),cEvent_Exit,on_exit));
+ if (SendPart(socket_server,cTask.GetAnswer(),cTask.GetAnswer().GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (on_exit==true) return(true);
+ if (SendPart(socket_server,cTask.GetAnswerReference(),cTask.GetAnswerReference().GetLength(),cEvent_Exit,on_exit)==false) return(false);
+ if (on_exit==true) return(true);
+ return(SendPart(socket_server,cTask.GetTaskReference(),cTask.GetTaskReference().GetLength(),cEvent_Exit,on_exit));
 }
 //----------------------------------------------------------------------------------------------------
 //передать серверу данные задания в виде полного пакета

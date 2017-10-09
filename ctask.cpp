@@ -16,6 +16,10 @@ CTask::CTask(void)
  Answer="";
  AnswerNotRead=false;
  PlannedPosition=false;
+ AnswerReferenceExist=false;
+ TaskReferenceExist=false;
+ AnswerReference="";
+ TaskReference="";
 }
 //====================================================================================================
 //деструктор класса
@@ -84,6 +88,21 @@ const CSafeString& CTask::GetAnswer(void) const
  return(Answer);
 }
 //----------------------------------------------------------------------------------------------------
+//получить ссылку на файл в ответе исполнителя
+//----------------------------------------------------------------------------------------------------
+const CSafeString& CTask::GetAnswerReference(void) const
+{
+ return(AnswerReference);
+}
+//----------------------------------------------------------------------------------------------------
+//задать ссылку на файл в задании
+//----------------------------------------------------------------------------------------------------
+const CSafeString& CTask::GetTaskReference(void) const
+{
+ return(TaskReference);
+}
+
+//----------------------------------------------------------------------------------------------------
 //получить, изменились ли данные задания
 //----------------------------------------------------------------------------------------------------
 const bool& CTask::GetChangeData(void) const
@@ -117,6 +136,20 @@ bool CTask::GetAnswerNotRead(void) const
 bool CTask::GetPlannedPosition(void) const
 {
  return(PlannedPosition);
+}
+//----------------------------------------------------------------------------------------------------
+//получить, есть ли ссылка в ответе исполнителя
+//----------------------------------------------------------------------------------------------------
+bool CTask::GetAnswerReferenceExist(void) const
+{
+ return(AnswerReferenceExist);
+}
+//----------------------------------------------------------------------------------------------------
+//получить, есть ли ссылка в задании
+//----------------------------------------------------------------------------------------------------
+bool CTask::GetTaskReferenceExist(void) const
+{
+ return(TaskReferenceExist);
 }
 //----------------------------------------------------------------------------------------------------
 //задать индекс
@@ -175,6 +208,20 @@ void CTask::SetAnswer(const char *answer)
  Answer=answer;
 }
 //----------------------------------------------------------------------------------------------------
+//задать ссылку на файл в ответе исполнителя
+//----------------------------------------------------------------------------------------------------
+void CTask::SetAnswerReference(const char *reference)
+{
+ AnswerReference=reference;
+}
+//----------------------------------------------------------------------------------------------------
+//задать ссылку на файл в задании
+//----------------------------------------------------------------------------------------------------
+void CTask::SetTaskReference(const char *reference)
+{
+ TaskReference=reference;
+}
+//----------------------------------------------------------------------------------------------------
 //задать изменились ли данные задания
 //----------------------------------------------------------------------------------------------------
 void CTask::SetChangeData(const bool& change_data)
@@ -208,6 +255,20 @@ void CTask::SetAnswerNotRead(bool state)
 void CTask::SetPlannedPosition(bool state)
 {
  PlannedPosition=state;
+}
+//----------------------------------------------------------------------------------------------------
+//задать, есть ли ссылка в ответе исполнителя
+//----------------------------------------------------------------------------------------------------
+void CTask::SetAnswerReferenceExist(bool state)
+{
+ AnswerReferenceExist=state;
+}
+//----------------------------------------------------------------------------------------------------
+//задать, есть ли ссылка в задании
+//----------------------------------------------------------------------------------------------------
+void CTask::SetTaskReferenceExist(bool state)
+{
+ TaskReferenceExist=state;
 }
 //----------------------------------------------------------------------------------------------------
 //установить, что задание не прочитано
@@ -419,6 +480,21 @@ bool CTask::IsPlannedPosition(void) const
  return(PlannedPosition);
 }
 //----------------------------------------------------------------------------------------------------
+//есть ли ссылка в ответе исполнителя
+//----------------------------------------------------------------------------------------------------
+bool CTask::IsAnswerReferenceExist(void) const
+{
+ return(AnswerReferenceExist);
+}
+//----------------------------------------------------------------------------------------------------
+//есть ли ссылка в задании
+//----------------------------------------------------------------------------------------------------
+bool CTask::IsTaskReferenceExist(void) const
+{
+ return(TaskReferenceExist);
+}
+
+//----------------------------------------------------------------------------------------------------
 //сохранить данные
 //----------------------------------------------------------------------------------------------------
 bool CTask::Save(FILE *file) const
@@ -431,6 +507,8 @@ bool CTask::Save(FILE *file) const
  sHeader.TaskSize=Task.GetLength();
  sHeader.TaskGUIDSize=TaskGUID.GetLength();
  sHeader.AnswerSize=Answer.GetLength();
+ sHeader.AnswerReferenceSize=AnswerReference.GetLength();
+ sHeader.TaskReferenceSize=TaskReference.GetLength();
  sHeader.Year=cDate.GetYear();
  sHeader.Month=cDate.GetMonth();
  sHeader.Day=cDate.GetDay();
@@ -439,6 +517,8 @@ bool CTask::Save(FILE *file) const
  sHeader.Index=Index;
  sHeader.AnswerNotRead=AnswerNotRead;
  sHeader.PlannedPosition=PlannedPosition;
+ sHeader.AnswerReferenceExist=AnswerReferenceExist;
+ sHeader.TaskReferenceExist=TaskReferenceExist;
  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
  const char *s_ptr;
  s_ptr=FromUserGUID;
@@ -453,6 +533,10 @@ bool CTask::Save(FILE *file) const
  fwrite(s_ptr,TaskGUID.GetLength(),1,file);
  s_ptr=Answer;
  fwrite(s_ptr,Answer.GetLength(),1,file);
+ s_ptr=AnswerReference;
+ fwrite(s_ptr,AnswerReference.GetLength(),1,file);
+ s_ptr=TaskReference;
+ fwrite(s_ptr,TaskReference.GetLength(),1,file);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
@@ -468,6 +552,8 @@ bool CTask::Load(FILE *file)
  char *task=new char[sHeader.TaskSize+1];
  char *task_guid=new char[sHeader.TaskGUIDSize+1];
  char *answer=new char[sHeader.AnswerSize+1];
+ char *answer_reference=new char[sHeader.AnswerReferenceSize+1];
+ char *task_reference=new char[sHeader.TaskReferenceSize+1];
  
  fread(from_user_guid,sizeof(char),sHeader.FromUserGUIDSize,file);
  fread(for_user_guid,sizeof(char),sHeader.ForUserGUIDSize,file);
@@ -475,6 +561,8 @@ bool CTask::Load(FILE *file)
  fread(task,sizeof(char),sHeader.TaskSize,file);
  fread(task_guid,sizeof(char),sHeader.TaskGUIDSize,file);
  fread(answer,sizeof(char),sHeader.AnswerSize,file);
+ fread(answer_reference,sizeof(char),sHeader.AnswerReferenceSize,file);
+ fread(task_reference,sizeof(char),sHeader.TaskReferenceSize,file);
  
  from_user_guid[sHeader.FromUserGUIDSize]=0;
  for_user_guid[sHeader.ForUserGUIDSize]=0;
@@ -482,6 +570,8 @@ bool CTask::Load(FILE *file)
  task[sHeader.TaskSize]=0;
  task_guid[sHeader.TaskGUIDSize]=0;
  answer[sHeader.AnswerSize]=0;
+ answer_reference[sHeader.AnswerReferenceSize]=0;
+ task_reference[sHeader.TaskReferenceSize]=0;
 
  FromUserGUID=from_user_guid;
  ForUserGUID=for_user_guid;
@@ -489,6 +579,8 @@ bool CTask::Load(FILE *file)
  Task=task;
  TaskGUID=task_guid;
  Answer=answer;
+ AnswerReference=answer_reference;
+ TaskReference=task_reference;
 
  State=sHeader.State;
  cDate.SetDate(sHeader.Year,sHeader.Month,sHeader.Day);
@@ -503,6 +595,8 @@ bool CTask::Load(FILE *file)
  delete[](task);
  delete[](task_guid);
  delete[](answer);
+ delete[](answer_reference);
+ delete[](task_reference);
 
  return(true);
 }

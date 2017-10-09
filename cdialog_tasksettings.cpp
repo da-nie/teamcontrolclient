@@ -10,6 +10,10 @@ BEGIN_MESSAGE_MAP(CDialog_TaskSettings,CDialog)
  ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED,OnCommand_Button_TaskFinished)
  ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_CANCEL,OnCommand_Button_Cancel)
  ON_CBN_SELCHANGE(IDC_COMBO_DIALOG_TASK_SETTINGS_USER,OnSelChange_ComboBox_User)
+ ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_SET_TASK_REFERENCE,OnCommand_Button_SetTaskReference)
+ ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE,OnCommand_Button_ResetTaskReference)
+ ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE,OnCommand_Button_OpenTaskReference)
+ ON_COMMAND(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE,OnCommand_Button_OpenAnswerReference)
 END_MESSAGE_MAP()
 
 //====================================================================================================
@@ -116,6 +120,23 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  }
  if (cTask_Local.IsPlannedPosition()==true) ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->SetCheck(1);
                                        else ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->SetCheck(0);
+
+
+
+ if (cTask_Local.IsAnswerReferenceExist()==true) ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE))->EnableWindow(TRUE);
+                                            else ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE))->EnableWindow(FALSE);
+
+ if (cTask_Local.IsTaskReferenceExist()==true)
+ {
+  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE))->EnableWindow(TRUE);
+  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE))->EnableWindow(TRUE);
+ }
+ else 
+ {
+  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE))->EnableWindow(FALSE);
+  ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE))->EnableWindow(FALSE);
+ }
+
  OnSelChange_ComboBox_User();
 
  return(CDialog::OnInitDialog());
@@ -220,6 +241,64 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_TaskFinished(void)
  cTask_Local.SetStateFinished();
  EndDialog(0);
 }
+//----------------------------------------------------------------------------------------------------
+//задать ссылку в задании
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCommand_Button_SetTaskReference(void)
+{
+ char Path[MAX_PATH];
+ GetCurrentDirectory(MAX_PATH,Path);
+ CFileDialog cFileDialog(TRUE,"","",OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,"*.*|*.*||",this);
+ cFileDialog.m_ofn.lpstrInitialDir=Path;
+ char Title[256];
+ strcpy(Title,"Выберите файл");
+ cFileDialog.m_ofn.lpstrTitle=Title;
+ if (cFileDialog.DoModal()!=IDOK) return;
+ char FilePath[MAX_PATH];
+ GetCurrentDirectory(MAX_PATH,FilePath); 
+ SetCurrentDirectory(Path);
+ //char name[MAX_PATH];
+ //DWORD size=MAX_PATH;
+ //GetComputerNameA(name,&size);
+ CString cString_FilePath=FilePath;
+ cString_FilePath+="\\"+cFileDialog.GetFileName();
+ const char *str_ptr=cString_FilePath;
+ cTask_Local.SetTaskReference(str_ptr);
+ cTask_Local.SetTaskReferenceExist(true);
+ ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE))->EnableWindow(TRUE);
+ ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE))->EnableWindow(TRUE);
+}
+//----------------------------------------------------------------------------------------------------
+//удалить ссылку в задании
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCommand_Button_ResetTaskReference(void)
+{
+ cTask_Local.SetTaskReferenceExist(false);
+ cTask_Local.SetTaskReference("");
+ ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE))->EnableWindow(FALSE);
+ ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE))->EnableWindow(FALSE);
+}
+//----------------------------------------------------------------------------------------------------
+//открыть ссылку в задании
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCommand_Button_OpenTaskReference(void)
+{
+ //открываем документ
+ CSafeString str="/select, ";
+ str+=cTask_Local.GetTaskReference();
+ ShellExecute(NULL,"OPEN","EXPLORER",str,NULL,SW_NORMAL);
+}
+//----------------------------------------------------------------------------------------------------
+//открыть ссылку из ответа
+//----------------------------------------------------------------------------------------------------
+afx_msg void CDialog_TaskSettings::OnCommand_Button_OpenAnswerReference(void)
+{
+ //открываем документ
+ CSafeString str="/select, ";
+ str+=cTask_Local.GetAnswerReference();
+ ShellExecute(NULL,"OPEN","EXPLORER",str,NULL,SW_NORMAL);
+}
+
 //----------------------------------------------------------------------------------------------------
 //изменился пользователь
 //----------------------------------------------------------------------------------------------------

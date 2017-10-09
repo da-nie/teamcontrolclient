@@ -47,6 +47,10 @@ class CDialog_TaskSetState:public CDialog
   afx_msg void OnCommand_Button_TaskCancel(void);//задание отклонено
   afx_msg void OnCommand_Button_TaskRead(void);//задание прочитано
   afx_msg void OnCommand_Button_TaskIsRunning(void);//задание выполняется
+  afx_msg void OnCommand_Button_OpenTaskReference(void);//открыть ссылку в задании
+  afx_msg void OnCommand_Button_SetAnswerReference(void);//задать ссылку в ответе
+  afx_msg void OnCommand_Button_ResetAnswerReference(void);//удалить ссылку в ответе
+  afx_msg void OnCommand_Button_OpenAnswerReference(void);//открыть ссылку в ответе
  protected:
   //-Новые функции класса (защищённые)---------------------------------------
   void ReadAnswer(void);//считать ответ

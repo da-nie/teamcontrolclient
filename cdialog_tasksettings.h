@@ -45,6 +45,10 @@ class CDialog_TaskSettings:public CDialog
   afx_msg void OnCommand_Button_Ok(void);//применить настройки
   afx_msg void OnCommand_Button_Cancel(void);//отменить настройки
   afx_msg void OnCommand_Button_TaskFinished(void);//подтверждение, что задание выполнено
+  afx_msg void OnCommand_Button_SetTaskReference(void);//задать ссылку в задании
+  afx_msg void OnCommand_Button_ResetTaskReference(void);//удалить ссылку в задании
+  afx_msg void OnCommand_Button_OpenTaskReference(void);//открыть ссылку в задании
+  afx_msg void OnCommand_Button_OpenAnswerReference(void);//открыть ссылку из ответа
   afx_msg void OnSelChange_ComboBox_User(void);//изменился пользователь
  protected:
   //-Новые функции класса (защищённые)---------------------------------------

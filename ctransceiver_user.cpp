@@ -9,6 +9,7 @@
 //====================================================================================================
 CTransceiver_User::CTransceiver_User(void)
 {
+ Version=1;
 }
 //====================================================================================================
 //деструктор класса
@@ -28,6 +29,10 @@ bool CTransceiver_User::ReadCUserInArray(char *ptr,size_t &offset,size_t max_len
  if (offset+sizeof(SServerAnswer::CUserDataHeader)>max_length) return(false);
  SServerAnswer::CUserDataHeader *sServerAnswer_cUserDataHeader_Ptr=reinterpret_cast<SServerAnswer::CUserDataHeader*>(ptr+offset);
  offset+=sizeof(SServerAnswer::CUserDataHeader);
+
+ if (sServerAnswer_cUserDataHeader_Ptr->Signature[0]!='U' || sServerAnswer_cUserDataHeader_Ptr->Signature[1]!='L' || sServerAnswer_cUserDataHeader_Ptr->Signature[2]!='V') return(false);
+ if (sServerAnswer_cUserDataHeader_Ptr->Version!=Version) return(false);
+
  long length=offset;
  length+=sServerAnswer_cUserDataHeader_Ptr->NameSize;
  length+=sServerAnswer_cUserDataHeader_Ptr->DescriptionSize;
