@@ -26,6 +26,8 @@ BEGIN_MESSAGE_MAP(CFrameWnd_Main,CFrameWnd)
  ON_COMMAND(IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_IS_RUNNING,OnCommand_ToolBar_Main_MyTaskShowIsRunning)
  ON_COMMAND(IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_READED,OnCommand_ToolBar_Main_MyTaskShowReaded)
 
+ ON_COMMAND(IDC_TOOLBAR_MAIN_SHOW_COMMON_TASK,OnCommand_ToolBar_Main_ShowCommonTask) 
+
  ON_MESSAGE(WM_SYSTEM_TRAY_ICON,OnSystemTrayIconMessage)
  ON_COMMAND(IDC_MENU_SYSTRAY_EXIT,OnCommand_Menu_SysTray_Exit)
 END_MESSAGE_MAP()
@@ -77,7 +79,12 @@ afx_msg BOOL CFrameWnd_Main::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext* 
  ButtonIndex[10]=IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_FINISHED;
  ButtonIndex[11]=IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_IS_RUNNING;
  ButtonIndex[12]=IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_READED;
+ ButtonIndex[13]=0;
+ ButtonIndex[14]=0;
+ ButtonIndex[15]=0;
+ ButtonIndex[16]=IDC_TOOLBAR_MAIN_SHOW_COMMON_TASK;
 
+ 
  cToolBar_Main.SetButtons(ButtonIndex,TOOLBAR_MAIN_BUTTON_AMOUNT);
 
  //настроим кнопки панели
@@ -94,6 +101,10 @@ afx_msg BOOL CFrameWnd_Main::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext* 
  cToolBar_Main.SetButtonStyle(10,TBBS_CHECKBOX);
  cToolBar_Main.SetButtonStyle(11,TBBS_CHECKBOX);
  cToolBar_Main.SetButtonStyle(12,TBBS_CHECKBOX);
+ cToolBar_Main.SetButtonInfo(13,ID_SEPARATOR,TBBS_SEPARATOR,24);
+ cToolBar_Main.SetButtonInfo(14,ID_SEPARATOR,TBBS_SEPARATOR,24);
+ cToolBar_Main.SetButtonInfo(15,ID_SEPARATOR,TBBS_SEPARATOR,24);
+ cToolBar_Main.SetButtonStyle(16,TBBS_CHECKBOX);
  //название панели
  cToolBar_Main.SetWindowText("Настройка вида");
  //устанавливаем новые размеры кнопок
@@ -114,6 +125,7 @@ afx_msg BOOL CFrameWnd_Main::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext* 
   if (ButtonIndex[n]==IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_CANCELLED) continue;
   if (ButtonIndex[n]==IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_DONE) continue;
   if (ButtonIndex[n]==IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_FINISHED) continue;
+  if (ButtonIndex[n]==IDC_TOOLBAR_MAIN_SHOW_COMMON_TASK) continue;
   cToolBar_Main.GetToolBarCtrl().SetState(ButtonIndex[n],TBSTATE_CHECKED);
  } 
 
@@ -443,6 +455,13 @@ afx_msg void CFrameWnd_Main::OnCommand_ToolBar_Main_MyTaskShowReaded(void)
  CheckToolBarMainButtonAndSetShowStateInDocument();
 }
 //----------------------------------------------------------------------------------------------------
+//нажата кнопка "показывать общие задания вместо выданных" главной панели инструментов 
+//----------------------------------------------------------------------------------------------------
+afx_msg void CFrameWnd_Main::OnCommand_ToolBar_Main_ShowCommonTask(void)
+{
+ CheckToolBarMainButtonAndSetShowStateInDocument();
+}
+//----------------------------------------------------------------------------------------------------
 //обработка сообщений трея
 //----------------------------------------------------------------------------------------------------
 afx_msg void CFrameWnd_Main::OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam)
@@ -502,6 +521,8 @@ void CFrameWnd_Main::CheckToolBarMainButtonAndSetShowStateInDocument(void)
  sShowState.MyTask_Show_IsRunning=false;
  sShowState.MyTask_Show_Readed=false;
 
+ sShowState.ShowCommonTask=false;
+
  if (cToolBar_Main.GetToolBarCtrl().IsButtonChecked(IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_CANCELLED)) sShowState.OutTask_Show_Cancelled=true;
  if (cToolBar_Main.GetToolBarCtrl().IsButtonChecked(IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_DONE)) sShowState.OutTask_Show_Done=true;
  if (cToolBar_Main.GetToolBarCtrl().IsButtonChecked(IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_NOT_READ)) sShowState.OutTask_Show_NotRead=true;
@@ -515,6 +536,8 @@ void CFrameWnd_Main::CheckToolBarMainButtonAndSetShowStateInDocument(void)
  if (cToolBar_Main.GetToolBarCtrl().IsButtonChecked(IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_FINISHED)) sShowState.MyTask_Show_Finished=true;
  if (cToolBar_Main.GetToolBarCtrl().IsButtonChecked(IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_IS_RUNNING)) sShowState.MyTask_Show_IsRunning=true;
  if (cToolBar_Main.GetToolBarCtrl().IsButtonChecked(IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_READED)) sShowState.MyTask_Show_Readed=true;
+
+ if (cToolBar_Main.GetToolBarCtrl().IsButtonChecked(IDC_TOOLBAR_MAIN_SHOW_COMMON_TASK)) sShowState.ShowCommonTask=true;
 
  cDocument_Main_Ptr->SetShowState(sShowState);
  cDocument_Main_Ptr->UpdateAllViews(NULL,0,NULL);

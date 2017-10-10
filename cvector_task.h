@@ -53,6 +53,7 @@ class CVectorTask
   vector<CTask> CreateVectorCTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
   vector<CTask> CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
   vector<CTask> CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
+  vector<CTask> CreateVectorCTaskByProjectGUID(const CSafeString &guid_project);//создать вектор задач по проекту
  protected:
   //функции
  

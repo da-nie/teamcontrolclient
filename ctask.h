@@ -60,6 +60,8 @@ class CTask
    bool PlannedPosition;//задание является плановой позицией
    bool AnswerReferenceExist;//есть ссылка в ответе исполнителя
    bool TaskReferenceExist;//есть ссылка в задании
+   bool Common;//задание является общим
+
    TASK_TYPE TaskType;//тип задания
   };
   #pragma pack()
@@ -74,6 +76,7 @@ class CTask
   bool PlannedPosition;//задание является плановой позицией
   bool AnswerReferenceExist;//есть ссылка в ответе исполнителя
   bool TaskReferenceExist;//есть ссылка в задании
+  bool Common;//задание является общим
   CDate cDate;//срок
   CSafeString TaskGUID;//идентификатор задания
   CSafeString Answer;//ответ на задание
@@ -132,6 +135,7 @@ class CTask
   bool GetPlannedPosition(void) const;//получить, является ли задание плановой позицией
   bool GetAnswerReferenceExist(void) const;//получить, есть ли ссылка в ответе исполнителя
   bool GetTaskReferenceExist(void) const;//получить, есть ли ссылка в задании
+  bool GetCommon(void) const;//получить, является ли задание общим
 
   void SetIndex(const long& index);//задать индекс
   void SetFromUserGUID(const char *from_user_guid);//задать уникальный идентификатор от какого пользователя задание
@@ -151,6 +155,7 @@ class CTask
   void SetPlannedPosition(bool state);//установить, является ли задание плановой позицией
   void SetAnswerReferenceExist(bool state);//задать, есть ли ссылка в ответе исполнителя
   void SetTaskReferenceExist(bool state);//задать, есть ли ссылка в задании
+  void SetCommon(bool state);//задать, является ли задание общим
 
   void SetStateNoRead(void);//установить, что задание не прочитано
   void SetStateReaded(void);//установить, что задание прочитано и ожидает выполнения
@@ -185,6 +190,7 @@ class CTask
   bool IsPlannedPosition(void) const;//является ли задание плановой позицией
   bool IsAnswerReferenceExist(void) const;//есть ли ссылка в ответе исполнителя
   bool IsTaskReferenceExist(void) const;//есть ли ссылка в задании
+  bool IsCommon(void) const;//является ли задание общим
 
   bool Save(FILE *file) const;//сохранить данные
   bool Load(FILE *file);//загрузить данные

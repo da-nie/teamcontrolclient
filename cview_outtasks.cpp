@@ -69,14 +69,15 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
   UpdateTask(vector_CTask_Local);
   return;
  }
- CSafeString guid;
- CSafeString name;
+ CSafeString my_guid;
+ CSafeString my_name;
  bool on_line;
  bool leader;
- cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
+ cDocument_Main_Ptr->GetMyParam(on_line,my_guid,my_name,leader);
  if (cUser.IsUserGUID(ALL_USER_GUID)==true)//выбраны сразу все пользователи
  {
-  vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByFromUserGUID(guid); 
+  if (cDocument_Main_Ptr->IsShowCommonTask()==true) vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskCommon(); 
+                                               else vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByFromUserGUID(my_guid); 
   VisibleFromUser=false;
   VisibleForUser=true;
  }
@@ -84,19 +85,22 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  {
   //проверим, не выбран ли проект, а не пользователь
   CUser cUser_Out;
-  if (cDocument_Main_Ptr->GetCVectorUser().FindByUserGUID(cUser.GetUserGUID(),cUser_Out)==false)//такого ползователя нет в базе
+  if (cDocument_Main_Ptr->GetCVectorUser().FindByUserGUID(cUser.GetUserGUID(),cUser_Out)==false)//такого пользователя нет в базе, значит, был выбран проект
   {
-   vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByProjectGUIDFromUserGUID(cUser.GetUserGUID(),guid);
+   if (cDocument_Main_Ptr->IsShowCommonTask()==true) vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskCommonByProjectGUID(cUser.GetUserGUID());
+                                                else vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByProjectGUIDFromUserGUID(cUser.GetUserGUID(),my_guid);
    VisibleFromUser=true;
    VisibleForUser=true;
   }
   else//был выбран пользователя
   {
-   vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(cUser.GetUserGUID(),guid); 
+   if (cDocument_Main_Ptr->IsShowCommonTask()==true) vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskCommonByForUserGUID(cUser.GetUserGUID()); 
+	                                            else vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(cUser.GetUserGUID(),my_guid);
    VisibleFromUser=false;
    VisibleForUser=false;
   }
  }
+ if (cDocument_Main_Ptr->IsShowCommonTask()==true) VisibleFromUser=true;
  CView_Base::OnUpdate(pSender,lHint,pHint);	
  UpdateTask(vector_CTask_Local);
 }
@@ -104,22 +108,27 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
 //функции обработки сообщений класса
 //====================================================================================================
 
+
+
 //----------------------------------------------------------------------------------------------------
 //нажатие правой кнопкой мышки
 //----------------------------------------------------------------------------------------------------
 afx_msg void CView_OutTasks::OnRButtonDown(UINT nFlags,CPoint point)
 {
  OnLButtonDown(nFlags,point);
+
  //создаём выпадающее меню
  CPoint mpoint;
  GetCursorPos(&mpoint);
- //есть ли в списке нужно нам задание
+ //есть ли в списке нужное нам задание
  size_t size=vector_SCell_Task.size();
  for(size_t n=0;n<size;n++)
  {
   SCell &sCell=vector_SCell_Task[n];
   if (SelectedTaskGUID.Compare(sCell.GUID)==0)//выбранное задание находится в списке отображения
   {
+   if (IsMyTask(SelectedTaskGUID)==false) return;
+
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_DELETE_TASK,MF_BYCOMMAND,&cBitmap_MenuList_DeleteTask,&cBitmap_MenuList_DeleteTask);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_EDIT_TASK,MF_BYCOMMAND,&cBitmap_MenuList_EditTask,&cBitmap_MenuList_EditTask);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_REPEAT_TASK,MF_BYCOMMAND,&cBitmap_MenuList_RepeatTask,&cBitmap_MenuList_RepeatTask);
@@ -166,6 +175,7 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskRepeat(void)
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
  CTask cTask;
  if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
+ if (IsMyTask(SelectedTaskGUID)==false) return;
  //просим изменить задание
  cTask.SetStateNoRead();
  if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
@@ -180,6 +190,8 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskDelete(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
+
+ if (IsMyTask(SelectedTaskGUID)==false) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
  CTask cTask;
@@ -194,6 +206,9 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskEdit(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
+
+ if (IsMyTask(SelectedTaskGUID)==false) return;
+
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
  CTask cTask;
@@ -206,7 +221,7 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskEdit(void)
   {   
    if (cTask.IsForUserGUID(for_user_guid)==false)//у задания поменялся адресат
    {
-    cTask.SetAnswer("");//стираем комментарий старого адресата	;
+    cTask.SetAnswer("");//стираем комментарий старого адресата
    }   
    //просим изменить задание
    if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
@@ -216,7 +231,7 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskEdit(void)
    else break;
   }
   else break;
- }
+ } 
 }
 //----------------------------------------------------------------------------------------------------
 //завершить задание
@@ -225,6 +240,7 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_SetTaskFinished(void)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
+ if (IsMyTask(SelectedTaskGUID)==false) return;
  //получаем выбранное задание
  CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
  CTask cTask;
@@ -253,6 +269,27 @@ bool CView_OutTasks::TaskIsVisible(const SShowState &sShowState,const CTask &cTa
  if (cTask.IsStateFinished()==true && sShowState.OutTask_Show_Finished==false) return(false);
  return(true);
 }
+//----------------------------------------------------------------------------------------------------
+//проверить, что задание с идентификатором выдано нами
+//----------------------------------------------------------------------------------------------------
+bool CView_OutTasks::IsMyTask(const CSafeString &task_guid)
+{
+ CDocument_Main *cDocument_Main_Ptr=GetDocument();
+ if (cDocument_Main_Ptr==NULL) return(false);
+ CSafeString my_guid;
+ CSafeString my_name;
+ bool on_line;
+ bool leader;
+ cDocument_Main_Ptr->GetMyParam(on_line,my_guid,my_name,leader);
+
+ //проверим, что выбрано задание от нас
+ CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(task_guid,cTask)==false) return(false);
+ if (cTask.IsFromUserGUID(my_guid)==false) return(false);//это не наше задание
+ return(true);
+}
+
 //====================================================================================================
 //прочее
 //====================================================================================================

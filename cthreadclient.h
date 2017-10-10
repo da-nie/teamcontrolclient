@@ -58,7 +58,11 @@ enum WORKING_MODE
  //запрос полной базы проектов от сервера
  WORKING_MODE_GET_PROJECT_BOOK,
  //ожидание полной базы проектов от сервера
- WORKING_MODE_WAIT_GET_PROJECT_BOOK
+ WORKING_MODE_WAIT_GET_PROJECT_BOOK,
+ //запрос полной базы общих заданий от сервера
+ WORKING_MODE_GET_COMMON_TASK_BOOK,
+ //ожидание полной базы общиз заданий от сервера
+ WORKING_MODE_WAIT_GET_COMMON_TASK_BOOK
 };
 
 //====================================================================================================
@@ -111,6 +115,7 @@ class CThreadClient
   bool ExecuteCommand_Autorization(SOCKET socket_server,bool &on_exit);//выполнение команды авторизации
   bool ExecuteCommand_GetUserBook(SOCKET socket_server,bool &on_exit);//выполнение команды запроса базы пользователей
   bool ExecuteCommand_GetTaskBook(SOCKET socket_server,bool &on_exit);//выполнение команды запроса базы заданий
+  bool ExecuteCommand_GetCommonTaskBook(SOCKET socket_server,bool &on_exit);//выполнение команды запроса базы общих заданий
   bool ExecuteCommand_GetProjectBook(SOCKET socket_server,bool &on_exit);//выполнение команды запроса базы проектов
 
   void NewDataFromServer(SOCKET socket_server,char *data,unsigned long length,bool &on_exit);//приняты данные от сервера
@@ -118,6 +123,7 @@ class CThreadClient
   void ExecuteAnswer_ClientProgrammAndLoader(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение клиентской программы и загрузчика и выполнение обновления
   void ExecuteAnswer_GetUserBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение базы сотрудников
   void ExecuteAnswer_GetTaskBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение базы заданий
+  void ExecuteAnswer_GetCommonTaskBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение базы общих заданий
   void ExecuteAnswer_GetProjectBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: получение базы проектов
   void ExecuteAnswer_Ok(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: ок
   void ExecuteAnswer_AutorizationOk(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit);//обработка ответа: авторизация принята

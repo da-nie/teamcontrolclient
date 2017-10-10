@@ -515,6 +515,10 @@ SOURCE=.\Bitmap\threemenulist_userinfo.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Bitmap\toolbar_main.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Bitmap\toolbar_my_task.bmp
 # End Source File
 # Begin Source File

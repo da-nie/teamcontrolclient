@@ -204,7 +204,7 @@ BEGIN
                     WS_HSCROLL,WS_EX_DLGMODALFRAME
     CONTROL         "Плановая позиция",
                     IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,210,240,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,210,105,10
     PUSHBUTTON      "Задать ссылку на сетевой файл",
                     IDC_BUTTON_DIALOG_TASK_SETTINGS_SET_TASK_REFERENCE,5,235,
                     245,14
@@ -217,6 +217,8 @@ BEGIN
     PUSHBUTTON      "Открыть ссылку на сетевой файл ответа",
                     IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE,5,
                     385,380,14
+    CONTROL         "Задание видно всем",IDC_DIALOG_TASK_SETTINGS_COMMON,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,115,210,105,10
 END
 
 IDD_DIALOG_CLIENT_SETTINGS DIALOGEX 0, 0, 172, 121
@@ -470,6 +472,8 @@ BEGIN
                             "Показывать выполняемые задания в списке полученных вами\nПоказывать выполняемые задания в списке полученных вами"
     IDC_TOOLBAR_MAIN_IN_MY_TASK_SHOW_READED 
                             "Показывать прочитанные задания в списке полученных вами\nПоказывать прочитанные задания в списке полученных вами"
+    IDC_TOOLBAR_MAIN_SHOW_COMMON_TASK 
+                            "Показать общие задания в списке выданных вместо выданных вами\nПоказать общие задания в списке выданных вместо выданных вами"
 END
 
 STRINGTABLE DISCARDABLE 

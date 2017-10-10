@@ -38,6 +38,7 @@ class CTransceiver_Task:public CTransceiver
   bool SendTaskDataToServer(SOCKET socket_server,const CTask &cTask,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные задания
   bool SendTaskDataToServerInPackage(SOCKET socket_server,const CTask &cTask,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit);//передать серверу данные задания в виде полного пакета
   bool GetTaskBook(SOCKET socket_server,CEvent &cEvent_Exit,bool &on_exit);//запрос базы данных заданий
+  bool GetCommonTaskBook(SOCKET socket_server,CEvent &cEvent_Exit,bool &on_exit);//запрос базы данных общих заданий
   bool GetTaskAnswer(char *ptr,size_t size,CTask &cTask);//считать задачу из ответа сервера
 };
 

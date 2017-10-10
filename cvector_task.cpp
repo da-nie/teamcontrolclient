@@ -5,7 +5,7 @@
 //====================================================================================================
 CVectorTask::CVectorTask()
 {
- Version=4;
+ Version=5;
 }
 //====================================================================================================
 //деструктор
@@ -265,6 +265,20 @@ vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSaf
   {
    if (cTask.IsProjectGUID(guid_project)==true) vector_CTask_Out.push_back(cTask);
   }
+ }
+ return(vector_CTask_Out);
+}
+//----------------------------------------------------------------------------------------------------
+//создать вектор задач по проекту
+//----------------------------------------------------------------------------------------------------
+vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUID(const CSafeString &guid_project)
+{
+ vector<CTask> vector_CTask_Out;
+ size_t size=vector_CTask.size();
+ for(size_t n=0;n<size;n++)
+ {
+  CTask cTask=vector_CTask[n];
+  if (cTask.IsProjectGUID(guid_project)==true) vector_CTask_Out.push_back(cTask);
  }
  return(vector_CTask_Out);
 }

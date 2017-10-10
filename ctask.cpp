@@ -18,6 +18,7 @@ CTask::CTask(void)
  PlannedPosition=false;
  AnswerReferenceExist=false;
  TaskReferenceExist=false;
+ Common=true;
  AnswerReference="";
  TaskReference="";
 }
@@ -152,6 +153,13 @@ bool CTask::GetTaskReferenceExist(void) const
  return(TaskReferenceExist);
 }
 //----------------------------------------------------------------------------------------------------
+//получить, является ли задание обшим
+//----------------------------------------------------------------------------------------------------
+bool CTask::GetCommon(void) const
+{
+ return(Common);
+}
+//----------------------------------------------------------------------------------------------------
 //задать индекс
 //----------------------------------------------------------------------------------------------------
 void CTask::SetIndex(const long& index)
@@ -269,6 +277,13 @@ void CTask::SetAnswerReferenceExist(bool state)
 void CTask::SetTaskReferenceExist(bool state)
 {
  TaskReferenceExist=state;
+}
+//----------------------------------------------------------------------------------------------------
+//задать, является ли задание общим
+//----------------------------------------------------------------------------------------------------
+void CTask::SetCommon(bool state)
+{
+ Common=state;
 }
 //----------------------------------------------------------------------------------------------------
 //установить, что задание не прочитано
@@ -493,7 +508,13 @@ bool CTask::IsTaskReferenceExist(void) const
 {
  return(TaskReferenceExist);
 }
-
+//----------------------------------------------------------------------------------------------------
+//является ли задание общим
+//----------------------------------------------------------------------------------------------------
+bool CTask::IsCommon(void) const
+{
+ return(Common);
+}
 //----------------------------------------------------------------------------------------------------
 //сохранить данные
 //----------------------------------------------------------------------------------------------------
@@ -519,6 +540,7 @@ bool CTask::Save(FILE *file) const
  sHeader.PlannedPosition=PlannedPosition;
  sHeader.AnswerReferenceExist=AnswerReferenceExist;
  sHeader.TaskReferenceExist=TaskReferenceExist;
+ sHeader.Common=Common;
  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
  const char *s_ptr;
  s_ptr=FromUserGUID;
@@ -580,7 +602,7 @@ bool CTask::Load(FILE *file)
  TaskGUID=task_guid;
  Answer=answer;
  AnswerReference=answer_reference;
- TaskReference=task_reference;
+ TaskReference=task_reference; 
 
  State=sHeader.State;
  cDate.SetDate(sHeader.Year,sHeader.Month,sHeader.Day);
@@ -588,6 +610,9 @@ bool CTask::Load(FILE *file)
  Index=sHeader.Index;
  AnswerNotRead=sHeader.AnswerNotRead;
  PlannedPosition=sHeader.PlannedPosition;
+ Common=sHeader.Common;
+ TaskReferenceExist=sHeader.TaskReferenceExist;
+ AnswerReferenceExist=sHeader.AnswerReferenceExist;
 
  delete[](from_user_guid);
  delete[](for_user_guid);

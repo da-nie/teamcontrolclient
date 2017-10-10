@@ -192,6 +192,8 @@ bool CThreadClient::LinkProcessing(SOCKET socket_server,bool &on_exit)
  if (WorkingMode==WORKING_MODE_WAIT_GET_TASK_BOOK) return(true);//ждём ответа на запрос на получение базы заданий
  if (WorkingMode==WORKING_MODE_GET_PROJECT_BOOK) return(ExecuteCommand_GetProjectBook(socket_server,on_exit));//посылаем запрос на получение базы проектов
  if (WorkingMode==WORKING_MODE_WAIT_GET_PROJECT_BOOK) return(true);//ждём ответа на запрос на получение базы проектов
+ if (WorkingMode==WORKING_MODE_GET_COMMON_TASK_BOOK) return(ExecuteCommand_GetCommonTaskBook(socket_server,on_exit));//посылаем запрос на получение полной базы заданий
+ if (WorkingMode==WORKING_MODE_WAIT_GET_COMMON_TASK_BOOK) return(true);//ждём ответа на запрос на получение полной базы общих заданий
  if (WorkingMode==WORKING_MODE_WAIT) 
  {
   if (TaskProcessing(socket_server,on_exit)==false) return(false);
@@ -312,6 +314,15 @@ bool CThreadClient::ExecuteCommand_GetTaskBook(SOCKET socket_server,bool &on_exi
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
+//выполнение команды запроса базы общих заданий
+//----------------------------------------------------------------------------------------------------
+bool CThreadClient::ExecuteCommand_GetCommonTaskBook(SOCKET socket_server,bool &on_exit)
+{
+ if (cTransceiver_Task.GetCommonTaskBook(socket_server,cEvent_Exit,on_exit)==false) return(false);
+ WorkingMode=WORKING_MODE_WAIT_GET_COMMON_TASK_BOOK;
+ return(true);
+}
+//----------------------------------------------------------------------------------------------------
 //выполнение команды запроса базы проектов
 //----------------------------------------------------------------------------------------------------
 bool CThreadClient::ExecuteCommand_GetProjectBook(SOCKET socket_server,bool &on_exit)
@@ -353,6 +364,7 @@ void CThreadClient::NewDataFromServer(SOCKET socket_server,char *data,unsigned l
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_CLIENT_PROGRAMM_AND_LOADER) ExecuteAnswer_ClientProgrammAndLoader(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_USER_BOOK) ExecuteAnswer_GetUserBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_TASK_BOOK) ExecuteAnswer_GetTaskBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
+    if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_COMMON_TASK_BOOK) ExecuteAnswer_GetCommonTaskBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
     if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_PROJECT_BOOK) ExecuteAnswer_GetProjectBook(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
 	if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_DELETED_USER) ExecuteAnswer_GetDeletedUser(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
 	if (sServerAnswer_sHeader.AnswerID==SERVER_ANSWER_ADDED_USER) ExecuteAnswer_GetAddedUser(socket_server,static_cast<SERVER_COMMAND>(sServerAnswer_sHeader.CommandID),on_exit);
@@ -485,6 +497,32 @@ void CThreadClient::ExecuteAnswer_GetTaskBook(SOCKET socket_server,SERVER_COMMAN
  WorkingMode=WORKING_MODE_GET_PROJECT_BOOK;
 }
 //----------------------------------------------------------------------------------------------------
+//обработка ответа: получение базы общих заданий
+//----------------------------------------------------------------------------------------------------
+void CThreadClient::ExecuteAnswer_GetCommonTaskBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit)
+{ 
+ on_exit=false;
+ if (cDocument_Main_Ptr==NULL) return;
+ //обновляем базу заданий
+ CVectorTask cVectorTask;
+ size_t size=vector_Data.size();
+ char *ptr=reinterpret_cast<char*>(&vector_Data[0]);
+ size_t offset=0;
+ SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
+ offset+=sizeof(SServerAnswer::SHeader);   
+ while(offset<size)
+ {
+  CTask cTask;
+  if (cTransceiver_Task.ReadCTaskInArray(ptr,offset,size,cTask)==false) break;
+  cTask.SetChangeData(false);
+  cTask.MarkForWork();
+  cVectorTask.PushBack(cTask);
+ } 
+ cDocument_Main_Ptr->SetCommonTaskBook(cVectorTask);
+ WorkingMode=WORKING_MODE_WAIT;
+}
+
+//----------------------------------------------------------------------------------------------------
 //обработка ответа: получение базы проектов
 //----------------------------------------------------------------------------------------------------
 void CThreadClient::ExecuteAnswer_GetProjectBook(SOCKET socket_server,SERVER_COMMAND command,bool &on_exit)
@@ -507,7 +545,7 @@ void CThreadClient::ExecuteAnswer_GetProjectBook(SOCKET socket_server,SERVER_COM
   cVectorProject.PushBack(cProject);
  } 
  cDocument_Main_Ptr->SetProjectBook(cVectorProject);
- WorkingMode=WORKING_MODE_WAIT;
+ WorkingMode=WORKING_MODE_GET_COMMON_TASK_BOOK; 
 }
 
 //----------------------------------------------------------------------------------------------------

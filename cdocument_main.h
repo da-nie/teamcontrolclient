@@ -58,6 +58,8 @@ struct SShowState
  bool MyTask_Show_Finished;//показывать ли завершённые задания в списке полученных
  bool MyTask_Show_IsRunning;//показывать ли выполняющиеся задания в списке полученных
  bool MyTask_Show_Readed;//показывать ли прочитанные задания в списке полученных
+
+ bool ShowCommonTask;//показывать ли общие задания
 };
 
 //====================================================================================================
@@ -77,7 +79,11 @@ class CDocument_Main:public CDocument
 
    CVectorUser cVectorUser;//список пользователей
    CVectorTask cVectorTask;//список заданий
+   CVectorTask cVectorTask_Common;//список общих заданий
    CVectorProject cVectorProject;//список проектов
+
+   CVectorTask cVectorTask_TransferToServer;//задания для передачи на сервер
+   CVectorProject cVectorProject_TransferToServer;//проекты для передачи на сервер
 
    bool OnUpdateView;//требуется ли обновить видам данные 
 
@@ -91,9 +97,6 @@ class CDocument_Main:public CDocument
    bool NotReadTaskState;//есть ли непрочитанные задания
 
    SClientSettings sClientSettings;//настройки клиента
-
-   CVectorTask cVectorTask_TransferToServer;//задания для передачи на сервер
-   CVectorProject cVectorProject_TransferToServer;//проекты для передачи на сервер
 
    SShowState sShowState;//настройки отображения данных
 
@@ -132,10 +135,12 @@ class CDocument_Main:public CDocument
 
   CVectorUser GetCVectorUser(void);//получить список пользователей
   CVectorTask GetCVectorTask(void);//получить список заданий
+  CVectorTask GetCVectorTaskCommon(void);//получить список общих заданий
   CVectorProject GetCVectorProject(void);//получить список проектов
 
   void SetUserBook(CVectorUser &cVectorUser_Set);//задать список пользователей
   void SetTaskBook(CVectorTask &cVectorTask_Set);//задать список заданий
+  void SetCommonTaskBook(CVectorTask &cVectorTask_Set);//задать общий список заданий
   void SetProjectBook(CVectorProject &cVectorProject_Set);//задать список проектов
 
   void OnDeletedUser(const CUser &cUser);//был удалён пользователь
@@ -167,6 +172,10 @@ class CDocument_Main:public CDocument
   vector<CTask> CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
   vector<CTask> CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
 
+  vector<CTask> CreateVectorCTaskCommonByForUserGUID(const CSafeString &guid);//создать вектор общих задач по GUID пользователя для которого задание
+  vector<CTask> CreateVectorCTaskCommon();//создать вектор общих задач
+  vector<CTask> CreateVectorCTaskCommonByProjectGUID(const CSafeString &guid_project);//создать вектор общих задач по проекту
+
   bool PopTaskTransferToServer(CTask &cTask);//получить задание для передачи на сервер
   void PushTaskTransferToServer(const CTask &cTask);//добавить задание для передачи на сервер
 
@@ -177,6 +186,8 @@ class CDocument_Main:public CDocument
 
   bool GetSendPingAndReset(void);//получить, нужно ли отправлять сообщение для проверки связи и сбросить его
   void SetSendPing(bool state);//задать, нужно ли отправлять сообщение для проверки связи
+
+  bool IsShowCommonTask(void);//разрешено ли показывать общие задания
 
   void Processing(void);//цикл обработки
  protected:

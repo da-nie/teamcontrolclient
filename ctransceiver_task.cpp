@@ -9,7 +9,7 @@
 //====================================================================================================
 CTransceiver_Task::CTransceiver_Task(void)
 {
- Version=1;
+ Version=2;
 }
 //====================================================================================================
 //деструктор класса
@@ -48,6 +48,7 @@ bool CTransceiver_Task::ReadCTaskInArray(char *ptr,size_t &offset,size_t max_len
  cTask.SetPlannedPosition(sServerAnswer_cTaskDataHeader_Ptr->PlannedPosition);
  cTask.SetAnswerReferenceExist(sServerAnswer_cTaskDataHeader_Ptr->AnswerReferenceExist);
  cTask.SetTaskReferenceExist(sServerAnswer_cTaskDataHeader_Ptr->TaskReferenceExist);
+ cTask.SetCommon(sServerAnswer_cTaskDataHeader_Ptr->Common);
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_NO_READ) cTask.SetStateNoRead();
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_READED) cTask.SetStateReaded();
  if (sServerAnswer_cTaskDataHeader_Ptr->State==TASK_STATE_CANCELED) cTask.SetStateCancelled();
@@ -119,6 +120,7 @@ bool CTransceiver_Task::SendTaskDataToServer(SOCKET socket_server,const CTask &c
  sServerCommand_cTaskDataHeader.PlannedPosition=cTask.GetPlannedPosition();
  sServerCommand_cTaskDataHeader.AnswerReferenceExist=cTask.GetAnswerReferenceExist();
  sServerCommand_cTaskDataHeader.TaskReferenceExist=cTask.GetTaskReferenceExist();
+ sServerCommand_cTaskDataHeader.Common=cTask.GetCommon();
 
  if (cTask.IsStateNoRead()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_NO_READ;
  if (cTask.IsStateReaded()==true) sServerCommand_cTaskDataHeader.State=TASK_STATE_READED;
@@ -172,6 +174,23 @@ bool CTransceiver_Task::GetTaskBook(SOCKET socket_server,CEvent &cEvent_Exit,boo
  on_exit=false;
  SServerCommand::SHeader sServerCommand_sHeader;
  sServerCommand_sHeader.CommandID=SERVER_COMMAND_GET_TASK_BOOK;
+ //начинаем передачу пакета
+ if (SendBeginPackage(socket_server,cEvent_Exit,on_exit)==false) return(false);
+ if (on_exit==true) return(true);
+ if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_sHeader),sizeof(SServerCommand::SHeader),cEvent_Exit,on_exit)==false) return(false);
+ if (on_exit==true) return(true);
+ if (SendEndPackage(socket_server,cEvent_Exit,on_exit)==false) return(false);
+ if (on_exit==true) return(true);
+ return(true);
+}
+//----------------------------------------------------------------------------------------------------
+//запрос базы данных общих заданий
+//----------------------------------------------------------------------------------------------------
+bool CTransceiver_Task::GetCommonTaskBook(SOCKET socket_server,CEvent &cEvent_Exit,bool &on_exit)
+{
+ on_exit=false;
+ SServerCommand::SHeader sServerCommand_sHeader;
+ sServerCommand_sHeader.CommandID=SERVER_COMMAND_GET_COMMON_TASK_BOOK;
  //начинаем передачу пакета
  if (SendBeginPackage(socket_server,cEvent_Exit,on_exit)==false) return(false);
  if (on_exit==true) return(true);

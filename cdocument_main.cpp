@@ -16,6 +16,7 @@ CDocument_Main::CDocument_Main(void)
   {
    sProtectedVariables.cVectorUser.Load("user_list.bin");
    sProtectedVariables.cVectorTask.Load("task_list.bin");
+   sProtectedVariables.cVectorTask_Common.Load("common_task_list.bin");
    sProtectedVariables.cVectorProject.Load("project_list.bin");
    sProtectedVariables.cVectorTask_TransferToServer.Load("task_to_server.bin");
    sProtectedVariables.cVectorProject_TransferToServer.Load("project_to_server.bin");
@@ -42,6 +43,7 @@ CDocument_Main::CDocument_Main(void)
    sProtectedVariables.sShowState.MyTask_Show_Finished=false;
    sProtectedVariables.sShowState.MyTask_Show_IsRunning=true;
    sProtectedVariables.sShowState.MyTask_Show_Readed=true;
+   sProtectedVariables.sShowState.ShowCommonTask=false;
 
    strcpy(sProtectedVariables.sClientSettings.Login,"");
    strcpy(sProtectedVariables.sClientSettings.Password,"");
@@ -171,6 +173,7 @@ void CDocument_Main::SaveState(void)
   {
    sProtectedVariables.cVectorUser.Save("user_list.bin");
    sProtectedVariables.cVectorTask.Save("task_list.bin");
+   sProtectedVariables.cVectorTask_Common.Save("common_task_list.bin");
    sProtectedVariables.cVectorProject.Save("project_list.bin");
    sProtectedVariables.cVectorTask_TransferToServer.Save("task_to_server.bin");
    sProtectedVariables.cVectorProject_TransferToServer.Save("project_to_server.bin");
@@ -372,6 +375,19 @@ CVectorTask CDocument_Main::GetCVectorTask(void)
  }
 }
 //----------------------------------------------------------------------------------------------------
+//получить список общих заданий
+//----------------------------------------------------------------------------------------------------
+CVectorTask CDocument_Main::GetCVectorTaskCommon(void)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   CVectorTask cVectorTask_Copy=sProtectedVariables.cVectorTask_Common;
+   return(cVectorTask_Copy);
+  }
+ }
+}
+//----------------------------------------------------------------------------------------------------
 //получить список проектов
 //----------------------------------------------------------------------------------------------------
 CVectorProject CDocument_Main::GetCVectorProject(void)
@@ -416,7 +432,21 @@ void CDocument_Main::SetTaskBook(CVectorTask &cVectorTask_Set)
  } 
  SaveState();
 }
-
+//----------------------------------------------------------------------------------------------------
+//задать список общих заданий
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::SetCommonTaskBook(CVectorTask &cVectorTask_Set)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   sProtectedVariables.cVectorTask_Common=cVectorTask_Set;
+   sProtectedVariables.cVectorTask_Common.SortByDate();
+   sProtectedVariables.OnUpdateView=true;
+  }
+ } 
+ SaveState();
+}
 //----------------------------------------------------------------------------------------------------
 //задать список проектов
 //----------------------------------------------------------------------------------------------------
@@ -488,6 +518,7 @@ void CDocument_Main::OnDeletedTask(const CTask &cTask)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    sProtectedVariables.cVectorTask.DeleteByTaskGUID(cTask.GetTaskGUID());
+   sProtectedVariables.cVectorTask_Common.DeleteByTaskGUID(cTask.GetTaskGUID());
    sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
@@ -507,6 +538,9 @@ void CDocument_Main::OnAddedTask(const CTask &cTask)
    sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
+
+   if (cTask.IsCommon()==true) sProtectedVariables.cVectorTask_Common.AddNew(cTask);
+   sProtectedVariables.cVectorTask_Common.SortByDate();
   }
  }
  SaveState();
@@ -523,6 +557,18 @@ void CDocument_Main::OnChangedTask(const CTask &cTask)
    sProtectedVariables.cVectorTask.SortByDate();
    sProtectedVariables.OnUpdateView=true;
    sProtectedVariables.OnShow=true;
+
+   CTask cTask_Local;
+   if (sProtectedVariables.cVectorTask_Common.FindByTaskGUID(cTask.GetTaskGUID(),cTask_Local)==true)//если задание уже есть в списке
+   {
+    if (cTask.IsCommon()==true) sProtectedVariables.cVectorTask_Common.ChangeByTaskGUID(cTask.GetTaskGUID(),cTask);
+	                       else sProtectedVariables.cVectorTask_Common.DeleteByTaskGUID(cTask.GetTaskGUID());
+   }
+   else//задания ещё нет в списке
+   {
+    if (cTask.IsCommon()==true) sProtectedVariables.cVectorTask_Common.AddNew(cTask);
+   }
+   sProtectedVariables.cVectorTask_Common.SortByDate();
   }
  }
  SaveState();
@@ -773,6 +819,55 @@ vector<CTask> CDocument_Main::CreateVectorCTaskByProjectGUIDFromUserGUID(const C
  return(vector_CTask);
 }
 
+
+
+
+
+//----------------------------------------------------------------------------------------------------
+//создать вектор общих задач по GUID пользователя для которого задание
+//----------------------------------------------------------------------------------------------------
+vector<CTask> CDocument_Main::CreateVectorCTaskCommonByForUserGUID(const CSafeString &guid)
+{
+ vector<CTask> vector_CTask;
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   vector_CTask=sProtectedVariables.cVectorTask_Common.CreateVectorCTaskByForUserGUID(guid);
+  }
+ }
+ return(vector_CTask);
+}
+//----------------------------------------------------------------------------------------------------
+//создать вектор общих задач
+//----------------------------------------------------------------------------------------------------
+vector<CTask> CDocument_Main::CreateVectorCTaskCommon(void)
+{
+ vector<CTask> vector_CTask;
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   vector_CTask=sProtectedVariables.cVectorTask_Common.GetVectorCTask();
+  }
+ }
+ return(vector_CTask);
+}
+//----------------------------------------------------------------------------------------------------
+//создать вектор общих задач по проекту
+//----------------------------------------------------------------------------------------------------
+vector<CTask> CDocument_Main::CreateVectorCTaskCommonByProjectGUID(const CSafeString &guid_project)
+{
+ vector<CTask> vector_CTask;
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   vector_CTask=sProtectedVariables.cVectorTask_Common.CreateVectorCTaskByProjectGUID(guid_project);
+  }
+ }
+ return(vector_CTask);
+}
+
+
+
 //----------------------------------------------------------------------------------------------------
 //получить задание для передачи на сервер
 //----------------------------------------------------------------------------------------------------
@@ -878,7 +973,19 @@ void CDocument_Main::SetSendPing(bool state)
   }
  }
 }
-
+//----------------------------------------------------------------------------------------------------
+//разрешено ли показывать общие задания
+//----------------------------------------------------------------------------------------------------
+bool CDocument_Main::IsShowCommonTask(void)
+{
+ {
+  CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
+  {
+   return(sProtectedVariables.sShowState.ShowCommonTask);
+  }
+ }
+ return(false);
+}
 
 
 //----------------------------------------------------------------------------------------------------

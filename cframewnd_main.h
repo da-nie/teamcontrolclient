@@ -23,7 +23,7 @@
 //====================================================================================================
 
 //количество кнопок в панели инструментов
-#define TOOLBAR_MAIN_BUTTON_AMOUNT 13
+#define TOOLBAR_MAIN_BUTTON_AMOUNT 17
 
 //период таймера рамки окна
 #define FRAME_WND_TIMER_PERIOD 100
@@ -87,6 +87,8 @@ class CFrameWnd_Main:public CFrameWnd
   afx_msg void OnCommand_ToolBar_Main_MyTaskShowFinished(void);//нажата кнопка "показать завершённые задания из списка полученных" главной панели инструментов 
   afx_msg void OnCommand_ToolBar_Main_MyTaskShowIsRunning(void);//нажата кнопка "показать выполняющиеся задания из списка полученных" главной панели инструментов 
   afx_msg void OnCommand_ToolBar_Main_MyTaskShowReaded(void);//нажата кнопка "показать прочитанные задания из списка полученных" главной панели инструментов 
+
+  afx_msg void OnCommand_ToolBar_Main_ShowCommonTask(void);//нажата кнопка "показывать общие задания вместо выданных" главной панели инструментов 
 
   afx_msg void OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam);//обработка сообщений трея
   afx_msg void OnCommand_Menu_SysTray_Exit(void);//обработка команды выхода из программы

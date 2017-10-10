@@ -121,7 +121,8 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
  if (cTask_Local.IsPlannedPosition()==true) ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->SetCheck(1);
                                        else ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->SetCheck(0);
 
-
+ if (cTask_Local.IsCommon()==true) ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_COMMON))->SetCheck(1);
+                              else ((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_COMMON))->SetCheck(0);
 
  if (cTask_Local.IsAnswerReferenceExist()==true) ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE))->EnableWindow(TRUE);
                                             else ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE))->EnableWindow(FALSE);
@@ -136,7 +137,6 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
   ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE))->EnableWindow(FALSE);
   ((CButton *)GetDlgItem(IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE))->EnableWindow(FALSE);
  }
-
  OnSelChange_ComboBox_User();
 
  return(CDialog::OnInitDialog());
@@ -217,6 +217,9 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
 
  if (((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->GetCheck()) cTask_Local.SetPlannedPosition(true);
                                                                                 else cTask_Local.SetPlannedPosition(false);
+
+ if (((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_COMMON))->GetCheck()) cTask_Local.SetCommon(true);
+                                                                      else cTask_Local.SetCommon(false);
  EndDialog(0);
 }
 //----------------------------------------------------------------------------------------------------
