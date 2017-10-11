@@ -222,7 +222,7 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_TaskEdit(void)
    if (cTask.IsForUserGUID(for_user_guid)==false)//у задания поменялся адресат
    {
     cTask.SetAnswer("");//стираем комментарий старого адресата
-   }   
+   }
    //просим изменить задание
    if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
    {

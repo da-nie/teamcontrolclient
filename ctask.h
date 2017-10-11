@@ -115,8 +115,7 @@ class CTask
   {
    if (cDate==cTask.cDate && Index==cTask.Index) return(true);
    return(false);
-  }
-
+  }  
   const long& GetIndex(void) const;//получиь индекс
   const CSafeString& GetFromUserGUID(void) const;//получить уникальный идентификатор от какого пользователя задание
   const CSafeString& GetForUserGUID(void) const;//получить уникальный идентификатор для какого пользователя задание
@@ -191,6 +190,7 @@ class CTask
   bool IsAnswerReferenceExist(void) const;//есть ли ссылка в ответе исполнителя
   bool IsTaskReferenceExist(void) const;//есть ли ссылка в задании
   bool IsCommon(void) const;//является ли задание общим
+  bool IsEquivalent(const CTask &cTask);//эквивалентны ли задания
 
   bool Save(FILE *file) const;//сохранить данные
   bool Load(FILE *file);//загрузить данные

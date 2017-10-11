@@ -515,6 +515,33 @@ bool CTask::IsCommon(void) const
 {
  return(Common);
 }
+
+//----------------------------------------------------------------------------------------------------
+//эквивалентны ли задания
+//----------------------------------------------------------------------------------------------------
+bool CTask::IsEquivalent(const CTask &cTask)
+{
+ if (Index!=cTask.Index) return(false);
+ if (State!=cTask.State) return(false);
+ 
+ if (FromUserGUID.Compare(cTask.FromUserGUID)!=0) return(false);
+ if (ForUserGUID.Compare(cTask.ForUserGUID)!=0) return(false);
+ if (ProjectGUID.Compare(cTask.ProjectGUID)!=0) return(false);
+ if (Task.Compare(cTask.Task)!=0) return(false);
+ if (AnswerNotRead!=cTask.AnswerNotRead) return(false);
+ if (PlannedPosition!=cTask.PlannedPosition) return(false);
+ if (AnswerReferenceExist!=cTask.AnswerReferenceExist) return(false);
+ if (TaskReferenceExist!=cTask.TaskReferenceExist) return(false);
+ if (Common!=cTask.Common) return(false);
+ if (!(cDate==cTask.cDate)) return(false);
+ if (TaskGUID.Compare(cTask.TaskGUID)!=0) return(false);
+ if (Answer.Compare(cTask.Answer)!=0) return(false);
+ if (AnswerReference.Compare(cTask.AnswerReference)!=0) return(false);
+ if (TaskReference.Compare(cTask.TaskReference)!=0) return(false);
+ 
+ return(true);
+}
+
 //----------------------------------------------------------------------------------------------------
 //сохранить данные
 //----------------------------------------------------------------------------------------------------

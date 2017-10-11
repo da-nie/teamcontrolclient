@@ -44,6 +44,7 @@ afx_msg void CDialog_TaskSettings::OnOK(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnCancel(void)
 {
+ OnCommand_Button_Cancel();
 }
 //----------------------------------------------------------------------------------------------------
 //инициализация диалога
@@ -175,6 +176,7 @@ afx_msg void CDialog_TaskSettings::OnDestroy(void)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
 { 
+ CTask cTask_Copy=cTask_Local;
  char task[255];
  ((CEdit *)GetDlgItem(IDC_EDIT_DIALOG_TASK_SETTINGS_TASK))->GetWindowText(task,255); 
  CTime cTime; 
@@ -187,9 +189,7 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
  size_t size;
  cTask_Local.SetDate(CDate(cTime.GetYear(),cTime.GetMonth(),cTime.GetDay()));
  cTask_Local.SetTask(task);
- if (NewTask==true) cTask_Local.SetIndex(0);//номер вернёт сервер
- cTask_Local.SetStateNoRead();
- cTask_Local.SetAnswerNotRead(false);
+ if (NewTask==true) cTask_Local.SetIndex(0);//номер вернёт сервер  
  //считываем пользователя, которому предназначена задача
  size=vector_CUser_Local.size();
  long user_index=((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->GetCurSel();
@@ -214,10 +214,11 @@ afx_msg void CDialog_TaskSettings::OnCommand_Button_Ok(void)
    cTask_Local.SetProjectGUID(cProject.GetProjectGUID());
   }
  }
-
  if (((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION))->GetCheck()) cTask_Local.SetPlannedPosition(true);
                                                                                 else cTask_Local.SetPlannedPosition(false);
-
+ //состояние задания не меняем если изменился только статус общности задания
+ if (cTask_Copy.IsEquivalent(cTask_Local)==false || NewTask==true) cTask_Local.SetStateNoRead();
+ cTask_Local.SetAnswerNotRead(false);
  if (((CButton *)GetDlgItem(IDC_DIALOG_TASK_SETTINGS_COMMON))->GetCheck()) cTask_Local.SetCommon(true);
                                                                       else cTask_Local.SetCommon(false);
  EndDialog(0);

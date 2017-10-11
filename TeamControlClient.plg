@@ -6,7 +6,13 @@
 --------------------Configuration: TeamControlClient - Win32 Release--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\WINDOWS\TEMP\RSP7CA.tmp" with contents
+Creating temporary file "C:\WINDOWS\TEMP\RSP139.tmp" with contents
+[
+/nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXDLL" /Fp"Release/TeamControlClient.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"D:\Working\TeamControl\TeamControlClient\ctask.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP139.tmp" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP13A.tmp" with contents
 [
 ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlClient.pdb" /machine:I386 /out:"Release/TeamControlClient.exe" 
 .\Release\cbitmapcell.obj
@@ -47,8 +53,10 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\main.obj
 .\Release\Resource.res
 ]
-Creating command line "link.exe @C:\WINDOWS\TEMP\RSP7CA.tmp"
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP13A.tmp"
 <h3>Output Window</h3>
+Compiling...
+ctask.cpp
 Linking...
 
 
