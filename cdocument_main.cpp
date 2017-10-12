@@ -517,11 +517,14 @@ void CDocument_Main::OnDeletedTask(const CTask &cTask)
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
+   if (cTask.IsFromOrForUserGUID(sProtectedVariables.MyGUID)==true)
+   {
+    sProtectedVariables.OnShow=true;
+   }
    sProtectedVariables.cVectorTask.DeleteByTaskGUID(cTask.GetTaskGUID());
    sProtectedVariables.cVectorTask_Common.DeleteByTaskGUID(cTask.GetTaskGUID());
    sProtectedVariables.cVectorTask.SortByDate();
-   sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
+   sProtectedVariables.OnUpdateView=true;   
   }
  }
  SaveState();
@@ -534,13 +537,15 @@ void CDocument_Main::OnAddedTask(const CTask &cTask)
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   sProtectedVariables.cVectorTask.AddNew(cTask);
-   sProtectedVariables.cVectorTask.SortByDate();
-   sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
-
+   if (cTask.IsFromOrForUserGUID(sProtectedVariables.MyGUID)==true)
+   {
+    sProtectedVariables.cVectorTask.AddNew(cTask);
+    sProtectedVariables.cVectorTask.SortByDate();
+	sProtectedVariables.OnShow=true;
+   }
    if (cTask.IsCommon()==true) sProtectedVariables.cVectorTask_Common.AddNew(cTask);
    sProtectedVariables.cVectorTask_Common.SortByDate();
+   sProtectedVariables.OnUpdateView=true;   
   }
  }
  SaveState();
@@ -553,11 +558,12 @@ void CDocument_Main::OnChangedTask(const CTask &cTask)
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {   
-   sProtectedVariables.cVectorTask.ChangeByTaskGUID(cTask.GetTaskGUID(),cTask);
-   sProtectedVariables.cVectorTask.SortByDate();
-   sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
-
+   if (cTask.IsFromOrForUserGUID(sProtectedVariables.MyGUID)==true)
+   {
+    sProtectedVariables.cVectorTask.ChangeByTaskGUID(cTask.GetTaskGUID(),cTask);
+    sProtectedVariables.cVectorTask.SortByDate();
+	if (cTask.IsForUserGUID(sProtectedVariables.MyGUID)==true) sProtectedVariables.OnShow=true;
+   }
    CTask cTask_Local;
    if (sProtectedVariables.cVectorTask_Common.FindByTaskGUID(cTask.GetTaskGUID(),cTask_Local)==true)//если задание уже есть в списке
    {
@@ -569,6 +575,7 @@ void CDocument_Main::OnChangedTask(const CTask &cTask)
     if (cTask.IsCommon()==true) sProtectedVariables.cVectorTask_Common.AddNew(cTask);
    }
    sProtectedVariables.cVectorTask_Common.SortByDate();
+   sProtectedVariables.OnUpdateView=true;   
   }
  }
  SaveState();
@@ -584,8 +591,7 @@ void CDocument_Main::OnDeletedProject(const CProject &cProject)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    sProtectedVariables.cVectorProject.DeleteByProjectGUID(cProject.GetProjectGUID());
-   sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
+   sProtectedVariables.OnUpdateView=true;   
   }
  }
  SaveState();
@@ -599,8 +605,7 @@ void CDocument_Main::OnAddedProject(const CProject &cProject)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
    sProtectedVariables.cVectorProject.AddNew(cProject);
-   sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
+   sProtectedVariables.OnUpdateView=true;   
   }
  }
  SaveState();
@@ -614,8 +619,7 @@ void CDocument_Main::OnChangedProject(const CProject &cProject)
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {   
    sProtectedVariables.cVectorProject.ChangeByProjectGUID(cProject.GetProjectGUID(),cProject);
-   sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
+   sProtectedVariables.OnUpdateView=true;   
   }
  }
  SaveState();
@@ -703,8 +707,7 @@ bool CDocument_Main::ChangeTask(CTask &cTask)
    while(sProtectedVariables.cVectorTask_TransferToServer.DeleteByTaskGUID(cTask.GetTaskGUID())==true);
    cTask.MarkForChange();
    sProtectedVariables.cVectorTask_TransferToServer.PushBack(cTask);
-   sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
+   sProtectedVariables.OnUpdateView=true;   
   }
  }
  return(true);
@@ -755,7 +758,6 @@ bool CDocument_Main::ChangeProject(CProject &cProject)
    cProject.MarkForChange();
    sProtectedVariables.cVectorProject_TransferToServer.PushBack(cProject);
    sProtectedVariables.OnUpdateView=true;
-   sProtectedVariables.OnShow=true;
   }
  }
  return(true);
