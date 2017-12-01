@@ -87,6 +87,7 @@ class CTask
   TASK_TYPE TaskType;//тип задания
   CSafeString ForUser;//для пользователя
   CSafeString FromUser;//от пользователя  
+  CSafeString Project;//по проекту
   //-Переменные класса-------------------------------------------------------
  public:
   //-Конструктор класса------------------------------------------------------
@@ -130,6 +131,7 @@ class CTask
   const bool& GetChangeData(void) const;//получить, изменились ли данные задания
   const CSafeString& GetForUser(void) const;//получить имя пользователя для которого задание
   const CSafeString& GetFromUser(void) const;//получить имя пользователя от которого задание
+  const CSafeString& GetProject(void) const;//получить название проекта по которому задание
   bool GetAnswerNotRead(void) const;//получить, прочитан ли ответ на задание
   bool GetPlannedPosition(void) const;//получить, является ли задание плановой позицией
   bool GetAnswerReferenceExist(void) const;//получить, есть ли ссылка в ответе исполнителя
@@ -150,6 +152,8 @@ class CTask
   void SetChangeData(const bool& change_data);//задать изменились ли данные задания
   void SetForUser(const char *for_user);//задать имя пользователя для которого задание
   void SetFromUser(const char *from_user);//задать имя пользователя от которого задание
+  void SetProject(const char *project);//задать название проекта по которому задание
+
   void SetAnswerNotRead(bool state);//установить, прочитан ли ответ на задание
   void SetPlannedPosition(bool state);//установить, является ли задание плановой позицией
   void SetAnswerReferenceExist(bool state);//задать, есть ли ссылка в ответе исполнителя

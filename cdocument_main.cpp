@@ -519,7 +519,7 @@ void CDocument_Main::OnDeletedTask(const CTask &cTask)
   {
    if (cTask.IsFromOrForUserGUID(sProtectedVariables.MyGUID)==true)
    {
-    sProtectedVariables.OnShow=true;
+    //sProtectedVariables.OnShow=true;
    }
    sProtectedVariables.cVectorTask.DeleteByTaskGUID(cTask.GetTaskGUID());
    sProtectedVariables.cVectorTask_Common.DeleteByTaskGUID(cTask.GetTaskGUID());
@@ -545,7 +545,7 @@ void CDocument_Main::OnAddedTask(const CTask &cTask)
    }
    if (cTask.IsCommon()==true) sProtectedVariables.cVectorTask_Common.AddNew(cTask);
    sProtectedVariables.cVectorTask_Common.SortByDate();
-   sProtectedVariables.OnUpdateView=true;   
+   sProtectedVariables.OnUpdateView=true;
   }
  }
  SaveState();
@@ -562,7 +562,7 @@ void CDocument_Main::OnChangedTask(const CTask &cTask)
    {
     sProtectedVariables.cVectorTask.ChangeByTaskGUID(cTask.GetTaskGUID(),cTask);
     sProtectedVariables.cVectorTask.SortByDate();
-	if (cTask.IsForUserGUID(sProtectedVariables.MyGUID)==true) sProtectedVariables.OnShow=true;
+	//if (cTask.IsForUserGUID(sProtectedVariables.MyGUID)==true) sProtectedVariables.OnShow=true;
    }
    CTask cTask_Local;
    if (sProtectedVariables.cVectorTask_Common.FindByTaskGUID(cTask.GetTaskGUID(),cTask_Local)==true)//если задание уже есть в списке

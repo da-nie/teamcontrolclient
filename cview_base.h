@@ -61,6 +61,7 @@ class CView_Base:public CView
   CTextCell cTextCell_ForUser;//текст в ячейке
   CTextCell cTextCell_FromUser;//текст в ячейке
   CTextCell cTextCell_PlannedPosition;//текст в ячейке
+  CTextCell cTextCell_Project;//текст в ячейке
   CBitmapCell cBitmapCell_TaskState;//изображение в ячейке
   CFrameCell cFrameCell_TaskState;//рамка ячейки с состоянием задачи
   CLineTextCell cLineTextCell_ColumnName;//текст назначения столбца

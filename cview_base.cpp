@@ -113,6 +113,10 @@ CView_Base::CView_Base()
  cTextCell_PlannedPosition.SetTextFont(Logfont_PlannedPosition);
  cTextCell_PlannedPosition.SetTextColor(RGB(255,64,64));
 
+ cTextCell_Project.SetTextFont(Logfont_Task);
+ cTextCell_Project.SetTextColor(RGB(32,127,32)); 
+
+
  cLineTextCell_ColumnName.SetTextFont(Logfont_ColumnName);
  cLineTextCell_ColumnName.SetTextColor(RGB(0,0,0));
 
@@ -318,10 +322,13 @@ void CView_Base::UpdateTask(vector<CTask> &vector_CTask_Local)
  {  
   if (TaskIsVisible(sShowState,vector_CTask_Local[n])==false) continue;
   CUser cUser;
-  cDocument_Main_Ptr->FindByUserGUID(vector_CTask_Local[n].GetFromUserGUID(),cUser);
-  vector_CTask_Local[n].SetFromUser(cUser.GetName());
-  cDocument_Main_Ptr->FindByUserGUID(vector_CTask_Local[n].GetForUserGUID(),cUser);
-  vector_CTask_Local[n].SetForUser(cUser.GetName());
+  if (cDocument_Main_Ptr->FindByUserGUID(vector_CTask_Local[n].GetFromUserGUID(),cUser)==true) vector_CTask_Local[n].SetFromUser(cUser.GetName());
+                                                                                          else vector_CTask_Local[n].SetFromUser("Неизвестно");
+  if (cDocument_Main_Ptr->FindByUserGUID(vector_CTask_Local[n].GetForUserGUID(),cUser)==true) vector_CTask_Local[n].SetForUser(cUser.GetName());
+                                                                                         else vector_CTask_Local[n].SetForUser("Неизвестно");
+  CProject cProject;
+  if (cDocument_Main_Ptr->FindByProjectGUID(vector_CTask_Local[n].GetProjectGUID(),cProject)==true) vector_CTask_Local[n].SetProject(cProject.GetProjectName());
+                                                                                               else vector_CTask_Local[n].SetProject("Без проекта");
   vector_CTask.push_back(vector_CTask_Local[n]);
  }
 
@@ -391,6 +398,8 @@ void CView_Base::DrawTasks(CDC *pDC)
   cTextCell_ForUser.SetText("Для: "+cTask.GetForUser());
   //от кого задание
   cTextCell_FromUser.SetText("От: "+cTask.GetFromUser());
+  //по какому проекту задание
+  cTextCell_Project.SetText("Проект: "+cTask.GetProject());
   //узнаем размеры изображения
   CBitmap *cBitmap_Ptr=NULL;
   if (cTask.IsStateNoRead()==true)
@@ -432,6 +441,8 @@ void CView_Base::DrawTasks(CDC *pDC)
   cTextCell_FromUser.GetSize(pDC,cRect_TextArea,cSize_FromUser);
   CSize cSize_PlannedPosition;
   cTextCell_PlannedPosition.GetSize(pDC,cRect_TextArea,cSize_PlannedPosition);
+  CSize cSize_Project;
+  cTextCell_Project.GetSize(pDC,cRect_TextArea,cSize_Project);
   CSize cSize_Task;
   cTextCell_Task.GetSize(pDC,cRect_TextArea,cSize_Task);
 
@@ -440,9 +451,9 @@ void CView_Base::DrawTasks(CDC *pDC)
   if (cTask.IsPlannedPosition()==false) cSize_PlannedPosition=CSize(0,0);
 
   //модифицируем размеры ячейки под изображение
-  long cell_height=cSize_TaskDate.cy+cSize_Task.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy;
-  if (cell_height<GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy) cell_height=GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy;
-  cRect_TextArea.bottom=cRect_TextArea.top+cell_height;  
+  long cell_height=cSize_TaskDate.cy+cSize_Task.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy+cSize_Project.cy;
+  if (cell_height<GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy+cSize_Project.cy) cell_height=GetTastStateVerticalOffset()*2+cSize_TaskState.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy+cSize_Project.cy;
+  cRect_TextArea.bottom=cRect_TextArea.top+cell_height;
   cRect_DrawArea.bottom=cRect_DrawArea.top+cell_height;
   //модифицируем размеры ячейки изображения по ширине
   CRect cRect_TaskState=CRect(cRect_DrawArea.left,cRect_DrawArea.top,cRect_DrawArea.left+GetTastStateHorizontalOffset()*2+cSize_TaskState.cx,cRect_DrawArea.bottom);
@@ -487,8 +498,10 @@ void CView_Base::DrawTasks(CDC *pDC)
    CRect cRect_PlannedPosition=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_FromUser.cy+cSize_ForUser.cy,cRect_TextArea.right,cRect_TextArea.bottom);
    cTextCell_PlannedPosition.Draw(pDC,cRect_PlannedPosition);
   }
+  CRect cRect_Project=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_FromUser.cy+cSize_ForUser.cy+cSize_PlannedPosition.cy,cRect_TextArea.right,cRect_TextArea.bottom);
+  cTextCell_Project.Draw(pDC,cRect_Project);
 
-  CRect cRect_TaskArea=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy,cRect_TextArea.right,cRect_TextArea.bottom);
+  CRect cRect_TaskArea=CRect(cRect_TextArea.left,cRect_TextArea.top+cSize_TaskDate.cy+cSize_ForUser.cy+cSize_FromUser.cy+cSize_PlannedPosition.cy+cSize_Project.cy,cRect_TextArea.right,cRect_TextArea.bottom);
   cTextCell_Task.Draw(pDC,cRect_TaskArea);
   //выведем рамку  
   cFrameCell.Draw(pDC,cRect_DrawArea);
