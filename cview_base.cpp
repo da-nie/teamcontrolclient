@@ -385,6 +385,12 @@ void CView_Base::DrawTasks(CDC *pDC)
  {
   if (cRect_DrawArea.top>cRect.bottom) break;
   CTask &cTask=vector_CTask[n];
+
+  bool visible_from_user_copy=VisibleFromUser;
+  //дл€ плановых позиций не отображаем от кого они (оказалось, что люди негативно реагируют на пославших плановую позицию)
+  if (cTask.IsPlannedPosition()==true) VisibleFromUser=false;
+
+
   char str_date[255];
   const CDate& cDate=cTask.GetDate();
   sprintf(str_date,"ƒо %02i.%02i.%04i [є %i]",cDate.GetDay(),cDate.GetMonth(),cDate.GetYear(),cTask.GetIndex());
@@ -512,6 +518,8 @@ void CView_Base::DrawTasks(CDC *pDC)
   vector_SCell_Task.push_back(sCell);
 
   cRect_DrawArea.top=cRect_DrawArea.bottom;
- }
+
+  VisibleFromUser=visible_from_user_copy;
+ } 
 }
 
