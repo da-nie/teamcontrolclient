@@ -18,6 +18,7 @@ BEGIN_MESSAGE_MAP(CView_OutTasks,CView)
  ON_COMMAND(IDC_MENU_LIST_VIEW_OUT_TASK_DELETE_TASK,OnCommand_Menu_List_TaskDelete)
  ON_COMMAND(IDC_MENU_LIST_VIEW_OUT_TASK_EDIT_TASK,OnCommand_Menu_List_TaskEdit)
  ON_COMMAND(IDC_MENU_LIST_VIEW_OUT_TASK_SET_FINISHED,OnCommand_Menu_List_SetTaskFinished)
+ ON_COMMAND(IDC_MENU_LIST_VIEW_OUT_TASK_SEND_TASK_COPY,OnCommand_Menu_List_SendTaskCopy)
 END_MESSAGE_MAP()
 
 //====================================================================================================
@@ -51,6 +52,7 @@ afx_msg void CView_OutTasks::OnInitialUpdate(void)
  cBitmap_MenuList_EditTask.LoadBitmap(IDB_BITMAP_MENU_EDIT_TASK);
  cBitmap_MenuList_RepeatTask.LoadBitmap(IDB_BITMAP_MENU_REPEAT_TASK);
  cBitmap_MenuList_SetTaskFinished.LoadBitmap(IDB_BITMAP_MENU_TASK_FINISHED);
+ cBitmap_MenuList_SendTaskCopy.LoadBitmap(IDB_BITMAP_MENU_ADD_TASK);
  CView_Base::OnInitialUpdate();
 }
 //----------------------------------------------------------------------------------------------------
@@ -128,11 +130,11 @@ afx_msg void CView_OutTasks::OnRButtonDown(UINT nFlags,CPoint point)
   if (SelectedTaskGUID.Compare(sCell.GUID)==0)//выбранное задание находится в списке отображения
   {
    if (IsMyTask(SelectedTaskGUID)==false) return;
-
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_DELETE_TASK,MF_BYCOMMAND,&cBitmap_MenuList_DeleteTask,&cBitmap_MenuList_DeleteTask);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_EDIT_TASK,MF_BYCOMMAND,&cBitmap_MenuList_EditTask,&cBitmap_MenuList_EditTask);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_REPEAT_TASK,MF_BYCOMMAND,&cBitmap_MenuList_RepeatTask,&cBitmap_MenuList_RepeatTask);
    cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_SET_FINISHED,MF_BYCOMMAND,&cBitmap_MenuList_SetTaskFinished,&cBitmap_MenuList_SetTaskFinished);
+   cMenu_List.SetMenuItemBitmaps(IDC_MENU_LIST_VIEW_OUT_TASK_SEND_TASK_COPY,MF_BYCOMMAND,&cBitmap_MenuList_SendTaskCopy,&cBitmap_MenuList_SendTaskCopy);
    cMenu_List.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN|TPM_LEFTBUTTON,mpoint.x,mpoint.y,this); 	
    return;
   }
@@ -252,6 +254,73 @@ afx_msg void CView_OutTasks::OnCommand_Menu_List_SetTaskFinished(void)
   MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
  }
 }
+
+//----------------------------------------------------------------------------------------------------
+//отправить копию задания
+//----------------------------------------------------------------------------------------------------
+afx_msg void CView_OutTasks::OnCommand_Menu_List_SendTaskCopy(void)
+{
+ CDocument_Main *cDocument_Main_Ptr=GetDocument();
+ if (cDocument_Main_Ptr==NULL) return;
+ //получаем выбранное задание
+ CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
+ cTask.SetAnswer("");
+ CSafeString for_user_guid=cTask.GetForUserGUID();
+ //запускаем диалог создания нового задания
+ while(1)
+ {
+  CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
+  if (cDialog_TaskSettings.Activate(cTask,cDocument_Main_Ptr,true)==true)
+  {
+   CDocument_Main *cDocument_Main_Ptr=GetDocument();
+   if (cTask.IsForUserGUID(for_user_guid)==true)
+   {
+    MessageBox("Требуется изменить пользователя, для которого создаётся задание!","Ошибка",MB_OK);
+	continue;
+   }
+   //просим добавить задание
+   if (cDocument_Main_Ptr->AddTask(cTask)==false)
+   {
+    MessageBox("Не удалось создать задание!","Ошибка",MB_OK);
+   }
+   else break;
+  }
+  else break;
+ }
+
+/* CDocument_Main *cDocument_Main_Ptr=GetDocument();
+ if (cDocument_Main_Ptr==NULL) return;
+
+ if (IsMyTask(SelectedTaskGUID)==false) return;
+
+ //получаем выбранное задание
+ CVectorTask cVectorTask=cDocument_Main_Ptr->GetCVectorTask();
+ CTask cTask;
+ if (cVectorTask.FindByTaskGUID(SelectedTaskGUID,cTask)==false) return;
+ CSafeString for_user_guid=cTask.GetForUserGUID();
+ while(1)
+ {
+  CDialog_TaskSettings cDialog_TaskSettings((LPCSTR)IDD_DIALOG_TASK_SETTINGS,this);
+  if (cDialog_TaskSettings.Activate(cTask,cDocument_Main_Ptr,false)==true)
+  {   
+   if (cTask.IsForUserGUID(for_user_guid)==false)//у задания поменялся адресат
+   {
+    cTask.SetAnswer("");//стираем комментарий старого адресата
+   }
+   //просим изменить задание
+   if (cDocument_Main_Ptr->ChangeTask(cTask)==false)
+   {
+    MessageBox("Не удалось изменить задание!","Ошибка",MB_OK);
+   }
+   else break;
+  }
+  else break;
+ } 
+ */
+}
+
 //====================================================================================================
 //функции класса
 //====================================================================================================

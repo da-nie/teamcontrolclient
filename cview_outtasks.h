@@ -46,6 +46,7 @@ class CView_OutTasks:public CView_Base
   CBitmap cBitmap_MenuList_RepeatTask;//пиктограмма "повторить задачу"
   CBitmap cBitmap_MenuList_EditTask;//пиктограмма "редактировать задачу"
   CBitmap cBitmap_MenuList_SetTaskFinished;//пиктограмма "завершить задание"
+  CBitmap cBitmap_MenuList_SendTaskCopy;//пиктограмма "отправить копию задания"
   //-Прочее------------------------------------------------------------------
  public:
   //-Конструктор класса------------------------------------------------------
@@ -64,6 +65,7 @@ class CView_OutTasks:public CView_Base
   afx_msg void OnCommand_Menu_List_TaskDelete(void);//удалить задание
   afx_msg void OnCommand_Menu_List_TaskEdit(void);//изменить задание
   afx_msg void OnCommand_Menu_List_SetTaskFinished(void);//завершить задание
+  afx_msg void OnCommand_Menu_List_SendTaskCopy(void);//отправить копию задания
   DECLARE_MESSAGE_MAP()
  public:
   //-Функции класса----------------------------------------------------------

@@ -107,6 +107,10 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Удалить задание",             IDC_MENU_LIST_VIEW_OUT_TASK_DELETE_TASK
 
+        MENUITEM SEPARATOR
+        MENUITEM "Отправить такое же задание другому сотруднику", 
+                                                IDC_MENU_LIST_VIEW_OUT_TASK_SEND_TASK_COPY
+
     END
 END
 

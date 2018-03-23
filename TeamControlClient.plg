@@ -6,13 +6,49 @@
 --------------------Configuration: TeamControlClient - Win32 Release--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\WINDOWS\TEMP\RSP1F.tmp" with contents
+Creating command line "rc.exe /l 0x419 /fo"Release/Resource.res" /d "NDEBUG" /d "_AFXDLL" "D:\Working\TeamControl\TeamControlClient\Resource.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP25.tmp" with contents
 [
 /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXDLL" /Fp"Release/TeamControlClient.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"D:\Working\TeamControl\TeamControlClient\cbitmapcell.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdate.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdialog_about.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdialog_clientsettings.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdialog_deletefinishedtask.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdialog_projectsettings.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdialog_tasksetstate.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdialog_tasksettings.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdialog_usersettings.cpp"
+"D:\Working\TeamControl\TeamControlClient\cdocument_main.cpp"
+"D:\Working\TeamControl\TeamControlClient\cfillcell.cpp"
+"D:\Working\TeamControl\TeamControlClient\cframecell.cpp"
+"D:\Working\TeamControl\TeamControlClient\cframewnd_main.cpp"
+"D:\Working\TeamControl\TeamControlClient\cicell.cpp"
+"D:\Working\TeamControl\TeamControlClient\clinetextcell.cpp"
+"D:\Working\TeamControl\TeamControlClient\cproject.cpp"
+"D:\Working\TeamControl\TeamControlClient\csafestring.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctask.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctextcell.cpp"
+"D:\Working\TeamControl\TeamControlClient\cthreadclient.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver_autorization.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver_file.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver_ping.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver_project.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver_task.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctransceiver_user.cpp"
+"D:\Working\TeamControl\TeamControlClient\ctreeview_kit.cpp"
+"D:\Working\TeamControl\TeamControlClient\cuser.cpp"
+"D:\Working\TeamControl\TeamControlClient\cvector_project.cpp"
+"D:\Working\TeamControl\TeamControlClient\cvector_task.cpp"
+"D:\Working\TeamControl\TeamControlClient\cvector_user.cpp"
 "D:\Working\TeamControl\TeamControlClient\cview_base.cpp"
+"D:\Working\TeamControl\TeamControlClient\cview_mytasks.cpp"
+"D:\Working\TeamControl\TeamControlClient\cview_outtasks.cpp"
+"D:\Working\TeamControl\TeamControlClient\main.cpp"
 ]
-Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP1F.tmp" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP20.tmp" with contents
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP25.tmp" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP26.tmp" with contents
 [
 ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlClient.pdb" /machine:I386 /out:"Release/TeamControlClient.exe" 
 .\Release\cbitmapcell.obj
@@ -53,10 +89,46 @@ ws2_32.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/TeamControlC
 .\Release\main.obj
 .\Release\Resource.res
 ]
-Creating command line "link.exe @C:\WINDOWS\TEMP\RSP20.tmp"
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP26.tmp"
 <h3>Output Window</h3>
+Compiling resources...
 Compiling...
+cbitmapcell.cpp
+cdate.cpp
+cdialog_about.cpp
+cdialog_clientsettings.cpp
+cdialog_deletefinishedtask.cpp
+cdialog_projectsettings.cpp
+cdialog_tasksetstate.cpp
+cdialog_tasksettings.cpp
+cdialog_usersettings.cpp
+cdocument_main.cpp
+cfillcell.cpp
+cframecell.cpp
+cframewnd_main.cpp
+cicell.cpp
+clinetextcell.cpp
+cproject.cpp
+csafestring.cpp
+ctask.cpp
+ctextcell.cpp
+cthreadclient.cpp
+ctransceiver.cpp
+ctransceiver_autorization.cpp
+ctransceiver_file.cpp
+ctransceiver_ping.cpp
+ctransceiver_project.cpp
+ctransceiver_task.cpp
+ctransceiver_user.cpp
+ctreeview_kit.cpp
+cuser.cpp
+cvector_project.cpp
+cvector_task.cpp
+cvector_user.cpp
 cview_base.cpp
+cview_mytasks.cpp
+cview_outtasks.cpp
+main.cpp
 Linking...
 
 
