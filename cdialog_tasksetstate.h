@@ -27,7 +27,6 @@ class CDialog_TaskSetState:public CDialog
   HBITMAP hBitmap_TaskIsRunning;
   HBITMAP hBitmap_TaskRead;
   HBITMAP hBitmap_TaskCancel;
-
  public:
   //-Конструктор класса------------------------------------------------------
   CDialog_TaskSetState(LPCTSTR lpszTemplateName,CWnd* pParentWnd);

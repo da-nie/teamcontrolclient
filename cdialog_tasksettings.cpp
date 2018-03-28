@@ -169,6 +169,7 @@ bool CDialog_TaskSettings::Activate(CTask &cTask,CDocument_Main *cDocument_Main_
 afx_msg void CDialog_TaskSettings::OnDestroy(void)
 {
  if (hBitmap_TaskFinished!=NULL) DeleteObject(hBitmap_TaskFinished);
+ hBitmap_TaskFinished=NULL;
  CDialog::OnDestroy();
 }
 //----------------------------------------------------------------------------------------------------
