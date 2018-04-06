@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -13,13 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Russian resources
+// Russian (Russia) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
-#ifdef _WIN32
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 #pragma code_page(1251)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -27,18 +25,18 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -52,110 +50,92 @@ END
 // Bitmap
 //
 
-IDB_BITMAP_USER         BITMAP  DISCARDABLE     "Bitmap\\user.bmp"
-IDB_BITMAP_MENU_ADD_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_add_task.bmp"
-IDB_BITMAP_MENU_DELETE_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_delete_task.bmp"
-IDB_BITMAP_MENU_EDIT_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_edit_task.bmp"
-IDB_BITMAP_MENU_REPEAT_TASK BITMAP  DISCARDABLE     "Bitmap\\menu_repeat_task.bmp"
-IDB_BITMAP_TASK_NOT_READ_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_not_read_frame_one.bmp"
-IDB_BITMAP_TASK_NOT_READ_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_not_read_frame_two.bmp"
-IDB_BITMAP_TASK_IS_RUNNING_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_is_running_frame_one.bmp"
-IDB_BITMAP_TASK_IS_RUNNING_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_is_running_frame_two.bmp"
-IDB_BITMAP_TASK_DONE_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_done_frame_one.bmp"
-IDB_BITMAP_TASK_DONE_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_done_frame_two.bmp"
-IDB_BITMAP_MENU_TASK_DONE BITMAP  DISCARDABLE     "Bitmap\\menu_task_done.bmp"
-IDB_BITMAP_MENU_TASK_IS_RUNNING BITMAP  DISCARDABLE     "Bitmap\\menu_task_is_running.bmp"
-IDB_BITMAP_MENU_TASK_READED BITMAP  DISCARDABLE     "Bitmap\\menu_task_readed.bmp"
-IDB_BITMAP_MENU_USER_INFO BITMAP  DISCARDABLE     "Bitmap\\menu_user_info.bmp"
-IDB_BITMAP_TASK_CANCELED_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_canceled_frame_one.bmp"
-IDB_BITMAP_TASK_CANCELED_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_canceled_frame_two.bmp"
-IDB_BITMAP_TASK_READED_FRAME_ONE BITMAP  DISCARDABLE     "Bitmap\\task_readed_frame_one.bmp"
-IDB_BITMAP_TASK_READED_FRAME_TWO BITMAP  DISCARDABLE     "Bitmap\\task_readed_frame_two.bmp"
-IDB_BITMAP_TASK_FINISHED BITMAP  DISCARDABLE     "Bitmap\\task_finished.bmp"
-IDB_BITMAP_MENU_TASK_FINISHED BITMAP  DISCARDABLE     "Bitmap\\menu_task_finished.bmp"
-IDB_BITMAP_TOOLBAR_MAIN BITMAP  DISCARDABLE     "Bitmap\\toolbar_main.bmp"
-IDB_BITMAP_ABOUT        BITMAP  DISCARDABLE     "Bitmap\\about.bmp"
-IDB_BITMAP_TASK_FINISHED_BIG BITMAP  DISCARDABLE     "Bitmap\\task_finished_big.bmp"
+IDB_BITMAP_USER         BITMAP                  "Bitmap\\user.bmp"
+IDB_BITMAP_MENU_ADD_TASK BITMAP                  "Bitmap\\menu_add_task.bmp"
+IDB_BITMAP_MENU_DELETE_TASK BITMAP                  "Bitmap\\menu_delete_task.bmp"
+IDB_BITMAP_MENU_EDIT_TASK BITMAP                  "Bitmap\\menu_edit_task.bmp"
+IDB_BITMAP_MENU_REPEAT_TASK BITMAP                  "Bitmap\\menu_repeat_task.bmp"
+IDB_BITMAP_TASK_NOT_READ_FRAME_ONE BITMAP                  "Bitmap\\task_not_read_frame_one.bmp"
+IDB_BITMAP_TASK_NOT_READ_FRAME_TWO BITMAP                  "Bitmap\\task_not_read_frame_two.bmp"
+IDB_BITMAP_TASK_IS_RUNNING_FRAME_ONE BITMAP                  "Bitmap\\task_is_running_frame_one.bmp"
+IDB_BITMAP_TASK_IS_RUNNING_FRAME_TWO BITMAP                  "Bitmap\\task_is_running_frame_two.bmp"
+IDB_BITMAP_TASK_DONE_FRAME_ONE BITMAP                  "Bitmap\\task_done_frame_one.bmp"
+IDB_BITMAP_TASK_DONE_FRAME_TWO BITMAP                  "Bitmap\\task_done_frame_two.bmp"
+IDB_BITMAP_MENU_TASK_DONE BITMAP                  "Bitmap\\menu_task_done.bmp"
+IDB_BITMAP_MENU_TASK_IS_RUNNING BITMAP                  "Bitmap\\menu_task_is_running.bmp"
+IDB_BITMAP_MENU_TASK_READED BITMAP                  "Bitmap\\menu_task_readed.bmp"
+IDB_BITMAP_MENU_USER_INFO BITMAP                  "Bitmap\\menu_user_info.bmp"
+IDB_BITMAP_TASK_CANCELED_FRAME_ONE BITMAP                  "Bitmap\\task_canceled_frame_one.bmp"
+IDB_BITMAP_TASK_CANCELED_FRAME_TWO BITMAP                  "Bitmap\\task_canceled_frame_two.bmp"
+IDB_BITMAP_TASK_READED_FRAME_ONE BITMAP                  "Bitmap\\task_readed_frame_one.bmp"
+IDB_BITMAP_TASK_READED_FRAME_TWO BITMAP                  "Bitmap\\task_readed_frame_two.bmp"
+IDB_BITMAP_TASK_FINISHED BITMAP                  "Bitmap\\task_finished.bmp"
+IDB_BITMAP_MENU_TASK_FINISHED BITMAP                  "Bitmap\\menu_task_finished.bmp"
+IDB_BITMAP_TOOLBAR_MAIN BITMAP                  "Bitmap\\toolbar_main.bmp"
+IDB_BITMAP_ABOUT        BITMAP                  "Bitmap\\about.bmp"
+IDB_BITMAP_TASK_FINISHED_BIG BITMAP                  "Bitmap\\task_finished_big.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDR_MENU_LIST_TREE_VIEW_USER MENU DISCARDABLE 
+IDR_MENU_LIST_TREE_VIEW_USER MENU
 BEGIN
     POPUP " "
     BEGIN
         MENUITEM "Поручить задачу",             IDC_MENU_LIST_TREE_VIEW_ADD_TASK
-
         MENUITEM "Посмотреть данные контакта",  IDC_MENU_LIST_TREE_VIEW_USER_INFO
-
     END
 END
 
-IDR_MENU_LIST_VIEW_OUT_TASK MENU DISCARDABLE 
+IDR_MENU_LIST_VIEW_OUT_TASK MENU
 BEGIN
     POPUP " "
     BEGIN
         MENUITEM "Выполнить заново",            IDC_MENU_LIST_VIEW_OUT_TASK_REPEAT_TASK
-
         MENUITEM "Завершить задание",           IDC_MENU_LIST_VIEW_OUT_TASK_SET_FINISHED
-
         MENUITEM SEPARATOR
         MENUITEM "Изменить задание",            IDC_MENU_LIST_VIEW_OUT_TASK_EDIT_TASK
-
         MENUITEM SEPARATOR
         MENUITEM "Удалить задание",             IDC_MENU_LIST_VIEW_OUT_TASK_DELETE_TASK
-
         MENUITEM SEPARATOR
-        MENUITEM "Отправить такое же задание другому сотруднику", 
-                                                IDC_MENU_LIST_VIEW_OUT_TASK_SEND_TASK_COPY
-
+        MENUITEM "Отправить такое же задание другому сотруднику", IDC_MENU_LIST_VIEW_OUT_TASK_SEND_TASK_COPY
     END
 END
 
-IDR_MENU_LIST_VIEW_MY_TASK MENU DISCARDABLE 
+IDR_MENU_LIST_VIEW_MY_TASK MENU
 BEGIN
     POPUP ""
     BEGIN
         MENUITEM "Задание прочитано",           IDC_MENU_LIST_VIEW_MY_TASK_SET_READED
-
         MENUITEM "Задание выполняется",         IDC_MENU_LIST_VIEW_MY_TASK_SET_IS_RUNNING
-
         MENUITEM SEPARATOR
         MENUITEM "Задание выполнено",           IDC_MENU_LIST_VIEW_MY_TASK_SET_DONE
-
         MENUITEM SEPARATOR
         MENUITEM "Задание отклонено",           IDC_MENU_LIST_VIEW_MY_TASK_SET_CANCELED
-
         MENUITEM SEPARATOR
         MENUITEM "Поручить копию задания",      IDC_MENU_LIST_VIEW_MY_TASK_SEND
-
     END
 END
 
-IDR_MENU_LIST_TREE_VIEW_PROJECT MENU DISCARDABLE 
+IDR_MENU_LIST_TREE_VIEW_PROJECT MENU
 BEGIN
     POPUP " "
     BEGIN
         MENUITEM "Создать проект",              IDC_MENU_LIST_TREE_VIEW_ADD_PROJECT
-
         MENUITEM "Изменить проект",             IDC_MENU_LIST_TREE_VIEW_EDIT_PROJECT
-
         MENUITEM SEPARATOR
         MENUITEM "Удалить проект",              IDC_MENU_LIST_TREE_VIEW_DELETE_PROJECT
-
     END
 END
 
-IDR_MENU_MAIN MENU DISCARDABLE 
+IDR_MENU_MAIN MENU
 BEGIN
     POPUP "Team Control"
     BEGIN
         MENUITEM "Настройки",                   IDC_MENU_MAIN_SETTINGS
-        MENUITEM "Удаление выданных вами завершённых заданий", 
-                                                IDC_MENU_MAIN_DELETE_FINISHED_TASK
-
+        MENUITEM "Удаление выданных вами завершённых заданий", IDC_MENU_MAIN_DELETE_FINISHED_TASK
     END
 END
 
@@ -166,168 +146,99 @@ END
 //
 
 IDD_DIALOG_TASK_SETTINGS DIALOGEX 0, 0, 392, 406
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Параметры задания"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Задание",IDC_STATIC,5,5,375,110,BS_CENTER
-    EDITTEXT        IDC_EDIT_DIALOG_TASK_SETTINGS_TASK,10,15,365,95,
-                    ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,
-                    WS_EX_DLGMODALFRAME
-    CONTROL         "DateTimePicker1",
-                    IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM,
-                    "SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,115,170,
-                    130,15
-    LTEXT           "Срок исполнения  ",IDC_STATIC,5,170,105,15,
-                    SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_RIGHT
-    LTEXT           "Проект  ",IDC_STATIC,5,190,105,15,SS_CENTERIMAGE,
-                    WS_EX_DLGMODALFRAME | WS_EX_RIGHT
-    COMBOBOX        IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT,115,190,130,75,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_TASK_SETTINGS_CANCEL,300,235,
-                    85,29,NOT WS_VISIBLE
-    PUSHBUTTON      "Отправить задание",IDC_BUTTON_DIALOG_TASK_SETTINGS_OK,
-                    300,270,85,29
-    PUSHBUTTON      "Завершить задание",
-                    IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED,300,130,85,
-                    80,BS_BITMAP
-    LTEXT           "Задание для  ",IDC_STATIC,5,130,105,15,SS_CENTERIMAGE,
-                    WS_EX_DLGMODALFRAME | WS_EX_RIGHT
-    COMBOBOX        IDC_COMBO_DIALOG_TASK_SETTINGS_USER,115,130,130,75,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Телефон исполнителя  ",IDC_STATIC,5,150,105,15,
-                    SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_RIGHT
-    EDITTEXT        IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE,115,150,130,14,
-                    ES_AUTOHSCROLL | ES_READONLY
-    CTEXT           "Завершить задание",
-                    IDC_STATIC_DIALOG_TASK_SETTINGS_TASK_FINISHED,300,215,85,
-                    13,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_DIALOG_TASK_SETTINGS_TASK,10,15,365,95,ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,WS_EX_DLGMODALFRAME
+    CONTROL         "DateTimePicker1",IDC_DATETIMEPICKER_DIALOG_TASK_SETTINGS_TERM,
+                    "SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,115,170,130,15
+    LTEXT           "Срок исполнения  ",IDC_STATIC,5,170,105,15,SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_RIGHT
+    LTEXT           "Проект  ",IDC_STATIC,5,190,105,15,SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_RIGHT
+    COMBOBOX        IDC_COMBO_DIALOG_TASK_SETTINGS_PROJECT,115,190,130,75,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_TASK_SETTINGS_CANCEL,300,235,85,29,NOT WS_VISIBLE
+    PUSHBUTTON      "Отправить задание",IDC_BUTTON_DIALOG_TASK_SETTINGS_OK,300,270,85,29
+    PUSHBUTTON      "Завершить задание",IDC_BUTTON_DIALOG_TASK_SETTINGS_TASK_FINISHED,300,130,85,80,BS_BITMAP
+    LTEXT           "Задание для  ",IDC_STATIC,5,130,105,15,SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_RIGHT
+    COMBOBOX        IDC_COMBO_DIALOG_TASK_SETTINGS_USER,115,130,130,75,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Телефон исполнителя  ",IDC_STATIC,5,150,105,15,SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_RIGHT
+    EDITTEXT        IDC_EDIT_DIALOG_TASK_SETTINGS_TELEPHONE,115,150,130,14,ES_AUTOHSCROLL | ES_READONLY
+    CTEXT           "Завершить задание",IDC_STATIC_DIALOG_TASK_SETTINGS_TASK_FINISHED,300,215,85,13,SS_CENTERIMAGE
     GROUPBOX        "Ответ исполнителя",IDC_STATIC,5,305,380,75,BS_CENTER
-    EDITTEXT        IDC_EDIT_DIALOG_TASK_SETTINGS_ANSWER,10,313,370,60,
-                    ES_MULTILINE | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | 
-                    WS_HSCROLL,WS_EX_DLGMODALFRAME
-    CONTROL         "Плановая позиция",
-                    IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,210,105,10
-    PUSHBUTTON      "Задать ссылку на сетевой файл",
-                    IDC_BUTTON_DIALOG_TASK_SETTINGS_SET_TASK_REFERENCE,5,235,
-                    245,14
-    PUSHBUTTON      "Удалить ссылку на сетевой файл",
-                    IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE,5,
-                    260,245,14
-    PUSHBUTTON      "Открыть ссылку на сетевой файл",
-                    IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE,5,
-                    285,245,14
-    PUSHBUTTON      "Открыть ссылку на сетевой файл ответа",
-                    IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE,5,
-                    385,380,14
+    EDITTEXT        IDC_EDIT_DIALOG_TASK_SETTINGS_ANSWER,10,313,370,60,ES_MULTILINE | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,WS_EX_DLGMODALFRAME
+    CONTROL         "Плановая позиция",IDC_DIALOG_TASK_SETTINGS_PLANNED_POSITION,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,210,105,10
+    PUSHBUTTON      "Задать ссылку на сетевой файл",IDC_BUTTON_DIALOG_TASK_SETTINGS_SET_TASK_REFERENCE,5,235,245,14
+    PUSHBUTTON      "Удалить ссылку на сетевой файл",IDC_BUTTON_DIALOG_TASK_SETTINGS_RESET_TASK_REFERENCE,5,260,245,14
+    PUSHBUTTON      "Открыть ссылку на сетевой файл",IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_TASK_REFERENCE,5,285,245,14
+    PUSHBUTTON      "Открыть ссылку на сетевой файл ответа",IDC_BUTTON_DIALOG_TASK_SETTINGS_OPEN_ANSWER_REFERENCE,5,385,380,14
     CONTROL         "Задание видно всем",IDC_DIALOG_TASK_SETTINGS_COMMON,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,115,210,105,10
 END
 
 IDD_DIALOG_CLIENT_SETTINGS DIALOGEX 0, 0, 172, 121
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Настройки подключения"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "Логин",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | 
-                    SS_CENTERIMAGE | WS_GROUP,5,5,55,15,WS_EX_CLIENTEDGE | 
-                    WS_EX_STATICEDGE
-    EDITTEXT        IDC_EDIT_DIALOG_CLIENT_SETTINGS_LOGIN,65,5,100,14,
-                    ES_AUTOHSCROLL
-    CONTROL         "Пароль",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | 
-                    SS_CENTERIMAGE | WS_GROUP,5,25,55,15,WS_EX_CLIENTEDGE | 
-                    WS_EX_STATICEDGE
-    EDITTEXT        IDC_EDIT_DIALOG_CLIENT_SETTINGS_PASSWORD,65,25,100,14,
-                    ES_PASSWORD | ES_AUTOHSCROLL
-    CONTROL         "IPAddress1",
-                    IDC_IPADDRESS_DIALOG_CLIENT_SETTINGS_SERVER_IP,
+    CONTROL         "Логин",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | WS_GROUP,5,5,55,15,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_DIALOG_CLIENT_SETTINGS_LOGIN,65,5,100,14,ES_AUTOHSCROLL
+    CONTROL         "Пароль",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | WS_GROUP,5,25,55,15,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_DIALOG_CLIENT_SETTINGS_PASSWORD,65,25,100,14,ES_PASSWORD | ES_AUTOHSCROLL
+    CONTROL         "IPAddress1",IDC_IPADDRESS_DIALOG_CLIENT_SETTINGS_SERVER_IP,
                     "SysIPAddress32",WS_TABSTOP,65,45,100,15
-    CONTROL         "IP сервера",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | 
-                    SS_CENTERIMAGE | WS_GROUP,5,45,55,15,WS_EX_CLIENTEDGE | 
-                    WS_EX_STATICEDGE
-    CONTROL         "Порт сервера",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | 
-                    SS_CENTERIMAGE | WS_GROUP,5,65,55,15,WS_EX_CLIENTEDGE | 
-                    WS_EX_STATICEDGE
-    EDITTEXT        IDC_EDIT_DIALOG_CLIENT_SETTINGS_SERVER_PORT,65,65,100,14,
-                    ES_AUTOHSCROLL | ES_NUMBER
-    PUSHBUTTON      "Применить",IDC_BUTTON_DIALOG_CLIENT_SETTINGS_OK,5,100,
-                    50,14
-    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_CLIENT_SETTINGS_CANCEL,115,
-                    100,50,14
-    CONTROL         "Загружать вместе с Windows",
-                    IDC_CHECK_DIALOG_CLIENT_SETTINGS_RUN_ON_WINDOWS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,85,160,10
+    CONTROL         "IP сервера",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | WS_GROUP,5,45,55,15,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    CONTROL         "Порт сервера",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | WS_GROUP,5,65,55,15,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_DIALOG_CLIENT_SETTINGS_SERVER_PORT,65,65,100,14,ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "Применить",IDC_BUTTON_DIALOG_CLIENT_SETTINGS_OK,5,100,50,14
+    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_CLIENT_SETTINGS_CANCEL,115,100,50,14
+    CONTROL         "Загружать вместе с Windows",IDC_CHECK_DIALOG_CLIENT_SETTINGS_RUN_ON_WINDOWS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,85,160,10
 END
 
 IDD_DIALOG_USER_SETTINGS DIALOGEX 0, 0, 247, 215
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Параметры контакта"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_NAME,100,5,140,14,
-                    ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_JOB_TITLE,100,30,140,14,
-                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_NAME,100,5,140,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_JOB_TITLE,100,30,140,14,ES_AUTOHSCROLL | ES_READONLY
     GROUPBOX        "Описание",IDC_STATIC,5,75,235,135,BS_CENTER
-    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_DESCRIPTION,11,85,224,120,
-                    ES_MULTILINE | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | 
-                    WS_HSCROLL,WS_EX_STATICEDGE
-    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_TELEPHONE,100,55,140,14,
-                    ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "ФИО",IDC_STATIC,5,5,89,15,SS_CENTERIMAGE,
-                    WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
-    LTEXT           "Должность",IDC_STATIC,5,30,89,15,SS_CENTERIMAGE,
-                    WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
-    LTEXT           "Телефон",IDC_STATIC,5,55,89,15,SS_CENTERIMAGE,
-                    WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_DESCRIPTION,11,85,224,120,ES_MULTILINE | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_DIALOG_USER_SETTINGS_TELEPHONE,100,55,140,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "ФИО",IDC_STATIC,5,5,89,15,SS_CENTERIMAGE,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    LTEXT           "Должность",IDC_STATIC,5,30,89,15,SS_CENTERIMAGE,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    LTEXT           "Телефон",IDC_STATIC,5,55,89,15,SS_CENTERIMAGE,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
 END
 
 IDD_DIALOG_TASK_SET_STATE DIALOGEX 0, 0, 267, 406
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Действие с задачей"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_TASK_SET_STATE_CANCEL,5,380,
-                    255,20
-    EDITTEXT        IDC_EDIT_DIALOG_TASK_SET_STATE_TASK,5,5,255,105,
-                    ES_MULTILINE | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | 
-                    WS_HSCROLL,WS_EX_DLGMODALFRAME
-    EDITTEXT        IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER,10,160,245,65,
-                    ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,
-                    WS_EX_DLGMODALFRAME
-    GROUPBOX        "Ответ выдавшему задание",IDC_STATIC,5,150,255,80,
-                    BS_CENTER
+    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_TASK_SET_STATE_CANCEL,5,380,255,20
+    EDITTEXT        IDC_EDIT_DIALOG_TASK_SET_STATE_TASK,5,5,255,105,ES_MULTILINE | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,WS_EX_DLGMODALFRAME
+    EDITTEXT        IDC_EDIT_DIALOG_TASK_SET_STATE_ANSWER,10,160,245,65,ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL,WS_EX_DLGMODALFRAME
+    GROUPBOX        "Ответ выдавшему задание",IDC_STATIC,5,150,255,80,BS_CENTER
     GROUPBOX        "Ссылка",IDC_STATIC,5,115,255,30,BS_CENTER
-    PUSHBUTTON      "Задать в ответе ссылку на сетевой файл",
-                    IDC_BUTTON_DIALOG_TASK_SET_STATE_SET_ANSWER_REFERENCE,5,
-                    235,255,14
-    PUSHBUTTON      "Открыть ссылку на сетевой файл",
-                    IDC_BUTTON_DIALOG_TASK_SET_STATE_OPEN_TASK_REFERENCE,10,
-                    125,245,14
-    PUSHBUTTON      "Удалить в ответе ссылку на сетевой файл",
-                    IDC_BUTTON_DIALOG_TASK_SET_STATE_RESET_ANSWER_REFERENCE,
-                    5,255,255,14
+    PUSHBUTTON      "Задать в ответе ссылку на сетевой файл",IDC_BUTTON_DIALOG_TASK_SET_STATE_SET_ANSWER_REFERENCE,5,235,255,14
+    PUSHBUTTON      "Открыть ссылку на сетевой файл",IDC_BUTTON_DIALOG_TASK_SET_STATE_OPEN_TASK_REFERENCE,10,125,245,14
+    PUSHBUTTON      "Удалить в ответе ссылку на сетевой файл",IDC_BUTTON_DIALOG_TASK_SET_STATE_RESET_ANSWER_REFERENCE,5,255,255,14
     GROUPBOX        "Ссылка",IDC_STATIC,5,275,255,30,BS_CENTER
-    PUSHBUTTON      "Открыть ссылку на сетевой файл",
-                    IDC_BUTTON_DIALOG_TASK_SET_STATE_OPEN_ANSWER_REFERENCE,
-                    10,285,245,14
-    PUSHBUTTON      "1",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_READ,5,310,55,
-                    50,BS_BITMAP
-    PUSHBUTTON      "3",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_DONE,140,310,
-                    55,50,BS_BITMAP
-    PUSHBUTTON      "2",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_IS_RUNNING,70,
-                    310,55,50,BS_BITMAP
-    PUSHBUTTON      "4",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_CANCEL,205,310,
-                    55,50,BS_BITMAP
+    PUSHBUTTON      "Открыть ссылку на сетевой файл",IDC_BUTTON_DIALOG_TASK_SET_STATE_OPEN_ANSWER_REFERENCE,10,285,245,14
+    PUSHBUTTON      "1",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_READ,5,310,55,50,BS_BITMAP
+    PUSHBUTTON      "3",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_DONE,140,310,55,50,BS_BITMAP
+    PUSHBUTTON      "2",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_IS_RUNNING,70,310,55,50,BS_BITMAP
+    PUSHBUTTON      "4",IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_CANCEL,205,310,55,50,BS_BITMAP
     CTEXT           "Прочитано",IDC_STATIC,5,365,55,8
     CTEXT           "Выполняется",IDC_STATIC,70,365,55,8
     CTEXT           "Выполнено",IDC_STATIC,140,365,55,8
     CTEXT           "Отклонено",IDC_STATIC,205,365,55,8
 END
 
-IDD_DIALOG_ABOUT DIALOG DISCARDABLE  0, 0, 247, 222
-STYLE DS_MODALFRAME | WS_POPUP
+IDD_DIALOG_ABOUT DIALOG 0, 0, 247, 222
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP
 FONT 8, "MS Sans Serif"
 BEGIN
     CTEXT           "Добро пожаловать в команду!",IDC_STATIC,5,210,235,8
@@ -335,33 +246,25 @@ BEGIN
 END
 
 IDD_DIALOG_PROJECT_SETTINGS DIALOGEX 0, 0, 287, 47
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Параметры проекта"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_PROJECT_SETTINGS_CANCEL,5,25,
-                    50,14
-    PUSHBUTTON      "Применить",IDC_BUTTON_DIALOG_PROJECT_SETTINGS_OK,230,25,
-                    50,14
-    EDITTEXT        IDC_EDIT_DIALOG_PROJECT_SETTINGS_PROJECT_NAME,85,5,195,
-                    14,ES_AUTOHSCROLL
-    LTEXT           "Название проекта",IDC_STATIC,5,5,75,13,SS_CENTERIMAGE,
-                    WS_EX_STATICEDGE
+    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_PROJECT_SETTINGS_CANCEL,5,25,50,14
+    PUSHBUTTON      "Применить",IDC_BUTTON_DIALOG_PROJECT_SETTINGS_OK,230,25,50,14
+    EDITTEXT        IDC_EDIT_DIALOG_PROJECT_SETTINGS_PROJECT_NAME,85,5,195,14,ES_AUTOHSCROLL
+    LTEXT           "Название проекта",IDC_STATIC,5,5,75,13,SS_CENTERIMAGE,WS_EX_STATICEDGE
 END
 
-IDD_DIALOG_DELETE_FINISHED_TASK DIALOG DISCARDABLE  0, 0, 517, 47
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+IDD_DIALOG_DELETE_FINISHED_TASK DIALOG 0, 0, 517, 47
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Удаление завершённых заданий"
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Удалить все выданные вами и завершённые задания до заданной даты (включительно)",
-                    IDC_BUTTON_DIALOG_DELETE_FINISHED_TASK_DELETE,5,5,400,14
-    CONTROL         "DateTimePicker1",
-                    IDC_DATETIMEPICKER_DIALOG_DELETE_FINISHED_TASK_DATE,
-                    "SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,410,5,
-                    100,15
-    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_DELETE_FINISHED_TASK_CANCEL,5,
-                    25,400,14
+    PUSHBUTTON      "Удалить все выданные вами и завершённые задания до заданной даты (включительно)",IDC_BUTTON_DIALOG_DELETE_FINISHED_TASK_DELETE,5,5,400,14
+    CONTROL         "DateTimePicker1",IDC_DATETIMEPICKER_DIALOG_DELETE_FINISHED_TASK_DATE,
+                    "SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,410,5,100,15
+    PUSHBUTTON      "Отмена",IDC_BUTTON_DIALOG_DELETE_FINISHED_TASK_CANCEL,5,25,400,14
 END
 
 
@@ -371,7 +274,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO
 BEGIN
     IDD_DIALOG_TASK_SETTINGS, DIALOG
     BEGIN
@@ -437,16 +340,16 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON_SYSTRAY        ICON    DISCARDABLE     "bitmap\\systray_icon.ico"
-IDI_ICON_SYSTRAY_NOT_READ_INVERSE ICON    DISCARDABLE     "bitmap\\systray_icon_not_read_inverse.ico"
-IDI_ICON_SYSTRAY_NOT_READ ICON    DISCARDABLE     "bitmap\\systray_icon_not_read.ico"
+IDI_ICON_SYSTRAY        ICON                    "bitmap\\systray_icon.ico"
+IDI_ICON_SYSTRAY_NOT_READ_INVERSE ICON                    "bitmap\\systray_icon_not_read_inverse.ico"
+IDI_ICON_SYSTRAY_NOT_READ ICON                    "bitmap\\systray_icon_not_read.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE
 BEGIN
     IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_CANCELLED 
                             "Показывать отменённые задания в списке выданных вами\nПоказывать отменённые задания в списке выданных вами"
@@ -460,7 +363,7 @@ BEGIN
                             "Показывать выполняемые задания в списке выданных вами\nПоказывать выполняемые задания в списке выданных вами"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE
 BEGIN
     IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_READED 
                             "Показывать прочитанные задания в списке выданных вами\nПоказывать прочитанные задания в списке выданных вами"
@@ -480,7 +383,7 @@ BEGIN
                             "Показать общие задания в списке выданных вместо выданных вами\nПоказать общие задания в списке выданных вместо выданных вами"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE
 BEGIN
     IDC_BUTTON_DIALOG_TASK_SET_STATE_TASK_READ 
                             "Задание прочитано\nЗадание прочитано"
@@ -492,7 +395,12 @@ BEGIN
                             "Задание отклонено\nЗадание отклонено"
 END
 
-#endif    // Russian resources
+STRINGTABLE
+BEGIN
+    IDR_MENU_MAIN           "TCC\n\nTCC\n\n\nTCC.Document\nTCC.Document"
+END
+
+#endif    // Russian (Russia) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

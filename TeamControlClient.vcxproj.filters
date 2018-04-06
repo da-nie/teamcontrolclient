@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cvector_task.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cvector_user.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cview_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cview_mytasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cview_outtasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cbitmapcell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdialog_about.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdialog_clientsettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdialog_deletefinishedtask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdialog_projectsettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdialog_tasksetstate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdialog_tasksettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdialog_usersettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cdocument_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cfillcell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cframecell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cframewnd_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cicell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="clinetextcell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cproject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="csafestring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctextcell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cthreadclient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctransceiver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctransceiver_autorization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctransceiver_file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctransceiver_ping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctransceiver_project.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctransceiver_task.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctransceiver_user.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctreeview_kit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cuser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cvector_project.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cvector_task.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cvector_user.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cview_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cview_mytasks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cview_outtasks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cbitmapcell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdialog_about.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdialog_clientsettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdialog_deletefinishedtask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdialog_projectsettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdialog_tasksetstate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdialog_tasksettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdialog_usersettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cdocument_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cfillcell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cframecell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cframewnd_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cicell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="clinetextcell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cproject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="craiiccriticalsection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="csafestring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctextcell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cthreadclient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransceiver_autorization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransceiver_file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransceiver_ping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransceiver_project.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransceiver_task.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransceiver_user.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctreeview_kit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cuser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cvector_project.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Bitmap\user.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_add_task.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_delete_task.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_edit_task.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_repeat_task.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_not_read_frame_one.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_not_read_frame_two.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_is_running_frame_one.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_is_running_frame_two.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_done_frame_one.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_done_frame_two.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_task_done.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_task_is_running.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_task_readed.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_user_info.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_canceled_frame_one.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_canceled_frame_two.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_readed_frame_one.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_readed_frame_two.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_finished.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\menu_task_finished.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\toolbar_main.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\about.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bitmap\task_finished_big.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap\systray_icon.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap\systray_icon_not_read_inverse.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap\systray_icon_not_read.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap\toolbar1.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

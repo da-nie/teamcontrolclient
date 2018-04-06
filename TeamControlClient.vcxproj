@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CEF00EFC-084A-4EFA-BC0A-80907C6EB1B9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TeamControlClient</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <ResourceCompile>
+      <Culture>0x3009</Culture>
+    </ResourceCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="cbitmapcell.cpp" />
+    <ClCompile Include="cdate.cpp" />
+    <ClCompile Include="cdialog_about.cpp" />
+    <ClCompile Include="cdialog_clientsettings.cpp" />
+    <ClCompile Include="cdialog_deletefinishedtask.cpp" />
+    <ClCompile Include="cdialog_projectsettings.cpp" />
+    <ClCompile Include="cdialog_tasksetstate.cpp" />
+    <ClCompile Include="cdialog_tasksettings.cpp" />
+    <ClCompile Include="cdialog_usersettings.cpp" />
+    <ClCompile Include="cdocument_main.cpp" />
+    <ClCompile Include="cfillcell.cpp" />
+    <ClCompile Include="cframecell.cpp" />
+    <ClCompile Include="cframewnd_main.cpp" />
+    <ClCompile Include="cicell.cpp" />
+    <ClCompile Include="clinetextcell.cpp" />
+    <ClCompile Include="cproject.cpp" />
+    <ClCompile Include="csafestring.cpp" />
+    <ClCompile Include="ctask.cpp" />
+    <ClCompile Include="ctextcell.cpp" />
+    <ClCompile Include="cthreadclient.cpp" />
+    <ClCompile Include="ctransceiver.cpp" />
+    <ClCompile Include="ctransceiver_autorization.cpp" />
+    <ClCompile Include="ctransceiver_file.cpp" />
+    <ClCompile Include="ctransceiver_ping.cpp" />
+    <ClCompile Include="ctransceiver_project.cpp" />
+    <ClCompile Include="ctransceiver_task.cpp" />
+    <ClCompile Include="ctransceiver_user.cpp" />
+    <ClCompile Include="ctreeview_kit.cpp" />
+    <ClCompile Include="cuser.cpp" />
+    <ClCompile Include="cvector_project.cpp" />
+    <ClCompile Include="cvector_task.cpp" />
+    <ClCompile Include="cvector_user.cpp" />
+    <ClCompile Include="cview_base.cpp" />
+    <ClCompile Include="cview_mytasks.cpp" />
+    <ClCompile Include="cview_outtasks.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cbitmapcell.h" />
+    <ClInclude Include="cdate.h" />
+    <ClInclude Include="cdialog_about.h" />
+    <ClInclude Include="cdialog_clientsettings.h" />
+    <ClInclude Include="cdialog_deletefinishedtask.h" />
+    <ClInclude Include="cdialog_projectsettings.h" />
+    <ClInclude Include="cdialog_tasksetstate.h" />
+    <ClInclude Include="cdialog_tasksettings.h" />
+    <ClInclude Include="cdialog_usersettings.h" />
+    <ClInclude Include="cdocument_main.h" />
+    <ClInclude Include="cfillcell.h" />
+    <ClInclude Include="cframecell.h" />
+    <ClInclude Include="cframewnd_main.h" />
+    <ClInclude Include="cicell.h" />
+    <ClInclude Include="clinetextcell.h" />
+    <ClInclude Include="cproject.h" />
+    <ClInclude Include="craiiccriticalsection.h" />
+    <ClInclude Include="csafestring.h" />
+    <ClInclude Include="ctask.h" />
+    <ClInclude Include="ctextcell.h" />
+    <ClInclude Include="cthreadclient.h" />
+    <ClInclude Include="ctransceiver.h" />
+    <ClInclude Include="ctransceiver_autorization.h" />
+    <ClInclude Include="ctransceiver_file.h" />
+    <ClInclude Include="ctransceiver_ping.h" />
+    <ClInclude Include="ctransceiver_project.h" />
+    <ClInclude Include="ctransceiver_task.h" />
+    <ClInclude Include="ctransceiver_user.h" />
+    <ClInclude Include="ctreeview_kit.h" />
+    <ClInclude Include="cuser.h" />
+    <ClInclude Include="cvector_project.h" />
+    <ClInclude Include="cvector_task.h" />
+    <ClInclude Include="cvector_user.h" />
+    <ClInclude Include="cview_base.h" />
+    <ClInclude Include="cview_mytasks.h" />
+    <ClInclude Include="cview_outtasks.h" />
+    <ClInclude Include="protocol.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Bitmap\about.bmp" />
+    <None Include="Bitmap\menu_add_task.bmp" />
+    <None Include="Bitmap\menu_delete_task.bmp" />
+    <None Include="Bitmap\menu_edit_task.bmp" />
+    <None Include="Bitmap\menu_repeat_task.bmp" />
+    <None Include="Bitmap\menu_task_done.bmp" />
+    <None Include="Bitmap\menu_task_finished.bmp" />
+    <None Include="Bitmap\menu_task_is_running.bmp" />
+    <None Include="Bitmap\menu_task_readed.bmp" />
+    <None Include="Bitmap\menu_user_info.bmp" />
+    <None Include="bitmap\systray_icon.ico" />
+    <None Include="bitmap\systray_icon_not_read.ico" />
+    <None Include="bitmap\systray_icon_not_read_inverse.ico" />
+    <None Include="Bitmap\task_canceled_frame_one.bmp" />
+    <None Include="Bitmap\task_canceled_frame_two.bmp" />
+    <None Include="Bitmap\task_done_frame_one.bmp" />
+    <None Include="Bitmap\task_done_frame_two.bmp" />
+    <None Include="Bitmap\task_finished.bmp" />
+    <None Include="Bitmap\task_finished_big.bmp" />
+    <None Include="Bitmap\task_is_running_frame_one.bmp" />
+    <None Include="Bitmap\task_is_running_frame_two.bmp" />
+    <None Include="Bitmap\task_not_read_frame_one.bmp" />
+    <None Include="Bitmap\task_not_read_frame_two.bmp" />
+    <None Include="Bitmap\task_readed_frame_one.bmp" />
+    <None Include="Bitmap\task_readed_frame_two.bmp" />
+    <None Include="bitmap\toolbar1.bmp" />
+    <None Include="Bitmap\toolbar_main.bmp" />
+    <None Include="Bitmap\user.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
