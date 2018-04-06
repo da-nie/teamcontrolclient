@@ -195,6 +195,7 @@ class CDocument_Main:public CDocument
   void FindAllMyParam(void);//определить все наши параметры (имя, руководитель ли)
   //-Прочее------------------------------------------------------------------
   DECLARE_DYNCREATE(CDocument_Main) 
+  DECLARE_MESSAGE_MAP()
 };
 
 #endif

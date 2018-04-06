@@ -20,7 +20,7 @@ class CWinApp_Main:public CWinApp
   ~CWinApp_Main();
   //-Переменные класса-------------------------------------------------------
   //-Функции класса----------------------------------------------------------
-  BOOL InitInstance(void);
+  virtual BOOL InitInstance(void);
   int ExitInstance(void);
   //-Прочее------------------------------------------------------------------
 };
@@ -35,6 +35,8 @@ CWinApp_Main::~CWinApp_Main()
 //-Функции класса------------------------------------------------------------
 BOOL CWinApp_Main::InitInstance(void)
 { 
+ CWinApp::InitInstance();
+
  char FileName[MAX_PATH];
  GetModuleFileName(NULL,FileName,MAX_PATH);
  //отматываем до черты
@@ -63,20 +65,25 @@ BOOL CWinApp_Main::InitInstance(void)
  }
  if (wsadata.wVersion!=0x0202)
  {
-  MessageBox(NULL,"Не верная версия библиотеки сокетов.","Ошибка",MB_OK);
+  MessageBox(NULL,"Неверная версия библиотеки сокетов.","Ошибка",MB_OK);
   WSACleanup();
   return(FALSE);
- }
+ } 
  CSingleDocTemplate* pDocTemplate;//новый шаблон 
- pDocTemplate=new CSingleDocTemplate(IDR_MENU_MAIN,RUNTIME_CLASS(CDocument_Main),RUNTIME_CLASS(CFrameWnd_Main),RUNTIME_CLASS(CView_OutTasks));
- AddDocTemplate(pDocTemplate);//добавить шаблон
- CCommandLineInfo cmdInfo;//класс команд
- ParseCommandLine(cmdInfo);//разбор командной строки
- if (!ProcessShellCommand(cmdInfo)) return(FALSE);//запуск команд на выполнение
+ pDocTemplate=new CSingleDocTemplate(IDR_MENU_MAIN,RUNTIME_CLASS(CDocument_Main),RUNTIME_CLASS(CFrameWnd_Main),RUNTIME_CLASS(CTreeView_Kit));
+ if (pDocTemplate==NULL)
+ {
+  MessageBox(NULL,"Не могу создать шаблон!","Ошибка",MB_OK);
+  return(false);
+ }
+ AddDocTemplate(pDocTemplate);//добавить шаблон 
+ CCommandLineInfo cmdInfo;//класс команд 
+ ParseCommandLine(cmdInfo);//разбор командной строки 
+ if (!ProcessShellCommand(cmdInfo)) return(FALSE);//запуск команд на выполнение 
  m_pMainWnd->SetWindowText("Клиент Team Control");
  //m_pMainWnd->SetWindowPos(NULL,0,0,640,480,0);
- m_pMainWnd->ShowWindow(SW_SHOW);//показать окно
- m_pMainWnd->UpdateWindow();//запустить цикл обработки сообщений
+ m_pMainWnd->ShowWindow(SW_SHOW);//показать окно 
+ m_pMainWnd->UpdateWindow();//запустить цикл обработки сообщений 
  return(TRUE);
 }
 int CWinApp_Main::ExitInstance(void)

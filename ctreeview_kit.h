@@ -83,6 +83,7 @@ class CTreeView_Kit:public CTreeView
   afx_msg BOOL PreCreateWindow(CREATESTRUCT& cs);//предсоздание окна
   afx_msg void OnInitialUpdate(void);//создание окна
   afx_msg void OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint);//обновление вида
+  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);//создание окна
   //-Функции обработки сообщений класса--------------------------------------
   afx_msg void OnDestroy(void);//уничтожение окна
   afx_msg void OnSize(UINT nType,int cx,int cy);//изменение размеров окна

@@ -111,6 +111,7 @@ void CTextCell::SetStrikeOutColor(const COLORREF &color)
 //----------------------------------------------------------------------------------------------------
 void CTextCell::SetTextFont(const LOGFONT &lf)
 {
+ cFont_Text.DeleteObject();
  cFont_Text.CreateFontIndirect(&lf);
 }
 //----------------------------------------------------------------------------------------------------

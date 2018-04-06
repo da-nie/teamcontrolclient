@@ -11,6 +11,7 @@ BEGIN_MESSAGE_MAP(CTreeView_Kit,CTreeView)
  ON_WM_LBUTTONDBLCLK()
  ON_WM_TIMER()
  ON_WM_DESTROY()
+ ON_WM_CREATE()
  ON_NOTIFY_REFLECT(TVN_SELCHANGED,OnSelchanged)
  ON_COMMAND(IDC_MENU_LIST_TREE_VIEW_ADD_TASK,OnCommand_Menu_List_AddTask) 
  ON_COMMAND(IDC_MENU_LIST_TREE_VIEW_USER_INFO,OnCommand_Menu_List_UserInfo)
@@ -25,7 +26,7 @@ END_MESSAGE_MAP()
 CTreeView_Kit::CTreeView_Kit() 
 { 
  hTREEITEM_Colleague=NULL;
- hTREEITEM_Projects=NULL;
+ hTREEITEM_Projects=NULL; 
 }
 //====================================================================================================
 //деструктор класса
@@ -93,6 +94,14 @@ afx_msg void CTreeView_Kit::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
 {
  UpdateTree();
  CTreeView::OnUpdate(pSender,lHint,pHint);
+}
+//----------------------------------------------------------------------------------------------------
+//создание окна
+//----------------------------------------------------------------------------------------------------
+afx_msg int CTreeView_Kit::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+ if (CTreeView::OnCreate(lpCreateStruct)==-1) return(-1);
+ return (0);
 }
 
 //====================================================================================================

@@ -11,6 +11,7 @@ BEGIN_MESSAGE_MAP(CView_OutTasks,CView)
  ON_WM_LBUTTONDOWN()
  ON_WM_LBUTTONDBLCLK()
  ON_WM_MOUSEWHEEL()
+ ON_WM_CREATE()
  ON_WM_TIMER()
  ON_WM_DESTROY()
  ON_WM_VSCROLL()
@@ -45,6 +46,7 @@ CView_OutTasks::~CView_OutTasks()
 //----------------------------------------------------------------------------------------------------
 afx_msg void CView_OutTasks::OnInitialUpdate(void)
 { 	
+ CView_Base::OnInitialUpdate();
  //создадим контекстное меню
  cMenu_List.LoadMenu(IDR_MENU_LIST_VIEW_OUT_TASK);
  //загружаем изображения
@@ -53,7 +55,6 @@ afx_msg void CView_OutTasks::OnInitialUpdate(void)
  cBitmap_MenuList_RepeatTask.LoadBitmap(IDB_BITMAP_MENU_REPEAT_TASK);
  cBitmap_MenuList_SetTaskFinished.LoadBitmap(IDB_BITMAP_MENU_TASK_FINISHED);
  cBitmap_MenuList_SendTaskCopy.LoadBitmap(IDB_BITMAP_MENU_ADD_TASK);
- CView_Base::OnInitialUpdate();
 }
 //----------------------------------------------------------------------------------------------------
 //обновить вид

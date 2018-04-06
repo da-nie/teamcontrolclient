@@ -47,6 +47,7 @@ CView_MyTasks::~CView_MyTasks()
 //----------------------------------------------------------------------------------------------------
 afx_msg void CView_MyTasks::OnInitialUpdate(void)
 { 
+ CView_Base::OnInitialUpdate();
  //создадим контекстное меню
  cMenu_List.LoadMenu(IDR_MENU_LIST_VIEW_MY_TASK);
  //загружаем изображения
@@ -55,8 +56,6 @@ afx_msg void CView_MyTasks::OnInitialUpdate(void)
  cBitmap_MenuList_SetTaskIsRunning.LoadBitmap(IDB_BITMAP_MENU_TASK_IS_RUNNING);
  cBitmap_MenuList_SetTaskCanceled.LoadBitmap(IDB_BITMAP_MENU_DELETE_TASK);
  cBitmap_MenuList_SendTask.LoadBitmap(IDB_BITMAP_MENU_ADD_TASK);
-
- CView_Base::OnInitialUpdate();
 }
 //----------------------------------------------------------------------------------------------------
 //обновить вид

@@ -107,6 +107,7 @@ void CLineTextCell::SetStrikeOutColor(const COLORREF &color)
 //----------------------------------------------------------------------------------------------------
 void CLineTextCell::SetTextFont(const LOGFONT &lf)
 {
+ cFont_Text.DeleteObject();
  cFont_Text.CreateFontIndirect(&lf);
 }
 //----------------------------------------------------------------------------------------------------

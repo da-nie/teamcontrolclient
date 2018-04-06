@@ -96,6 +96,7 @@ class CView_Base:public CView
   afx_msg void OnDestroy(void);//уничтожение окна
   afx_msg void OnVScroll(UINT nSBCode,UINT nPos,CScrollBar* pScrollBar);//вертикальная полоса прокрутки
   afx_msg BOOL OnMouseWheel(UINT nFlags,short zDelta,CPoint pt);//вращение колёсика мышки
+  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);//создание окна
  public:
   //-Функции класса----------------------------------------------------------
  protected:

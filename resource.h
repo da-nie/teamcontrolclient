@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by Resource.rc
 //
 #define IDC_MONTHCALENDAR_NOT_USED      100
@@ -86,6 +86,8 @@
 #define IDB_BITMAP_TASK_IS_RUNNING_FRAME_TWO 2037
 #define IDB_BITMAP_TASK_CANCELED_FRAME_TWO 2038
 #define IDB_BITMAP_TASK_READED_FRAME_TWO 2039
+#define IDR_TOOLBAR1                    2040
+#define IDB_BITMAP1                     2041
 #define IDC_MENU_LIST_TREE_VIEW_ADD_TASK 4000
 #define IDC_MENU_LIST_VIEW_OUT_TASK_REPEAT_TASK 4001
 #define IDC_MENU_LIST_VIEW_OUT_TASK_DELETE_TASK 4002
@@ -125,7 +127,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        2040
+#define _APS_NEXT_RESOURCE_VALUE        2042
 #define _APS_NEXT_COMMAND_VALUE         4031
 #define _APS_NEXT_CONTROL_VALUE         1041
 #define _APS_NEXT_SYMED_VALUE           3000

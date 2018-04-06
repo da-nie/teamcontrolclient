@@ -48,9 +48,17 @@ bool CVectorProject::Load(char *filename)
  FILE *file=fopen(filename,"rb");
  if (file==NULL) return(false);
  unsigned char signature[3];
- unsigned char version;
- fread(&signature,sizeof(unsigned char),3,file);
- fread(&version,sizeof(unsigned long),1,file);
+ unsigned long version;
+ if (fread(signature,sizeof(unsigned char),3,file)<3)
+ {
+  fclose(file);
+  return(false);
+ }
+ if (fread(&version,sizeof(unsigned long),1,file)<1)
+ {
+  fclose(file);
+  return(false);
+ }
  if (signature[0]!='P' || signature[1]!='L' || signature[2]!='V' || version!=Version)
  {
   fclose(file);
@@ -58,7 +66,11 @@ bool CVectorProject::Load(char *filename)
  }
 
  size_t size;
- fread(&size,sizeof(size_t),1,file);
+ if (fread(&size,sizeof(size_t),1,file)<1)
+ {
+  fclose(file);
+  return(false);
+ }
  for(size_t n=0;n<size;n++)
  {
   CProject cProject;

@@ -5,6 +5,9 @@
 //====================================================================================================
 CView_Base::CView_Base() 
 { 
+ FlashState=false;
+ SelectedTaskGUID="";
+
  Logfont_Task.lfHeight=8; 
  Logfont_Task.lfWidth=0; 
  Logfont_Task.lfEscapement=0;
@@ -95,38 +98,6 @@ CView_Base::CView_Base()
  Logfont_PlannedPosition.lfPitchAndFamily=DEFAULT_PITCH;  
  strcpy(Logfont_PlannedPosition.lfFaceName,"Arial Black"); 
 
- FlashState=false;
- SelectedTaskGUID="";
-
- cTextCell_TaskDate.SetTextFont(Logfont_TaskDate);
- cTextCell_TaskDate.SetTextColor(RGB(0,0,255));
-
- cTextCell_Task.SetTextFont(Logfont_Task);
- cTextCell_Task.SetTextColor(RGB(0,0,0)); 
-
- cTextCell_ForUser.SetTextFont(Logfont_ForUser);
- cTextCell_ForUser.SetTextColor(RGB(0,127,255));
-
- cTextCell_FromUser.SetTextFont(Logfont_FromUser);
- cTextCell_FromUser.SetTextColor(RGB(127,0,255));
-
- cTextCell_PlannedPosition.SetTextFont(Logfont_PlannedPosition);
- cTextCell_PlannedPosition.SetTextColor(RGB(255,64,64));
-
- cTextCell_Project.SetTextFont(Logfont_Task);
- cTextCell_Project.SetTextColor(RGB(32,127,32)); 
-
-
- cLineTextCell_ColumnName.SetTextFont(Logfont_ColumnName);
- cLineTextCell_ColumnName.SetTextColor(RGB(0,0,0));
-
- cFrameCell_TaskState.SetBorderColor(RGB(0,0,0));
- cFrameCell.SetBorderColor(RGB(0,0,0));
-
- cTextCell_Task.SetStrikeOutColor(RGB(192,192,192));
-
- cTextCell_PlannedPosition.SetText("ПЛАНОВАЯ ПОЗИЦИЯ !");
-
  VisibleFromUser=true;
  VisibleForUser=true;
 }
@@ -153,26 +124,6 @@ afx_msg BOOL CView_Base::PreCreateWindow(CREATESTRUCT& cs)
 //----------------------------------------------------------------------------------------------------
 afx_msg void CView_Base::OnInitialUpdate(void)
 { 	
- //создаём полосу прокрутки
- CRect cRect;
- GetClientRect(&cRect);
- cRect.left=cRect.right-GetScrollBarWidth(); 
- cScrollBar_ShiftItem.Create(WS_CHILD|WS_VISIBLE|SBS_VERT,cRect,this,IDC_SCROLLBAR_LIST_VIEW_OUT_TASK_SHIFT_ITEM);
- cScrollBar_ShiftItem.SetScrollRange(0,0,TRUE);
- cScrollBar_ShiftItem.EnableWindow(FALSE);
-
- cBitmap_TaskNotReadFrameOne.LoadBitmap(IDB_BITMAP_TASK_NOT_READ_FRAME_ONE);
- cBitmap_TaskNotReadFrameOneFlash.LoadBitmap(IDB_BITMAP_TASK_NOT_READ_FRAME_TWO);
- cBitmap_TaskDoneFrameOne.LoadBitmap(IDB_BITMAP_TASK_DONE_FRAME_ONE);
- cBitmap_TaskDoneFrameTwo.LoadBitmap(IDB_BITMAP_TASK_DONE_FRAME_TWO);
- cBitmap_TaskReadedFrameOne.LoadBitmap(IDB_BITMAP_TASK_READED_FRAME_ONE);
- cBitmap_TaskReadedFrameTwo.LoadBitmap(IDB_BITMAP_TASK_READED_FRAME_TWO);
- cBitmap_TaskIsRunningFrameOne.LoadBitmap(IDB_BITMAP_TASK_IS_RUNNING_FRAME_ONE);
- cBitmap_TaskIsRunningFrameTwo.LoadBitmap(IDB_BITMAP_TASK_IS_RUNNING_FRAME_TWO);
- cBitmap_TaskCanceledFrameOne.LoadBitmap(IDB_BITMAP_TASK_CANCELED_FRAME_ONE);
- cBitmap_TaskCanceledFrameTwo.LoadBitmap(IDB_BITMAP_TASK_CANCELED_FRAME_TWO);
- cBitmap_TaskFinished.LoadBitmap(IDB_BITMAP_TASK_FINISHED);
-
  CView::OnInitialUpdate();
  //запускаем таймер
  SetTimer(ID_TIMER_VIEW,500,NULL);
@@ -285,6 +236,62 @@ afx_msg BOOL CView_Base::OnMouseWheel(UINT nFlags,short zDelta,CPoint pt)
  cScrollBar_ShiftItem.SetScrollPos(hpos,TRUE);
  InvalidateRect(NULL,FALSE);
  return(TRUE);
+}
+//----------------------------------------------------------------------------------------------------
+//создание окна
+//----------------------------------------------------------------------------------------------------
+afx_msg int CView_Base::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+ if (CView::OnCreate(lpCreateStruct)==-1) return(-1);
+
+ //создаём полосу прокрутки
+ CRect cRect;
+ GetClientRect(&cRect);
+ cRect.left=cRect.right-GetScrollBarWidth(); 
+ cScrollBar_ShiftItem.Create(WS_CHILD|WS_VISIBLE|SBS_VERT,cRect,this,IDC_SCROLLBAR_LIST_VIEW_OUT_TASK_SHIFT_ITEM);
+ cScrollBar_ShiftItem.SetScrollRange(0,0,TRUE);
+ cScrollBar_ShiftItem.EnableWindow(FALSE);
+
+ cBitmap_TaskNotReadFrameOne.LoadBitmap(IDB_BITMAP_TASK_NOT_READ_FRAME_ONE);
+ cBitmap_TaskNotReadFrameOneFlash.LoadBitmap(IDB_BITMAP_TASK_NOT_READ_FRAME_TWO);
+ cBitmap_TaskDoneFrameOne.LoadBitmap(IDB_BITMAP_TASK_DONE_FRAME_ONE);
+ cBitmap_TaskDoneFrameTwo.LoadBitmap(IDB_BITMAP_TASK_DONE_FRAME_TWO);
+ cBitmap_TaskReadedFrameOne.LoadBitmap(IDB_BITMAP_TASK_READED_FRAME_ONE);
+ cBitmap_TaskReadedFrameTwo.LoadBitmap(IDB_BITMAP_TASK_READED_FRAME_TWO);
+ cBitmap_TaskIsRunningFrameOne.LoadBitmap(IDB_BITMAP_TASK_IS_RUNNING_FRAME_ONE);
+ cBitmap_TaskIsRunningFrameTwo.LoadBitmap(IDB_BITMAP_TASK_IS_RUNNING_FRAME_TWO);
+ cBitmap_TaskCanceledFrameOne.LoadBitmap(IDB_BITMAP_TASK_CANCELED_FRAME_ONE);
+ cBitmap_TaskCanceledFrameTwo.LoadBitmap(IDB_BITMAP_TASK_CANCELED_FRAME_TWO);
+ cBitmap_TaskFinished.LoadBitmap(IDB_BITMAP_TASK_FINISHED);
+
+ cTextCell_TaskDate.SetTextFont(Logfont_TaskDate);
+ cTextCell_TaskDate.SetTextColor(RGB(0,0,255));
+
+ cTextCell_Task.SetTextFont(Logfont_Task);
+ cTextCell_Task.SetTextColor(RGB(0,0,0)); 
+
+ cTextCell_ForUser.SetTextFont(Logfont_ForUser);
+ cTextCell_ForUser.SetTextColor(RGB(0,127,255));
+
+ cTextCell_FromUser.SetTextFont(Logfont_FromUser);
+ cTextCell_FromUser.SetTextColor(RGB(127,0,255));
+
+ cTextCell_PlannedPosition.SetTextFont(Logfont_PlannedPosition);
+ cTextCell_PlannedPosition.SetTextColor(RGB(255,64,64));
+
+ cTextCell_Project.SetTextFont(Logfont_Task);
+ cTextCell_Project.SetTextColor(RGB(32,127,32)); 
+
+ cLineTextCell_ColumnName.SetTextFont(Logfont_ColumnName);
+ cLineTextCell_ColumnName.SetTextColor(RGB(0,0,0));
+
+ cFrameCell_TaskState.SetBorderColor(RGB(0,0,0));
+ cFrameCell.SetBorderColor(RGB(0,0,0));
+
+ cTextCell_Task.SetStrikeOutColor(RGB(192,192,192));
+
+ cTextCell_PlannedPosition.SetText("ПЛАНОВАЯ ПОЗИЦИЯ !");
+ return (0);
 }
 
 //====================================================================================================

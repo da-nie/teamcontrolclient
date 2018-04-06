@@ -90,7 +90,7 @@ class CFrameWnd_Main:public CFrameWnd
 
   afx_msg void OnCommand_ToolBar_Main_ShowCommonTask(void);//нажата кнопка "показывать общие задани€ вместо выданных" главной панели инструментов 
 
-  afx_msg void OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam);//обработка сообщений тре€
+  afx_msg LRESULT OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam);//обработка сообщений тре€
   afx_msg void OnCommand_Menu_SysTray_Exit(void);//обработка команды выхода из программы
 
  protected:

@@ -74,7 +74,6 @@ class CView_OutTasks:public CView_Base
   bool TaskIsVisible(const SShowState &sShowState,const CTask& cTask);//разрешено ли отображать задание
   bool IsMyTask(const CSafeString &task_guid);//проверить, что задание с идентификатором выдано нами
   //-Прочее------------------------------------------------------------------
-  DECLARE_DYNCREATE(CView_OutTasks)
-  
+  DECLARE_DYNCREATE(CView_OutTasks)  
 };
 #endif

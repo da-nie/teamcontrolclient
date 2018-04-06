@@ -57,6 +57,26 @@ CFrameWnd_Main::~CFrameWnd_Main()
 //----------------------------------------------------------------------------------------------------
 afx_msg BOOL CFrameWnd_Main::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext* pContext)
 { 
+ //создаём разделитель
+ RECT Rect;
+ GetClientRect(&Rect);
+ long width=Rect.right-Rect.left;
+ long kit_width=width*KIT_WIDTH_SCALE;
+ long out_tasks_width=width*OUT_TASK_WIDTH_SCALE;
+ long my_tasks_width=width*MY_TASK_WIDTH_SCALE;
+
+ cSplitterWnd_Main.CreateStatic(this,1,3); 
+ cSplitterWnd_Main.CreateView(0,0,RUNTIME_CLASS(CTreeView_Kit),CSize(kit_width,0),pContext);//создаём первый вид
+ cSplitterWnd_Main.CreateView(0,1,RUNTIME_CLASS(CView_OutTasks),CSize(out_tasks_width,0),pContext);//создаём второй вид
+ cSplitterWnd_Main.CreateView(0,2,RUNTIME_CLASS(CView_MyTasks),CSize(my_tasks_width,0),pContext);//создаём третий вид
+ SetActiveView((CView*)cSplitterWnd_Main.GetPane(0,1));//устанавливаем активный вид
+ return(TRUE);
+}
+//----------------------------------------------------------------------------------------------------
+//создание рамки
+//----------------------------------------------------------------------------------------------------
+afx_msg int CFrameWnd_Main::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{ 
  //создадим панель инструментов
  cToolBar_Main.Create(this,WS_CHILD|WS_VISIBLE|CBRS_SIZE_FIXED|CBRS_TOP|CBRS_TOOLTIPS);
  //загрузим картинки для панели
@@ -83,7 +103,6 @@ afx_msg BOOL CFrameWnd_Main::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext* 
  ButtonIndex[14]=0;
  ButtonIndex[15]=0;
  ButtonIndex[16]=IDC_TOOLBAR_MAIN_SHOW_COMMON_TASK;
-
  
  cToolBar_Main.SetButtons(ButtonIndex,TOOLBAR_MAIN_BUTTON_AMOUNT);
 
@@ -116,7 +135,8 @@ afx_msg BOOL CFrameWnd_Main::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext* 
  Size_Image.cy=32;
  cToolBar_Main.SetSizes(Size_Button,Size_Image);
  cToolBar_Main.EnableDocking(CBRS_ALIGN_ANY);
- DockControlBar(&cToolBar_Main,AFX_IDW_DOCKBAR_TOP);
+ //DockControlBar(&cToolBar_Main,AFX_IDW_DOCKBAR_TOP);
+
  //включим все кнопки
  for(long n=0;n<TOOLBAR_MAIN_BUTTON_AMOUNT;n++)
  {
@@ -127,28 +147,8 @@ afx_msg BOOL CFrameWnd_Main::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext* 
   if (ButtonIndex[n]==IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_FINISHED) continue;
   if (ButtonIndex[n]==IDC_TOOLBAR_MAIN_SHOW_COMMON_TASK) continue;
   cToolBar_Main.GetToolBarCtrl().SetState(ButtonIndex[n],TBSTATE_CHECKED);
- } 
+ }
 
- //создаём разделитель
- RECT Rect;
- GetClientRect(&Rect);
- long width=Rect.right-Rect.left;
- long kit_width=width*KIT_WIDTH_SCALE;
- long out_tasks_width=width*OUT_TASK_WIDTH_SCALE;
- long my_tasks_width=width*MY_TASK_WIDTH_SCALE;
-
- cSplitterWnd_Main.CreateStatic(this,1,3); 
- cSplitterWnd_Main.CreateView(0,0,RUNTIME_CLASS(CTreeView_Kit),CSize(kit_width,0),pContext);//создаём первый вид
- cSplitterWnd_Main.CreateView(0,1,RUNTIME_CLASS(CView_OutTasks),CSize(out_tasks_width,0),pContext);//создаём второй вид
- cSplitterWnd_Main.CreateView(0,2,RUNTIME_CLASS(CView_MyTasks),CSize(my_tasks_width,0),pContext);//создаём третий вид
- SetActiveView((CView*)cSplitterWnd_Main.GetPane(0,1));//устанавливаем активный вид
- return(TRUE);
-}
-//----------------------------------------------------------------------------------------------------
-//создание рамки
-//----------------------------------------------------------------------------------------------------
-afx_msg int CFrameWnd_Main::OnCreate(LPCREATESTRUCT lpCreateStruct)
-{ 
  //запускаем таймер
  SetTimer(ID_TIMER_FRAMEWND_MAIN,FRAME_WND_TIMER_PERIOD,NULL); 
  //создаём иконку в трее
@@ -188,7 +188,8 @@ afx_msg int CFrameWnd_Main::OnCreate(LPCREATESTRUCT lpCreateStruct)
  AboutCounter=ABOUT_TIMER_MAX_CONTER;
  ChangeSysTrayIconCounter=SYSTRAY_CHANGE_ICON_COUNTER;
 
- return(CFrameWnd::OnCreate(lpCreateStruct));
+ int ret=CFrameWnd::OnCreate(lpCreateStruct);
+ return(ret);
 }
 //----------------------------------------------------------------------------------------------------
 //уничтожение рамки
@@ -464,9 +465,9 @@ afx_msg void CFrameWnd_Main::OnCommand_ToolBar_Main_ShowCommonTask(void)
 //----------------------------------------------------------------------------------------------------
 //обработка сообщений трея
 //----------------------------------------------------------------------------------------------------
-afx_msg void CFrameWnd_Main::OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam)
+afx_msg LRESULT CFrameWnd_Main::OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam)
 {
- if (wParam!=IDI_ICON_SYSTRAY) return;//это не наша иконка в лотке 
+ if (wParam!=IDI_ICON_SYSTRAY) return(0);//это не наша иконка в лотке 
  if (lParam==WM_LBUTTONUP)//нажали и отпустили левую кнопку мыши
  {  
   SetForegroundWindow();
@@ -484,6 +485,7 @@ afx_msg void CFrameWnd_Main::OnSystemTrayIconMessage(WPARAM wParam,LPARAM lParam
   cMenu->TrackPopupMenu(TPM_LEFTBUTTON|TPM_RIGHTBUTTON,cPoint.x,cPoint.y,this);
   delete(cMenu);
  }
+ return(0);
 }
 //----------------------------------------------------------------------------------------------------
 //обработка команды выхода из программы
