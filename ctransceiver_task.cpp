@@ -209,6 +209,6 @@ bool CTransceiver_Task::GetTaskAnswer(char *ptr,size_t size,CTask &cTask)
  if (sizeof(SServerAnswer::SHeader)>size) return(false);
  SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
  offset+=sizeof(SServerAnswer::SHeader);   
- if (ReadCTaskInArray(ptr,offset,size,cTask)==false) return(false);;
+ if (ReadCTaskInArray(ptr,offset,size,cTask)==false) return(false);
  return(true);
 }

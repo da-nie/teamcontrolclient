@@ -38,8 +38,8 @@ class CTextCell:public CICell
   //деструктор
   ~CTextCell();
   //функции класса
-  void Draw(CDC *pDC,const CRect &cRect_DrawArea);//отрисовка
-  void GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize);//получить размеры элемента
+  void Draw(CDC *pDC,const CRect &cRect_DrawArea) override;//отрисовка
+  void GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize) override;//получить размеры элемента
   void SetText(const CSafeString &text);//задать текст
   void SetTextColor(const COLORREF &color);//задать цвет текста
   void SetStrikeOutColor(const COLORREF &color);//задать цвет зачёркивания

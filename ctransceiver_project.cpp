@@ -55,6 +55,12 @@ bool CTransceiver_Project::SendProjectDataToServer(SOCKET socket_server,const CP
 {
  on_exit=false;
  SServerCommand::CProjectDataHeader sServerCommand_cProjectDataHeader;
+
+ sServerCommand_cProjectDataHeader.Signature[0]='P';
+ sServerCommand_cProjectDataHeader.Signature[1]='L';
+ sServerCommand_cProjectDataHeader.Signature[2]='V';
+ sServerCommand_cProjectDataHeader.Version=Version;
+
  sServerCommand_cProjectDataHeader.ProjectNameSize=cProject.GetProjectName().GetLength();
  sServerCommand_cProjectDataHeader.ProjectGUIDSize=cProject.GetProjectGUID().GetLength();
  if (SendPart(socket_server,reinterpret_cast<char*>(&sServerCommand_cProjectDataHeader),sizeof(SServerCommand::CProjectDataHeader),cEvent_Exit,on_exit)==false) return(false);
@@ -107,6 +113,6 @@ bool CTransceiver_Project::GetProjectAnswer(char *ptr,size_t size,CProject &cPro
  if (sizeof(SServerAnswer::SHeader)>size) return(false);
  SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
  offset+=sizeof(SServerAnswer::SHeader);   
- if (ReadCProjectInArray(ptr,offset,size,cProject)==false) return(false);;
+ if (ReadCProjectInArray(ptr,offset,size,cProject)==false) return(false);
  return(true);
 }

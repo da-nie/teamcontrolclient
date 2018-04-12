@@ -92,6 +92,6 @@ bool CTransceiver_User::GetUserAnswer(char *ptr,size_t size,CUser &cUser)
  if (sizeof(SServerAnswer::SHeader)>size) return(false);
  SServerAnswer::SHeader *sServerAnswer_sHeader_Ptr=reinterpret_cast<SServerAnswer::SHeader*>(ptr);
  offset+=sizeof(SServerAnswer::SHeader);   
- if (ReadCUserInArray(ptr,offset,size,cUser)==false) return(false);;
+ if (ReadCUserInArray(ptr,offset,size,cUser)==false) return(false);
  return(true);
 }

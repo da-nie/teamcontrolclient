@@ -28,8 +28,8 @@ class CFillCell:public CICell
   //деструктор
   ~CFillCell();
   //-Функции класса----------------------------------------------------------
-  void Draw(CDC *pDC,const CRect &cRect_DrawArea);//отрисовка
-  void GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize);//получить размеры элемента
+  void Draw(CDC *pDC,const CRect &cRect_DrawArea) override;//отрисовка
+  void GetSize(CDC *pDC,const CRect &cRect_DrawArea,CSize &cSize) override;//получить размеры элемента
   void SetBackgroundColor(const COLORREF &color);//задать цвет фона
   COLORREF GetBackgroundColor(void);//получить цвет фона
 };
