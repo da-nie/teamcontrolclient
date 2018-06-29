@@ -1,4 +1,6 @@
 #include "cproject.h"
+#include "crc.h"
+#include "cuniquearrayptr.h"
 
 //====================================================================================================
 //конструктор класса
@@ -135,13 +137,30 @@ bool CProject::IsProjectGUID(const char *guid) const
 //----------------------------------------------------------------------------------------------------
 bool CProject::Save(FILE *file) const
 {
+ const char *s_ptr;
  //заполняем заголовок
  SHeader sHeader;
  sHeader.ProjectNameSize=ProjectName.GetLength();
  sHeader.ProjectGUIDSize=ProjectGUID.GetLength();
  sHeader.ProjectType=ProjectType;
+
  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
- const char *s_ptr;
+
+//считаем crc
+ unsigned short crc16=0;
+ CreateCRC16(crc16,&sHeader,sizeof(SHeader)*1);
+ //записываем crc
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
+ s_ptr=ProjectName;
+ CreateCRC16(crc16,s_ptr,ProjectName.GetLength());
+ s_ptr=ProjectGUID;
+ CreateCRC16(crc16,s_ptr,ProjectGUID.GetLength());
+
+ //записываем crc
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
+ //записываем данные  
  s_ptr=ProjectName;
  fwrite(s_ptr,ProjectName.GetLength(),1,file);
  s_ptr=ProjectGUID;
@@ -153,22 +172,36 @@ bool CProject::Save(FILE *file) const
 //----------------------------------------------------------------------------------------------------
 bool CProject::Load(FILE *file)
 {
- SHeader sHeader;
- fread(&sHeader,sizeof(SHeader),1,file);
- char *project_guid=new char[sHeader.ProjectGUIDSize+1];
- char *project_name=new char[sHeader.ProjectNameSize+1];
- 
- fread(project_name,sizeof(char),sHeader.ProjectNameSize,file);
- fread(project_guid,sizeof(char),sHeader.ProjectGUIDSize,file);  
- 
- project_name[sHeader.ProjectNameSize]=0;
- project_guid[sHeader.ProjectGUIDSize]=0;
+ unsigned short crc16_file;
+ unsigned short crc16=0;
 
- ProjectName=project_name;
- ProjectGUID=project_guid;
+ SHeader sHeader;
+ if (fread(&sHeader,sizeof(SHeader),1,file)<1) return(false);
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+ CreateCRC16(crc16,&sHeader,sizeof(SHeader));
+ if (crc16!=crc16_file) return(false);
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+
+ CUniqueArrayPtr<char> project_guid;
+ CUniqueArrayPtr<char> project_name;
+
+ project_guid.Set(new char[sHeader.ProjectGUIDSize+1]);
+ project_name.Set(new char[sHeader.ProjectNameSize+1]);
+ 
+ if (fread(project_name.Get(),sizeof(char),sHeader.ProjectNameSize,file)<sHeader.ProjectNameSize) return(false);
+ if (fread(project_guid.Get(),sizeof(char),sHeader.ProjectGUIDSize,file)<sHeader.ProjectGUIDSize) return(false); 
+
+ CreateCRC16(crc16,project_name.Get(),sizeof(char)*sHeader.ProjectNameSize);
+ CreateCRC16(crc16,project_guid.Get(),sizeof(char)*sHeader.ProjectGUIDSize);
+
+ if (crc16!=crc16_file) return(false);
+
+ project_name.Get()[sHeader.ProjectNameSize]=0;
+ project_guid.Get()[sHeader.ProjectGUIDSize]=0;
+
+ ProjectName=project_name.Get();
+ ProjectGUID=project_guid.Get();
  ProjectType=sHeader.ProjectType;
 
- delete[](project_name);
- delete[](project_guid);
  return(true);
 }

@@ -1,4 +1,6 @@
 #include "cuser.h"
+#include "crc.h"
+#include "cuniquearrayptr.h"
 
 //====================================================================================================
 //конструктор класса
@@ -174,6 +176,7 @@ bool CUser::IsUserGUID(const char *guid) const
 //----------------------------------------------------------------------------------------------------
 bool CUser::Save(FILE *file) const
 {
+ const char *s_ptr;
  //заполняем заголовок
  SHeader sHeader;
  sHeader.NameSize=Name.GetLength();
@@ -182,8 +185,30 @@ bool CUser::Save(FILE *file) const
  sHeader.DescriptionSize=Description.GetLength();
  sHeader.UserGUIDSize=UserGUID.GetLength();
  sHeader.Leader=Leader;
+
  fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
- const char *s_ptr;
+
+ //считаем crc
+ unsigned short crc16=0;
+ CreateCRC16(crc16,&sHeader,sizeof(SHeader)*1);
+ //записываем crc
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
+ s_ptr=Name;
+ CreateCRC16(crc16,s_ptr,Name.GetLength());
+ s_ptr=JobTitle;
+ CreateCRC16(crc16,s_ptr,JobTitle.GetLength());
+ s_ptr=Telephone;
+ CreateCRC16(crc16,s_ptr,Telephone.GetLength());
+ s_ptr=Description;
+ CreateCRC16(crc16,s_ptr,Description.GetLength());
+ s_ptr=UserGUID;
+ CreateCRC16(crc16,s_ptr,UserGUID.GetLength());
+
+ //записываем crc
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
+ //записываем данные
  s_ptr=Name;
  fwrite(s_ptr,Name.GetLength(),1,file);
  s_ptr=JobTitle;
@@ -201,38 +226,54 @@ bool CUser::Save(FILE *file) const
 //----------------------------------------------------------------------------------------------------
 bool CUser::Load(FILE *file)
 {
+ unsigned short crc16_file;
+ unsigned short crc16=0;
+
  SHeader sHeader;
- fread(&sHeader,sizeof(SHeader),1,file);
- char *name=new char[sHeader.NameSize+1];
- char *job_title=new char[sHeader.JobTitleSize+1];
- char *telephone=new char[sHeader.TelephoneSize+1];
- char *description=new char[sHeader.DescriptionSize+1];
- char *user_guid=new char[sHeader.UserGUIDSize+1];
- 
- fread(name,sizeof(char),sHeader.NameSize,file);
- fread(job_title,sizeof(char),sHeader.JobTitleSize,file);
- fread(telephone,sizeof(char),sHeader.TelephoneSize,file);
- fread(description,sizeof(char),sHeader.DescriptionSize,file);
- fread(user_guid,sizeof(char),sHeader.UserGUIDSize,file);  
- 
- name[sHeader.NameSize]=0;
- job_title[sHeader.JobTitleSize]=0;
- telephone[sHeader.TelephoneSize]=0;
- description[sHeader.DescriptionSize]=0;
- user_guid[sHeader.UserGUIDSize]=0;
+ if (fread(&sHeader,sizeof(SHeader),1,file)<1) return(false);
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+ CreateCRC16(crc16,&sHeader,sizeof(SHeader)); 
+ if (crc16!=crc16_file) return(false);
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false); 
 
- Name=name;
- JobTitle=job_title;
- Telephone=telephone;
- Description=description;
- UserGUID=user_guid;
+ CUniqueArrayPtr<char> name;
+ CUniqueArrayPtr<char> job_title;
+ CUniqueArrayPtr<char> telephone;
+ CUniqueArrayPtr<char> description;
+ CUniqueArrayPtr<char> user_guid;
+
+ name.Set(new char[sHeader.NameSize+1]);
+ job_title.Set(new char[sHeader.JobTitleSize+1]);
+ telephone.Set(new char[sHeader.TelephoneSize+1]);
+ description.Set(new char[sHeader.DescriptionSize+1]);
+ user_guid.Set(new char[sHeader.UserGUIDSize+1]);
+ 
+ if (fread(name.Get(),sizeof(char),sHeader.NameSize,file)<sHeader.NameSize) return(false);
+ if (fread(job_title.Get(),sizeof(char),sHeader.JobTitleSize,file)<sHeader.JobTitleSize) return(false);
+ if (fread(telephone.Get(),sizeof(char),sHeader.TelephoneSize,file)<sHeader.TelephoneSize) return(false);
+ if (fread(description.Get(),sizeof(char),sHeader.DescriptionSize,file)<sHeader.DescriptionSize) return(false);
+ if (fread(user_guid.Get(),sizeof(char),sHeader.UserGUIDSize,file)<sHeader.UserGUIDSize) return(false);  
+ 
+ CreateCRC16(crc16,name.Get(),sizeof(char)*sHeader.NameSize); 
+ CreateCRC16(crc16,job_title.Get(),sizeof(char)*sHeader.JobTitleSize);
+ CreateCRC16(crc16,telephone.Get(),sizeof(char)*sHeader.TelephoneSize);
+ CreateCRC16(crc16,description.Get(),sizeof(char)*sHeader.DescriptionSize);
+ CreateCRC16(crc16,user_guid.Get(),sizeof(char)*sHeader.UserGUIDSize);
+
+ if (crc16!=crc16_file) return(false); 
+
+ name.Get()[sHeader.NameSize]=0;
+ job_title.Get()[sHeader.JobTitleSize]=0;
+ telephone.Get()[sHeader.TelephoneSize]=0;
+ description.Get()[sHeader.DescriptionSize]=0;
+ user_guid.Get()[sHeader.UserGUIDSize]=0;
+
+ Name=name.Get();
+ JobTitle=job_title.Get();
+ Telephone=telephone.Get();
+ Description=description.Get();
+ UserGUID=user_guid.Get();
  Leader=sHeader.Leader;
-
- delete[](name);
- delete[](job_title);
- delete[](telephone);
- delete[](description);
- delete[](user_guid);
 
  return(true);
 }

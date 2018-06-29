@@ -123,6 +123,9 @@
     <ClCompile Include="cvector_project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="crc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cvector_task.h">
@@ -240,6 +243,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cvector_project.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="crc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cuniqueptr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cuniquearrayptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

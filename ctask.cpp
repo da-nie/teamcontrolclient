@@ -1,4 +1,6 @@
 #include "ctask.h"
+#include "crc.h"
+#include "cuniquearrayptr.h"
 
 //====================================================================================================
 //конструктор класса
@@ -564,6 +566,7 @@ bool CTask::IsEquivalent(const CTask &cTask)
 //----------------------------------------------------------------------------------------------------
 bool CTask::Save(FILE *file) const
 {
+ const char *s_ptr;
  //заполняем заголовок
  SHeader sHeader;
  sHeader.FromUserGUIDSize=FromUserGUID.GetLength();
@@ -585,8 +588,36 @@ bool CTask::Save(FILE *file) const
  sHeader.AnswerReferenceExist=AnswerReferenceExist;
  sHeader.TaskReferenceExist=TaskReferenceExist;
  sHeader.Common=Common;
- fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
- const char *s_ptr;
+
+ fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file); 
+
+//считаем crc
+ unsigned short crc16=0;
+ CreateCRC16(crc16,&sHeader,sizeof(SHeader)*1);
+ //записываем crc
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
+ s_ptr=FromUserGUID;
+ CreateCRC16(crc16,s_ptr,FromUserGUID.GetLength());
+ s_ptr=ForUserGUID;
+ CreateCRC16(crc16,s_ptr,ForUserGUID.GetLength());
+ s_ptr=ProjectGUID;
+ CreateCRC16(crc16,s_ptr,ProjectGUID.GetLength());
+ s_ptr=Task;
+ CreateCRC16(crc16,s_ptr,Task.GetLength());
+ s_ptr=TaskGUID;
+ CreateCRC16(crc16,s_ptr,TaskGUID.GetLength());
+ s_ptr=Answer;
+ CreateCRC16(crc16,s_ptr,Answer.GetLength());
+ s_ptr=AnswerReference;
+ CreateCRC16(crc16,s_ptr,AnswerReference.GetLength());
+ s_ptr=TaskReference;
+ CreateCRC16(crc16,s_ptr,TaskReference.GetLength());
+
+ //записываем crc
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
+ //записываем данные 
  s_ptr=FromUserGUID;
  fwrite(s_ptr,FromUserGUID.GetLength(),1,file);
  s_ptr=ForUserGUID;
@@ -610,43 +641,71 @@ bool CTask::Save(FILE *file) const
 //----------------------------------------------------------------------------------------------------
 bool CTask::Load(FILE *file)
 {
- SHeader sHeader;
- fread(&sHeader,sizeof(SHeader),1,file);
- char *from_user_guid=new char[sHeader.FromUserGUIDSize+1];
- char *for_user_guid=new char[sHeader.ForUserGUIDSize+1];
- char *project_guid=new char[sHeader.ProjectGUIDSize+1];
- char *task=new char[sHeader.TaskSize+1];
- char *task_guid=new char[sHeader.TaskGUIDSize+1];
- char *answer=new char[sHeader.AnswerSize+1];
- char *answer_reference=new char[sHeader.AnswerReferenceSize+1];
- char *task_reference=new char[sHeader.TaskReferenceSize+1];
- 
- fread(from_user_guid,sizeof(char),sHeader.FromUserGUIDSize,file);
- fread(for_user_guid,sizeof(char),sHeader.ForUserGUIDSize,file);
- fread(project_guid,sizeof(char),sHeader.ProjectGUIDSize,file);
- fread(task,sizeof(char),sHeader.TaskSize,file);
- fread(task_guid,sizeof(char),sHeader.TaskGUIDSize,file);
- fread(answer,sizeof(char),sHeader.AnswerSize,file);
- fread(answer_reference,sizeof(char),sHeader.AnswerReferenceSize,file);
- fread(task_reference,sizeof(char),sHeader.TaskReferenceSize,file);
- 
- from_user_guid[sHeader.FromUserGUIDSize]=0;
- for_user_guid[sHeader.ForUserGUIDSize]=0;
- project_guid[sHeader.ProjectGUIDSize]=0;
- task[sHeader.TaskSize]=0;
- task_guid[sHeader.TaskGUIDSize]=0;
- answer[sHeader.AnswerSize]=0;
- answer_reference[sHeader.AnswerReferenceSize]=0;
- task_reference[sHeader.TaskReferenceSize]=0;
+ unsigned short crc16_file;
+ unsigned short crc16=0;
 
- FromUserGUID=from_user_guid;
- ForUserGUID=for_user_guid;
- ProjectGUID=project_guid;
- Task=task;
- TaskGUID=task_guid;
- Answer=answer;
- AnswerReference=answer_reference;
- TaskReference=task_reference; 
+ SHeader sHeader;
+ if (fread(&sHeader,sizeof(SHeader),1,file)<1) return(false);
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+ CreateCRC16(crc16,&sHeader,sizeof(SHeader));
+ if (crc16!=crc16_file) return(false);
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+
+ CUniqueArrayPtr<char> from_user_guid;
+ CUniqueArrayPtr<char> for_user_guid;
+ CUniqueArrayPtr<char> project_guid;
+ CUniqueArrayPtr<char> task;
+ CUniqueArrayPtr<char> task_guid;
+ CUniqueArrayPtr<char> answer;
+ CUniqueArrayPtr<char> answer_reference;
+ CUniqueArrayPtr<char> task_reference;
+
+ from_user_guid.Set(new char[sHeader.FromUserGUIDSize+1]);
+ for_user_guid.Set(new char[sHeader.ForUserGUIDSize+1]);
+ project_guid.Set(new char[sHeader.ProjectGUIDSize+1]);
+ task.Set(new char[sHeader.TaskSize+1]);
+ task_guid.Set(new char[sHeader.TaskGUIDSize+1]);
+ answer.Set(new char[sHeader.AnswerSize+1]);
+ answer_reference.Set(new char[sHeader.AnswerReferenceSize+1]);
+ task_reference.Set(new char[sHeader.TaskReferenceSize+1]);
+ 
+ if (fread(from_user_guid.Get(),sizeof(char),sHeader.FromUserGUIDSize,file)<sHeader.FromUserGUIDSize) return(false);
+ if (fread(for_user_guid.Get(),sizeof(char),sHeader.ForUserGUIDSize,file)<sHeader.ForUserGUIDSize) return(false);
+ if (fread(project_guid.Get(),sizeof(char),sHeader.ProjectGUIDSize,file)<sHeader.ProjectGUIDSize) return(false);
+ if (fread(task.Get(),sizeof(char),sHeader.TaskSize,file)<sHeader.TaskSize) return(false);
+ if (fread(task_guid.Get(),sizeof(char),sHeader.TaskGUIDSize,file)<sHeader.TaskGUIDSize) return(false);
+ if (fread(answer.Get(),sizeof(char),sHeader.AnswerSize,file)<sHeader.AnswerSize) return(false);
+ if (fread(answer_reference.Get(),sizeof(char),sHeader.AnswerReferenceSize,file)<sHeader.AnswerReferenceSize) return(false);
+ if (fread(task_reference.Get(),sizeof(char),sHeader.TaskReferenceSize,file)<sHeader.TaskReferenceSize) return(false);
+
+ CreateCRC16(crc16,from_user_guid.Get(),sizeof(char)*sHeader.FromUserGUIDSize);
+ CreateCRC16(crc16,for_user_guid.Get(),sizeof(char)*sHeader.ForUserGUIDSize);
+ CreateCRC16(crc16,project_guid.Get(),sizeof(char)*sHeader.ProjectGUIDSize);
+ CreateCRC16(crc16,task.Get(),sizeof(char)*sHeader.TaskSize);
+ CreateCRC16(crc16,task_guid.Get(),sizeof(char)*sHeader.TaskGUIDSize);
+ CreateCRC16(crc16,answer.Get(),sizeof(char)*sHeader.AnswerSize);
+ CreateCRC16(crc16,answer_reference.Get(),sizeof(char)*sHeader.AnswerReferenceSize);
+ CreateCRC16(crc16,task_reference.Get(),sizeof(char)*sHeader.TaskReferenceSize);
+
+ if (crc16!=crc16_file) return(false);
+
+ from_user_guid.Get()[sHeader.FromUserGUIDSize]=0;
+ for_user_guid.Get()[sHeader.ForUserGUIDSize]=0;
+ project_guid.Get()[sHeader.ProjectGUIDSize]=0;
+ task.Get()[sHeader.TaskSize]=0;
+ task_guid.Get()[sHeader.TaskGUIDSize]=0;
+ answer.Get()[sHeader.AnswerSize]=0;
+ answer_reference.Get()[sHeader.AnswerReferenceSize]=0;
+ task_reference.Get()[sHeader.TaskReferenceSize]=0;
+
+ FromUserGUID=from_user_guid.Get();
+ ForUserGUID=for_user_guid.Get();
+ ProjectGUID=project_guid.Get();
+ Task=task.Get();
+ TaskGUID=task_guid.Get();
+ Answer=answer.Get();
+ AnswerReference=answer_reference.Get();
+ TaskReference=task_reference.Get(); 
 
  State=sHeader.State;
  cDate.SetDate(sHeader.Year,sHeader.Month,sHeader.Day);
@@ -657,15 +716,6 @@ bool CTask::Load(FILE *file)
  Common=sHeader.Common;
  TaskReferenceExist=sHeader.TaskReferenceExist;
  AnswerReferenceExist=sHeader.AnswerReferenceExist;
-
- delete[](from_user_guid);
- delete[](for_user_guid);
- delete[](project_guid);
- delete[](task);
- delete[](task_guid);
- delete[](answer);
- delete[](answer_reference);
- delete[](task_reference);
 
  return(true);
 }

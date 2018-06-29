@@ -1,11 +1,12 @@
 #include "cvector_task.h"
+#include "crc.h"
 
 //====================================================================================================
 //конструктор
 //====================================================================================================
 CVectorTask::CVectorTask()
 {
- Version=5;
+ Version=6;
 }
 //====================================================================================================
 //деструктор
@@ -25,11 +26,17 @@ bool CVectorTask::Save(char *filename)
  FILE *file=fopen(filename,"wb");
  if (file==NULL) return(false);
  //пишем сигнатуру и номер версии структуры данных
+ unsigned short crc16=0;
  fwrite("TLV",sizeof(unsigned char),3,file);
  fwrite(&Version,sizeof(unsigned long),1,file);
+ CreateCRC16(crc16,&Version,sizeof(unsigned long)*1);
 
  size_t size=vector_CTask.size();
  fwrite(&size,sizeof(size_t),1,file);
+ CreateCRC16(crc16,&size,sizeof(size_t)*1);
+ //записываем CRC
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
  for(size_t n=0;n<size;n++)
  {
   const CTask &cTask=vector_CTask[n]; 
@@ -49,6 +56,7 @@ bool CVectorTask::Load(char *filename)
  if (file==NULL) return(false);
  unsigned char signature[3];
  unsigned long version;
+ unsigned short crc16_file;
  if (fread(signature,sizeof(unsigned char),3,file)<3)
  {
   fclose(file);
@@ -70,6 +78,22 @@ bool CVectorTask::Load(char *filename)
   fclose(file);
   return(false);
  }
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1)
+ {
+  fclose(file);
+  return(false);
+ }
+
+ unsigned short crc16=0;
+ CreateCRC16(crc16,&version,sizeof(unsigned long)*1);
+ CreateCRC16(crc16,&size,sizeof(size_t)*1);
+ 
+ if (crc16_file!=crc16)
+ {
+  fclose(file);
+  return(false);
+ }
+
  for(size_t n=0;n<size;n++)
  {
   CTask cTask;

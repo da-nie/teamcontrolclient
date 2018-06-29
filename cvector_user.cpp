@@ -1,11 +1,12 @@
 #include "cvector_user.h"
+#include "crc.h"
 
 //====================================================================================================
 //конструктор
 //====================================================================================================
 CVectorUser::CVectorUser()
 {
- Version=1;
+ Version=2;
 }
 //====================================================================================================
 //деструктор
@@ -25,11 +26,17 @@ bool CVectorUser::Save(char *filename)
  FILE *file=fopen(filename,"wb");
  if (file==NULL) return(false);
  //пишем сигнатуру и номер версии структуры данных
+ unsigned short crc16=0;
  fwrite("ULV",sizeof(unsigned char),3,file);
  fwrite(&Version,sizeof(unsigned long),1,file);
+ CreateCRC16(crc16,&Version,sizeof(unsigned long)*1);
  //пишем файл
  size_t size=vector_CUser.size();
  fwrite(&size,sizeof(size_t),1,file);
+ CreateCRC16(crc16,&size,sizeof(size_t)*1);
+ //записываем CRC
+ fwrite(&crc16,sizeof(unsigned short),1,file);
+
  for(size_t n=0;n<size;n++)
  {
   const CUser &cUser=vector_CUser[n]; 
@@ -49,6 +56,7 @@ bool CVectorUser::Load(char *filename)
  if (file==NULL) return(false);
  unsigned char signature[3];
  unsigned long version;
+ unsigned short crc16_file;
  if (fread(signature,sizeof(unsigned char),3,file)<3)
  {
   fclose(file);
@@ -70,6 +78,21 @@ bool CVectorUser::Load(char *filename)
   fclose(file);
   return(false);
  }
+ if (fread(&crc16_file,sizeof(unsigned short),1,file)<1)
+ {
+  fclose(file);
+  return(false);
+ }
+
+ unsigned short crc16=0;
+ CreateCRC16(crc16,&version,sizeof(unsigned long)*1);
+ CreateCRC16(crc16,&size,sizeof(size_t)*1);
+  if (crc16_file!=crc16)
+ {
+  fclose(file);
+  return(false);
+ }
+
  for(size_t n=0;n<size;n++)
  {
   CUser cUser;

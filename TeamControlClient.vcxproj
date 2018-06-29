@@ -111,6 +111,7 @@
     <ClCompile Include="cicell.cpp" />
     <ClCompile Include="clinetextcell.cpp" />
     <ClCompile Include="cproject.cpp" />
+    <ClCompile Include="crc.cpp" />
     <ClCompile Include="csafestring.cpp" />
     <ClCompile Include="ctask.cpp" />
     <ClCompile Include="ctextcell.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="clinetextcell.h" />
     <ClInclude Include="cproject.h" />
     <ClInclude Include="craiiccriticalsection.h" />
+    <ClInclude Include="crc.h" />
     <ClInclude Include="csafestring.h" />
     <ClInclude Include="ctask.h" />
     <ClInclude Include="ctextcell.h" />
@@ -162,6 +164,8 @@
     <ClInclude Include="ctransceiver_task.h" />
     <ClInclude Include="ctransceiver_user.h" />
     <ClInclude Include="ctreeview_kit.h" />
+    <ClInclude Include="cuniquearrayptr.h" />
+    <ClInclude Include="cuniqueptr.h" />
     <ClInclude Include="cuser.h" />
     <ClInclude Include="cvector_project.h" />
     <ClInclude Include="cvector_task.h" />
