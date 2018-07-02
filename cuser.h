@@ -10,6 +10,9 @@
 //====================================================================================================
 //подключаемые библиотеки
 //====================================================================================================
+#include "craiifilein.h"
+#include "craiifileout.h"
+
 #include "stdafx.h"
 #include "csafestring.h"
 
@@ -73,7 +76,7 @@ class CUser
   bool IsLoginAndPassword(const char *login,const char *password) const;//верный ли логин и пароль
   bool IsUserGUID(const char *guid) const;//верный ли UserGUID
 
-  bool Save(FILE *file) const;//сохранить данные
-  bool Load(FILE *file);//загрузить данные
+  bool Save(CRAIIFileOut &cRAIIFileOut) const;//сохранить данные
+  bool Load(CRAIIFileIn &cRAIIFileIn);//загрузить данные
 };
 #endif

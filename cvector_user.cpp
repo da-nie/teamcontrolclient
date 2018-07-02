@@ -23,26 +23,28 @@ CVectorUser::~CVectorUser()
 //----------------------------------------------------------------------------------------------------
 bool CVectorUser::Save(char *filename)
 {
- FILE *file=fopen(filename,"wb");
- if (file==NULL) return(false);
- //пишем сигнатуру и номер версии структуры данных
- unsigned short crc16=0;
- fwrite("ULV",sizeof(unsigned char),3,file);
- fwrite(&Version,sizeof(unsigned long),1,file);
- CreateCRC16(crc16,&Version,sizeof(unsigned long)*1);
- //пишем файл
- size_t size=vector_CUser.size();
- fwrite(&size,sizeof(size_t),1,file);
- CreateCRC16(crc16,&size,sizeof(size_t)*1);
- //записываем CRC
- fwrite(&crc16,sizeof(unsigned short),1,file);
-
- for(size_t n=0;n<size;n++)
+ CRAIIFileOut cRAIIFileOut(filename,std::ios_base::out|std::ios_base::binary);
  {
-  const CUser &cUser=vector_CUser[n]; 
-  if (cUser.Save(file)==false) break;
+  if (cRAIIFileOut.IsOpened()==false) return(false);
+
+  //пишем сигнатуру и номер версии структуры данных
+  unsigned short crc16=0;
+  if (cRAIIFileOut.GetHandle().write((char *)"ULV",sizeof(unsigned char)*3)==false) return(false);
+  if (cRAIIFileOut.GetHandle().write((char *)&Version,sizeof(unsigned long)*1)==false) return(false);
+  CreateCRC16(crc16,&Version,sizeof(unsigned long)*1);
+  //пишем файл
+  size_t size=vector_CUser.size();
+  if (cRAIIFileOut.GetHandle().write((char *)&size,sizeof(size_t)*1)==false) return(false);  
+  CreateCRC16(crc16,&size,sizeof(size_t)*1);
+  //записываем CRC
+  if (cRAIIFileOut.GetHandle().write((char *)&crc16,sizeof(unsigned short)*1)==false) return(false);
+ 
+  for(size_t n=0;n<size;n++)
+  {
+   const CUser &cUser=vector_CUser[n]; 
+   if (cUser.Save(cRAIIFileOut)==false) break;
+  }
  }
- fclose(file);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
@@ -52,54 +54,29 @@ bool CVectorUser::Load(char *filename)
 {
  vector_CUser.clear();
 
- FILE *file=fopen(filename,"rb");
- if (file==NULL) return(false);
- unsigned char signature[3];
- unsigned long version;
- unsigned short crc16_file;
- if (fread(signature,sizeof(unsigned char),3,file)<3)
+ CRAIIFileIn cRAIIFileIn(filename,std::ios_base::in|std::ios_base::binary);
  {
-  fclose(file);
-  return(false);
+  if (cRAIIFileIn.IsOpened()==false) return(false);
+  unsigned char signature[3];
+  unsigned long version;
+  unsigned short crc16_file;
+  if (cRAIIFileIn.GetHandle().read((char*)signature,sizeof(unsigned char)*3)==false) return(false);
+  if (cRAIIFileIn.GetHandle().read((char*)&version,sizeof(unsigned long)*1)==false) return(false);
+  if (signature[0]!='U' || signature[1]!='L' || signature[2]!='V' || version!=Version) return(false);
+  size_t size;
+  if (cRAIIFileIn.GetHandle().read((char*)&size,sizeof(size_t)*1)==false) return(false);
+  if (cRAIIFileIn.GetHandle().read((char*)&crc16_file,sizeof(unsigned short)*1)==false) return(false);
+  unsigned short crc16=0;
+  CreateCRC16(crc16,&version,sizeof(unsigned long)*1);
+  CreateCRC16(crc16,&size,sizeof(size_t)*1);
+  if (crc16_file!=crc16) return(false);
+  for(size_t n=0;n<size;n++)
+  {
+   CUser cUser;
+   if (cUser.Load(cRAIIFileIn)==false) break;
+   vector_CUser.push_back(cUser);
+  }
  }
- if (fread(&version,sizeof(unsigned long),1,file)<1)
- {
-  fclose(file);
-  return(false);
- }
- if (signature[0]!='U' || signature[1]!='L' || signature[2]!='V' || version!=Version)
- {
-  fclose(file);
-  return(false);
- }
- size_t size;
- if (fread(&size,sizeof(size_t),1,file)<1)
- {
-  fclose(file);
-  return(false);
- }
- if (fread(&crc16_file,sizeof(unsigned short),1,file)<1)
- {
-  fclose(file);
-  return(false);
- }
-
- unsigned short crc16=0;
- CreateCRC16(crc16,&version,sizeof(unsigned long)*1);
- CreateCRC16(crc16,&size,sizeof(size_t)*1);
-  if (crc16_file!=crc16)
- {
-  fclose(file);
-  return(false);
- }
-
- for(size_t n=0;n<size;n++)
- {
-  CUser cUser;
-  if (cUser.Load(file)==false) break;
-  vector_CUser.push_back(cUser);
- }
- fclose(file);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------

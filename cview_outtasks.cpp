@@ -65,6 +65,8 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  if (cDocument_Main_Ptr==NULL) return;
  vector<CTask> vector_CTask_Local;
 
+ if (cDocument_Main_Ptr->IsShowCommonTask()==true) ColumnName="Выданные видимые всем задания";
+                                              else ColumnName="Выданные задания"; 
  CUser cUser;
  if (cDocument_Main_Ptr->GetSelectedUser(cUser)==false)
  {
@@ -79,8 +81,8 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  cDocument_Main_Ptr->GetMyParam(on_line,my_guid,my_name,leader);
  if (cUser.IsUserGUID(ALL_USER_GUID)==true)//выбраны сразу все пользователи
  {
-  if (cDocument_Main_Ptr->IsShowCommonTask()==true) vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskCommon(); 
-                                               else vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByFromUserGUID(my_guid); 
+  if (cDocument_Main_Ptr->IsShowCommonTask()==true) vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskCommon();    
+                                               else vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByFromUserGUID(my_guid);    
   VisibleFromUser=false;
   VisibleForUser=true;
  }

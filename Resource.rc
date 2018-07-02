@@ -400,6 +400,11 @@ BEGIN
     IDR_MENU_MAIN           "TCC\n\nTCC\n\n\nTCC.Document\nTCC.Document"
 END
 
+STRINGTABLE
+BEGIN
+    AFX_IDS_UNTITLED        "Team Control"
+END
+
 #endif    // Russian (Russia) resources
 /////////////////////////////////////////////////////////////////////////////
 

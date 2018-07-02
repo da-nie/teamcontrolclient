@@ -10,6 +10,9 @@
 //====================================================================================================
 //подключаемые библиотеки
 //====================================================================================================
+#include "craiifilein.h"
+#include "craiifileout.h"
+
 #include "stdafx.h"
 #include "csafestring.h"
 //====================================================================================================
@@ -78,7 +81,7 @@ class CProject
 
   bool IsProjectGUID(const char *guid) const;//верный ли ProjectGUID
 
-  bool Save(FILE *file) const;//сохранить данные
-  bool Load(FILE *file);//загрузить данные
+  bool Save(CRAIIFileOut &cRAIIFileOut) const;//сохранить данные
+  bool Load(CRAIIFileIn &cRAIIFileIn);//загрузить данные
 };
 #endif

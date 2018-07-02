@@ -564,7 +564,7 @@ bool CTask::IsEquivalent(const CTask &cTask)
 //----------------------------------------------------------------------------------------------------
 //сохранить данные
 //----------------------------------------------------------------------------------------------------
-bool CTask::Save(FILE *file) const
+bool CTask::Save(CRAIIFileOut &cRAIIFileOut) const
 {
  const char *s_ptr;
  //заполняем заголовок
@@ -589,13 +589,13 @@ bool CTask::Save(FILE *file) const
  sHeader.TaskReferenceExist=TaskReferenceExist;
  sHeader.Common=Common;
 
- fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file); 
+ if (cRAIIFileOut.GetHandle().write((char *)&sHeader,sizeof(SHeader)*1)==false) return(false);
 
 //считаем crc
  unsigned short crc16=0;
  CreateCRC16(crc16,&sHeader,sizeof(SHeader)*1);
  //записываем crc
- fwrite(&crc16,sizeof(unsigned short),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)&crc16,sizeof(unsigned short)*1)==false) return(false);
 
  s_ptr=FromUserGUID;
  CreateCRC16(crc16,s_ptr,FromUserGUID.GetLength());
@@ -615,41 +615,41 @@ bool CTask::Save(FILE *file) const
  CreateCRC16(crc16,s_ptr,TaskReference.GetLength());
 
  //записываем crc
- fwrite(&crc16,sizeof(unsigned short),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)&crc16,sizeof(unsigned short)*1)==false) return(false);
 
  //записываем данные 
  s_ptr=FromUserGUID;
- fwrite(s_ptr,FromUserGUID.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*FromUserGUID.GetLength())==false) return(false);
  s_ptr=ForUserGUID;
- fwrite(s_ptr,ForUserGUID.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*ForUserGUID.GetLength())==false) return(false);
  s_ptr=ProjectGUID;
- fwrite(s_ptr,ProjectGUID.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*ProjectGUID.GetLength())==false) return(false);
  s_ptr=Task;
- fwrite(s_ptr,Task.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*Task.GetLength())==false) return(false);
  s_ptr=TaskGUID;
- fwrite(s_ptr,TaskGUID.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*TaskGUID.GetLength())==false) return(false);
  s_ptr=Answer;
- fwrite(s_ptr,Answer.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*Answer.GetLength())==false) return(false);
  s_ptr=AnswerReference;
- fwrite(s_ptr,AnswerReference.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*AnswerReference.GetLength())==false) return(false);
  s_ptr=TaskReference;
- fwrite(s_ptr,TaskReference.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*TaskReference.GetLength())==false) return(false);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //загрузить данные
 //----------------------------------------------------------------------------------------------------
-bool CTask::Load(FILE *file)
+bool CTask::Load(CRAIIFileIn &cRAIIFileIn)
 {
  unsigned short crc16_file;
  unsigned short crc16=0;
 
  SHeader sHeader;
- if (fread(&sHeader,sizeof(SHeader),1,file)<1) return(false);
- if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)&sHeader,sizeof(SHeader)*1)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)&crc16_file,sizeof(unsigned short)*1)==false) return(false);
  CreateCRC16(crc16,&sHeader,sizeof(SHeader));
  if (crc16!=crc16_file) return(false);
- if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)&crc16_file,sizeof(unsigned short)*1)==false) return(false);
 
  CUniqueArrayPtr<char> from_user_guid;
  CUniqueArrayPtr<char> for_user_guid;
@@ -669,14 +669,14 @@ bool CTask::Load(FILE *file)
  answer_reference.Set(new char[sHeader.AnswerReferenceSize+1]);
  task_reference.Set(new char[sHeader.TaskReferenceSize+1]);
  
- if (fread(from_user_guid.Get(),sizeof(char),sHeader.FromUserGUIDSize,file)<sHeader.FromUserGUIDSize) return(false);
- if (fread(for_user_guid.Get(),sizeof(char),sHeader.ForUserGUIDSize,file)<sHeader.ForUserGUIDSize) return(false);
- if (fread(project_guid.Get(),sizeof(char),sHeader.ProjectGUIDSize,file)<sHeader.ProjectGUIDSize) return(false);
- if (fread(task.Get(),sizeof(char),sHeader.TaskSize,file)<sHeader.TaskSize) return(false);
- if (fread(task_guid.Get(),sizeof(char),sHeader.TaskGUIDSize,file)<sHeader.TaskGUIDSize) return(false);
- if (fread(answer.Get(),sizeof(char),sHeader.AnswerSize,file)<sHeader.AnswerSize) return(false);
- if (fread(answer_reference.Get(),sizeof(char),sHeader.AnswerReferenceSize,file)<sHeader.AnswerReferenceSize) return(false);
- if (fread(task_reference.Get(),sizeof(char),sHeader.TaskReferenceSize,file)<sHeader.TaskReferenceSize) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)from_user_guid.Get(),sizeof(char)*sHeader.FromUserGUIDSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)for_user_guid.Get(),sizeof(char)*sHeader.ForUserGUIDSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)project_guid.Get(),sizeof(char)*sHeader.ProjectGUIDSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)task.Get(),sizeof(char)*sHeader.TaskSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)task_guid.Get(),sizeof(char)*sHeader.TaskGUIDSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)answer.Get(),sizeof(char)*sHeader.AnswerSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)answer_reference.Get(),sizeof(char)*sHeader.AnswerReferenceSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)task_reference.Get(),sizeof(char)*sHeader.TaskReferenceSize)==false) return(false);
 
  CreateCRC16(crc16,from_user_guid.Get(),sizeof(char)*sHeader.FromUserGUIDSize);
  CreateCRC16(crc16,for_user_guid.Get(),sizeof(char)*sHeader.ForUserGUIDSize);

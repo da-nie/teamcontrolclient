@@ -135,7 +135,7 @@ bool CProject::IsProjectGUID(const char *guid) const
 //----------------------------------------------------------------------------------------------------
 //сохранить данные
 //----------------------------------------------------------------------------------------------------
-bool CProject::Save(FILE *file) const
+bool CProject::Save(CRAIIFileOut &cRAIIFileOut) const
 {
  const char *s_ptr;
  //заполняем заголовок
@@ -144,13 +144,13 @@ bool CProject::Save(FILE *file) const
  sHeader.ProjectGUIDSize=ProjectGUID.GetLength();
  sHeader.ProjectType=ProjectType;
 
- fwrite(reinterpret_cast<const char*>(&sHeader),sizeof(SHeader),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)&sHeader,sizeof(SHeader)*1)==false) return(false);
 
-//считаем crc
+ //считаем crc
  unsigned short crc16=0;
  CreateCRC16(crc16,&sHeader,sizeof(SHeader)*1);
  //записываем crc
- fwrite(&crc16,sizeof(unsigned short),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)&crc16,sizeof(unsigned short)*1)==false) return(false);
 
  s_ptr=ProjectName;
  CreateCRC16(crc16,s_ptr,ProjectName.GetLength());
@@ -158,29 +158,29 @@ bool CProject::Save(FILE *file) const
  CreateCRC16(crc16,s_ptr,ProjectGUID.GetLength());
 
  //записываем crc
- fwrite(&crc16,sizeof(unsigned short),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)&crc16,sizeof(unsigned short)*1)==false) return(false);
 
  //записываем данные  
  s_ptr=ProjectName;
- fwrite(s_ptr,ProjectName.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*ProjectName.GetLength())==false) return(false);
  s_ptr=ProjectGUID;
- fwrite(s_ptr,ProjectGUID.GetLength(),1,file);
+ if (cRAIIFileOut.GetHandle().write((char *)s_ptr,sizeof(unsigned char)*ProjectGUID.GetLength())==false) return(false);
  return(true);
 }
 //----------------------------------------------------------------------------------------------------
 //загрузить данные
 //----------------------------------------------------------------------------------------------------
-bool CProject::Load(FILE *file)
+bool CProject::Load(CRAIIFileIn &cRAIIFileIn)
 {
  unsigned short crc16_file;
  unsigned short crc16=0;
 
  SHeader sHeader;
- if (fread(&sHeader,sizeof(SHeader),1,file)<1) return(false);
- if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)&sHeader,sizeof(SHeader)*1)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)&crc16_file,sizeof(unsigned short)*1)==false) return(false);
  CreateCRC16(crc16,&sHeader,sizeof(SHeader));
  if (crc16!=crc16_file) return(false);
- if (fread(&crc16_file,sizeof(unsigned short),1,file)<1) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)&crc16_file,sizeof(unsigned short)*1)==false) return(false);
 
  CUniqueArrayPtr<char> project_guid;
  CUniqueArrayPtr<char> project_name;
@@ -188,8 +188,8 @@ bool CProject::Load(FILE *file)
  project_guid.Set(new char[sHeader.ProjectGUIDSize+1]);
  project_name.Set(new char[sHeader.ProjectNameSize+1]);
  
- if (fread(project_name.Get(),sizeof(char),sHeader.ProjectNameSize,file)<sHeader.ProjectNameSize) return(false);
- if (fread(project_guid.Get(),sizeof(char),sHeader.ProjectGUIDSize,file)<sHeader.ProjectGUIDSize) return(false); 
+ if (cRAIIFileIn.GetHandle().read((char*)project_name.Get(),sizeof(char)*sHeader.ProjectNameSize)==false) return(false);
+ if (cRAIIFileIn.GetHandle().read((char*)project_guid.Get(),sizeof(char)*sHeader.ProjectGUIDSize)==false) return(false);
 
  CreateCRC16(crc16,project_name.Get(),sizeof(char)*sHeader.ProjectNameSize);
  CreateCRC16(crc16,project_guid.Get(),sizeof(char)*sHeader.ProjectGUIDSize);
