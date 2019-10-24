@@ -13,13 +13,16 @@
 
 #include <list>
 #include <vector>
+#include <memory>
 #include "stdafx.h"
 #include "craiiccriticalsection.h"
 #include "cvector_task.h"
 #include "cvector_user.h"
 #include "cvector_project.h"
+#include "citaskexport.h"
 
-using namespace std;
+
+
 
 //====================================================================================================
 //макроопределения
@@ -167,14 +170,14 @@ class CDocument_Main:public CDocument
   bool DeleteProject(CProject &cProject);//удалить проект
   bool ChangeProject(CProject &cProject);//изменить проект
 
-  vector<CTask> CreateVectorCTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
-  vector<CTask> CreateVectorCTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
-  vector<CTask> CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
-  vector<CTask> CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
+  std::vector<CTask> CreateVectorCTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
+  std::vector<CTask> CreateVectorCTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
+  std::vector<CTask> CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
+  std::vector<CTask> CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
 
-  vector<CTask> CreateVectorCTaskCommonByForUserGUID(const CSafeString &guid);//создать вектор общих задач по GUID пользователя для которого задание
-  vector<CTask> CreateVectorCTaskCommon();//создать вектор общих задач
-  vector<CTask> CreateVectorCTaskCommonByProjectGUID(const CSafeString &guid_project);//создать вектор общих задач по проекту
+  std::vector<CTask> CreateVectorCTaskCommonByForUserGUID(const CSafeString &guid);//создать вектор общих задач по GUID пользователя для которого задание
+  std::vector<CTask> CreateVectorCTaskCommon();//создать вектор общих задач
+  std::vector<CTask> CreateVectorCTaskCommonByProjectGUID(const CSafeString &guid_project);//создать вектор общих задач по проекту
 
   bool PopTaskTransferToServer(CTask &cTask);//получить задание для передачи на сервер
   void PushTaskTransferToServer(const CTask &cTask);//добавить задание для передачи на сервер
@@ -190,6 +193,9 @@ class CDocument_Main:public CDocument
   bool IsShowCommonTask(void);//разрешено ли показывать общие задания
 
   void Processing(void);//цикл обработки
+
+  void ExportTaskFrom(const std::string &file_name,std::shared_ptr<CITaskExport> cITaskExport_Ptr);//экспорт выданных заданий
+  void ExportTaskFor(const std::string &file_name,std::shared_ptr<CITaskExport> cITaskExport_Ptr);//экспорт полученных заданий
  protected:
   //-Функции класса----------------------------------------------------------  
   void FindAllMyParam(void);//определить все наши параметры (имя, руководитель ли)

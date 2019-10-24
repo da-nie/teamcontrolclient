@@ -24,7 +24,7 @@
 #include "cframecell.h"
 #include "cbitmapcell.h"
 
-using namespace std;
+
 
 //====================================================================================================
 //класс представления
@@ -34,10 +34,10 @@ class CView_Base:public CView
 {
  protected: 
   //-Переменные класса-------------------------------------------------------
-  vector<CTask> vector_CTask;//отображаемый список задач
+  std::vector<CTask> vector_CTask;//отображаемый список задач
   bool FlashState;//состояние мигания
   CSafeString SelectedTaskGUID;//GUID выбранного задания
-  vector<SCell> vector_SCell_Task;//список координат заданий
+  std::vector<SCell> vector_SCell_Task;//список координат заданий
 
   CBitmap cBitmap_TaskNotReadFrameOne;//пиктограмма "задание не прочитано"
   CBitmap cBitmap_TaskNotReadFrameOneFlash;//инверсная пиктограмма "задание не прочитано"
@@ -103,7 +103,7 @@ class CView_Base:public CView
   //-Функции класса----------------------------------------------------------
   CDocument_Main* GetDocument(void);//получить документ
   virtual bool TaskIsVisible(const SShowState &sShowState,const CTask& cTask)=0;//разрешено ли отображать задание
-  void UpdateTask(vector<CTask> &vector_CTask_Local);//обновить задания в списке
+  void UpdateTask(std::vector<CTask> &vector_CTask_Local);//обновить задания в списке
   void DrawTasks(CDC *pDC);//нарисовать список задач
   //константы класса
   const long & GetScrollBarWidth(void){static const long ret=16;return(ret);}//получить ширину полосы прокрутки

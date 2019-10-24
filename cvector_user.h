@@ -15,7 +15,7 @@
 #include "stdafx.h"
 #include "cuser.h"
 
-using namespace std;
+
 
 //====================================================================================================
 //класс-обёртка для вектора хранения пользователей
@@ -26,7 +26,7 @@ class CVectorUser
  protected: 
   unsigned long Version;//номер версии структуры
   //переменные
-  vector<CUser> vector_CUser;
+  std::vector<CUser> vector_CUser;
  public:
   //конструктор
   CVectorUser();
@@ -44,7 +44,7 @@ class CVectorUser
   size_t Size(void);//получить количество пользователей
   bool PopBack(CUser &cUser);//получить последнего пользователя и удалить его
   bool PushBack(const CUser &cUser);//добавить пользователя в конец
-  vector<CUser>& GetVectorCUser(void);//получить ссылку на вектор пользователей
+  std::vector<CUser>& GetVectorCUser(void);//получить ссылку на вектор пользователей
  protected:
   //функции
  

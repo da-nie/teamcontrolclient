@@ -206,8 +206,8 @@ afx_msg void CTreeView_Kit::OnSelchanged(NMHDR* pNMHDR,LRESULT* pResult)
   return;
  }
  //ищем выбранный элемент среди сотрудников
- list<SColleagueInTreeView>::iterator iterator=list_SColleagueInTreeView.begin();
- list<SColleagueInTreeView>::iterator iterator_end=list_SColleagueInTreeView.end();  
+ std::list<SColleagueInTreeView>::iterator iterator=list_SColleagueInTreeView.begin();
+ std::list<SColleagueInTreeView>::iterator iterator_end=list_SColleagueInTreeView.end();  
  while(iterator!=iterator_end)
  {
   SColleagueInTreeView &sColleagueInTreeView=*iterator;
@@ -222,8 +222,8 @@ afx_msg void CTreeView_Kit::OnSelchanged(NMHDR* pNMHDR,LRESULT* pResult)
  }
 
  //ищем выбранный элемент среди проектов
- list<CProjectInTreeView>::iterator iterator_project=list_CProjectInTreeView.begin();
- list<CProjectInTreeView>::iterator iterator_project_end=list_CProjectInTreeView.end();  
+ std::list<CProjectInTreeView>::iterator iterator_project=list_CProjectInTreeView.begin();
+ std::list<CProjectInTreeView>::iterator iterator_project_end=list_CProjectInTreeView.end();  
  while(iterator_project!=iterator_project_end)
  {
   CProjectInTreeView &cProjectInTreeView=*iterator_project;
@@ -377,8 +377,8 @@ void CTreeView_Kit::UpdateTree(void)
  if (hTREEITEM_Colleague!=NULL)
  {
   //сканируем дерево сотрудников и добавляем или удаляем сотрудников
-  list<SColleagueInTreeView>::iterator iterator=list_SColleagueInTreeView.begin();
-  list<SColleagueInTreeView>::iterator iterator_end=list_SColleagueInTreeView.end();  
+  std::list<SColleagueInTreeView>::iterator iterator=list_SColleagueInTreeView.begin();
+  std::list<SColleagueInTreeView>::iterator iterator_end=list_SColleagueInTreeView.end();  
   //удаление сотрудников
   while(iterator!=iterator_end)
   {
@@ -398,7 +398,7 @@ void CTreeView_Kit::UpdateTree(void)
   }
    //добавление сотрудников
   CVectorUser cVectorUser=cDocument_Main_Ptr->GetCVectorUser();
-  vector<CUser> &vector_CUser=cVectorUser.GetVectorCUser();
+  std::vector<CUser> &vector_CUser=cVectorUser.GetVectorCUser();
   size_t size=vector_CUser.size();
   for(size_t n=0;n<size;n++)
   {
@@ -419,8 +419,8 @@ void CTreeView_Kit::UpdateTree(void)
  if (hTREEITEM_Projects!=NULL)
  {
   //сканируем дерево проектов и добавляем или удаляем проекты
-  list<CProjectInTreeView>::iterator iterator=list_CProjectInTreeView.begin();
-  list<CProjectInTreeView>::iterator iterator_end=list_CProjectInTreeView.end();  
+  std::list<CProjectInTreeView>::iterator iterator=list_CProjectInTreeView.begin();
+  std::list<CProjectInTreeView>::iterator iterator_end=list_CProjectInTreeView.end();  
   //удаление проектов
   while(iterator!=iterator_end)
   {
@@ -440,7 +440,7 @@ void CTreeView_Kit::UpdateTree(void)
   }
    //добавление проектов
   CVectorProject cVectorProject=cDocument_Main_Ptr->GetCVectorProject();
-  vector<CProject> &vector_CProject=cVectorProject.GetVectorCProject();
+  std::vector<CProject> &vector_CProject=cVectorProject.GetVectorCProject();
   size_t size=vector_CProject.size();
   for(size_t n=0;n<size;n++)
   {
@@ -490,8 +490,8 @@ HTREEITEM CTreeView_Kit::InsertItem(HTREEITEM hParent,const CSafeString& text,lo
 //----------------------------------------------------------------------------------------------------
 bool CTreeView_Kit::FindColleagueByGUID(const CSafeString &guid,SColleagueInTreeView &sColleagueInTreeView)
 {
- list<SColleagueInTreeView>::iterator iterator=list_SColleagueInTreeView.begin();
- list<SColleagueInTreeView>::iterator iterator_end=list_SColleagueInTreeView.end();
+ std::list<SColleagueInTreeView>::iterator iterator=list_SColleagueInTreeView.begin();
+ std::list<SColleagueInTreeView>::iterator iterator_end=list_SColleagueInTreeView.end();
  while(iterator!=iterator_end)
  {
   sColleagueInTreeView=*iterator;
@@ -505,8 +505,8 @@ bool CTreeView_Kit::FindColleagueByGUID(const CSafeString &guid,SColleagueInTree
 //----------------------------------------------------------------------------------------------------
 bool CTreeView_Kit::FindProjectByGUID(const CSafeString &guid,CProjectInTreeView &cProjectInTreeView)
 {
- list<CProjectInTreeView>::iterator iterator=list_CProjectInTreeView.begin();
- list<CProjectInTreeView>::iterator iterator_end=list_CProjectInTreeView.end();
+ std::list<CProjectInTreeView>::iterator iterator=list_CProjectInTreeView.begin();
+ std::list<CProjectInTreeView>::iterator iterator_end=list_CProjectInTreeView.end();
  while(iterator!=iterator_end)
  {
   cProjectInTreeView=*iterator;

@@ -132,6 +132,15 @@
     <ClCompile Include="craiifileout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ctaskexportcsv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctaskexporthtml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="citaskexport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cvector_task.h">
@@ -264,6 +273,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="craiifilein.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="citaskexport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctaskexportcsv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctaskexporthtml.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

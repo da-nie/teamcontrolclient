@@ -19,7 +19,7 @@
 #include "cdialog_usersettings.h"
 #include "cdialog_clientsettings.h"
 
-using namespace std;
+
 
 //====================================================================================================
 //макроопределения
@@ -62,8 +62,8 @@ class CTreeView_Kit:public CTreeView
   HTREEITEM hTREEITEM_Colleague;//ветка "сотрудники"
   HTREEITEM hTREEITEM_Projects;//ветка "проекты"
 
-  list<SColleagueInTreeView> list_SColleagueInTreeView;//список сотрудников в дереве представлений
-  list<CProjectInTreeView> list_CProjectInTreeView;//список проектов в дереве представлений
+  std::list<SColleagueInTreeView> list_SColleagueInTreeView;//список сотрудников в дереве представлений
+  std::list<CProjectInTreeView> list_CProjectInTreeView;//список проектов в дереве представлений
 
   CBitmap cBitmap_MenuList_AddTask;//создать задание
   CBitmap cBitmap_MenuList_UserInfo;//посмотреть информацию о пользователе

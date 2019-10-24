@@ -19,27 +19,17 @@
 #include "cdialog_deletefinishedtask.h"
 
 //====================================================================================================
-//макроопределения
-//====================================================================================================
-
-//количество кнопок в панели инструментов
-#define TOOLBAR_MAIN_BUTTON_AMOUNT 17
-
-//период таймера рамки окна
-#define FRAME_WND_TIMER_PERIOD 100
-//максимальное время показа заставки при включении
-#define ABOUT_TIMER_MAX_CONTER (3000/FRAME_WND_TIMER_PERIOD)
-//время на смену иконки в трее
-#define SYSTRAY_CHANGE_ICON_COUNTER (500/FRAME_WND_TIMER_PERIOD)
-//периодичность проверки связи
-#define PING_COUNTER_MAX_VALUE (60000/FRAME_WND_TIMER_PERIOD)
-
-//====================================================================================================
 //класс рамки окна
 //====================================================================================================
 class CFrameWnd_Main:public CFrameWnd
 {
  protected:
+  //-Константы класса--------------------------------------------------------
+  static const unsigned long TOOLBAR_MAIN_BUTTON_AMOUNT=17;//количество кнопок в панели инструментов
+  static const unsigned long FRAME_WND_TIMER_PERIOD=100;//период таймера рамки окна
+  static const unsigned long ABOUT_TIMER_MAX_CONTER=(3000/FRAME_WND_TIMER_PERIOD);//максимальное время показа заставки при включении
+  static const unsigned long SYSTRAY_CHANGE_ICON_COUNTER=(500/FRAME_WND_TIMER_PERIOD);//время на смену иконки в трее
+  static const unsigned long PING_COUNTER_MAX_VALUE=(60000/FRAME_WND_TIMER_PERIOD);//периодичность проверки связи
   //-Переменные класса-------------------------------------------------------
   CStatusBar cStatusBar_Main;
   CToolBar cToolBar_Main;
@@ -73,6 +63,10 @@ class CFrameWnd_Main:public CFrameWnd
   DECLARE_MESSAGE_MAP()
   afx_msg void OnCommand_Menu_Main_Settings(void);//настройка клиента
   afx_msg void OnCommand_Menu_Main_DeleteFinishedTask(void);//удаление завершённых заданий
+  afx_msg void OnCommand_Menu_Main_ExportTaskFromHTML(void);//экспорт выданных заданий в html
+  afx_msg void OnCommand_Menu_Main_ExportTaskFromCSV(void);//экспорт выданных заданий в csv
+  afx_msg void OnCommand_Menu_Main_ExportTaskForHTML(void);//экспорт полученных заданий в html
+  afx_msg void OnCommand_Menu_Main_ExportTaskForCSV(void);//экспорт полученных заданий в csv
 
   afx_msg void OnCommand_ToolBar_Main_OutTaskShowCancelled(void);//нажата кнопка "показать отменённые задания из списка выданных" главной панели инструментов 
   afx_msg void OnCommand_ToolBar_Main_OutTaskShowDone(void);//нажата кнопка "показать выполненные задания из списка выданных" главной панели инструментов 
@@ -96,6 +90,7 @@ class CFrameWnd_Main:public CFrameWnd
  protected:
   //функции класса
   void CheckToolBarMainButtonAndSetShowStateInDocument(void);//проверить кнопки главной панели инструментов и задать их состояние в документе  
+  bool GetFileNameForSave(std::string &file_name,const std::string &caption,const std::string &extension);//получить имя файла для сохранения
   //-Прочее------------------------------------------------------------------
   DECLARE_DYNCREATE(CFrameWnd_Main) 
 };

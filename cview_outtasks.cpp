@@ -63,7 +63,7 @@ void CView_OutTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
 {
  CDocument_Main *cDocument_Main_Ptr=GetDocument();
  if (cDocument_Main_Ptr==NULL) return;
- vector<CTask> vector_CTask_Local;
+ std::vector<CTask> vector_CTask_Local;
 
  if (cDocument_Main_Ptr->IsShowCommonTask()==true) ColumnName="Выданные видимые всем задания";
                                               else ColumnName="Выданные задания"; 

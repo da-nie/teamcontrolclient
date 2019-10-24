@@ -136,6 +136,10 @@ BEGIN
     BEGIN
         MENUITEM "Ќастройки",                   IDC_MENU_MAIN_SETTINGS
         MENUITEM "”даление выданных вами завершЄнных заданий", IDC_MENU_MAIN_DELETE_FINISHED_TASK
+        MENUITEM "Ёкспорт выданных заданий в html", IDC_MENU_MAIN_EXPORT_TASK_FROM_HTML
+        MENUITEM "Ёкспорт выданных заданий в csv", IDC_MENU_MAIN_EXPORT_TASK_FROM_CSV
+        MENUITEM "Ёкспорт полученных заданий в html", IDC_MENU_MAIN_EXPORT_TASK_FOR_HTML
+        MENUITEM "Ёкспорт полученных заданий в csv", IDC_MENU_MAIN_EXPORT_TASK_FOR_CSV
     END
 END
 

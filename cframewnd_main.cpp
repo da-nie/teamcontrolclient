@@ -1,4 +1,7 @@
 #include "cframewnd_main.h"
+#include "citaskexport.h"
+
+#include <memory>
 
 //====================================================================================================
 //карта сообщений класса
@@ -11,6 +14,12 @@ BEGIN_MESSAGE_MAP(CFrameWnd_Main,CFrameWnd)
  ON_WM_SYSCOMMAND()
  ON_COMMAND(IDC_MENU_MAIN_SETTINGS,OnCommand_Menu_Main_Settings)
  ON_COMMAND(IDC_MENU_MAIN_DELETE_FINISHED_TASK,OnCommand_Menu_Main_DeleteFinishedTask)
+
+ ON_COMMAND(IDC_MENU_MAIN_EXPORT_TASK_FROM_HTML,OnCommand_Menu_Main_ExportTaskFromHTML)
+ ON_COMMAND(IDC_MENU_MAIN_EXPORT_TASK_FROM_CSV,OnCommand_Menu_Main_ExportTaskFromCSV)
+
+ ON_COMMAND(IDC_MENU_MAIN_EXPORT_TASK_FOR_HTML,OnCommand_Menu_Main_ExportTaskForHTML)
+ ON_COMMAND(IDC_MENU_MAIN_EXPORT_TASK_FOR_CSV,OnCommand_Menu_Main_ExportTaskForCSV)
 
  ON_COMMAND(IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_CANCELLED,OnCommand_ToolBar_Main_OutTaskShowCancelled)
  ON_COMMAND(IDC_TOOLBAR_MAIN_IN_OUT_TASK_SHOW_DONE,OnCommand_ToolBar_Main_OutTaskShowDone)
@@ -370,6 +379,54 @@ afx_msg void CFrameWnd_Main::OnCommand_Menu_Main_DeleteFinishedTask(void)
  long day=0;
  if (cDialog_DeleteFinishedTask.Activate(year,month,day)==true) cDocument_Main_Ptr->DeleteFinishedTask(year,month,day);
 }
+//----------------------------------------------------------------------------------------------------
+//экспорт выданных заданий в html
+//----------------------------------------------------------------------------------------------------
+afx_msg void CFrameWnd_Main::OnCommand_Menu_Main_ExportTaskFromHTML(void)
+{
+ std::string file_name;
+ if (GetFileNameForSave(file_name,"Ёкспорт выданных заданий в html","*.htm|*.htm||")==false) return;
+ CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
+ if (cDocument_Main_Ptr==NULL) return;//ошибка
+ std::shared_ptr<CITaskExport> cITaskExport_Ptr(CITaskExport::CreateNewTaskExportToHTML());
+ cDocument_Main_Ptr->ExportTaskFrom(file_name,cITaskExport_Ptr);
+}
+//----------------------------------------------------------------------------------------------------
+//экспорт выданных заданий в cvs
+//----------------------------------------------------------------------------------------------------
+afx_msg void CFrameWnd_Main::OnCommand_Menu_Main_ExportTaskFromCSV(void)
+{
+ std::string file_name;
+ if (GetFileNameForSave(file_name,"Ёкспорт выданных заданий в cvs","*.csv|*.csv||")==false) return;
+ CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
+ if (cDocument_Main_Ptr==NULL) return;//ошибка
+ std::shared_ptr<CITaskExport> cITaskExport_Ptr(CITaskExport::CreateNewTaskExportToCSV());
+ cDocument_Main_Ptr->ExportTaskFrom(file_name,cITaskExport_Ptr);
+}
+//----------------------------------------------------------------------------------------------------
+//экспорт полученных заданий в html
+//----------------------------------------------------------------------------------------------------
+afx_msg void CFrameWnd_Main::OnCommand_Menu_Main_ExportTaskForHTML(void)
+{
+ std::string file_name;
+ if (GetFileNameForSave(file_name,"Ёкспорт полученных заданий в html","*.htm|*.htm||")==false) return;
+ CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
+ if (cDocument_Main_Ptr==NULL) return;//ошибка
+ std::shared_ptr<CITaskExport> cITaskExport_Ptr(CITaskExport::CreateNewTaskExportToHTML());
+ cDocument_Main_Ptr->ExportTaskFor(file_name,cITaskExport_Ptr);
+}
+//----------------------------------------------------------------------------------------------------
+//экспорт полученных заданий в cvs
+//----------------------------------------------------------------------------------------------------
+afx_msg void CFrameWnd_Main::OnCommand_Menu_Main_ExportTaskForCSV(void)
+{
+ std::string file_name;
+ if (GetFileNameForSave(file_name,"Ёкспорт полученных заданий в cvs","*.csv|*.csv||")==false) return;
+ CDocument_Main *cDocument_Main_Ptr=(CDocument_Main*)GetActiveDocument();
+ if (cDocument_Main_Ptr==NULL) return;//ошибка
+ std::shared_ptr<CITaskExport> cITaskExport_Ptr(CITaskExport::CreateNewTaskExportToCSV());
+ cDocument_Main_Ptr->ExportTaskFor(file_name,cITaskExport_Ptr);
+}
 
 //----------------------------------------------------------------------------------------------------
 //нажата кнопка "показать отменЄнные задани€ из списка выданных" главной панели инструментов 
@@ -545,6 +602,25 @@ void CFrameWnd_Main::CheckToolBarMainButtonAndSetShowStateInDocument(void)
  cDocument_Main_Ptr->UpdateAllViews(NULL,0,NULL);
 }
 
+//----------------------------------------------------------------------------------------------------
+//получить им€ файла дл€ сохранени€
+//----------------------------------------------------------------------------------------------------
+bool CFrameWnd_Main::GetFileNameForSave(std::string &file_name,const std::string &caption,const std::string &extension)
+{
+ char path[MAX_PATH];
+ GetCurrentDirectory(MAX_PATH,path); 
+ CFileDialog cFileDialog(FALSE,"","",OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,extension.c_str(),this);
+ cFileDialog.m_ofn.lpstrInitialDir=path;
+ cFileDialog.m_ofn.lpstrTitle=caption.c_str();
+ if (cFileDialog.DoModal()!=IDOK) return(false);
+ char file_path[MAX_PATH];
+ GetCurrentDirectory(MAX_PATH,file_path); 
+ SetCurrentDirectory(path);
+ file_name=file_path;
+ file_name+="\\";
+ file_name+=cFileDialog.GetFileName();
+ return(true);
+}
 
 //====================================================================================================
 //ѕрочее

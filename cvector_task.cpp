@@ -217,16 +217,16 @@ bool CVectorTask::PushBack(const CTask &cTask)
 //----------------------------------------------------------------------------------------------------
 //получить ссылку на вектор задач
 //----------------------------------------------------------------------------------------------------
-vector<CTask>& CVectorTask::GetVectorCTask(void)
+std::vector<CTask>& CVectorTask::GetVectorCTask(void)
 {
  return(vector_CTask);
 }
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CVectorTask::CreateVectorCTaskByForUserGUID(const CSafeString &guid)
+std::vector<CTask> CVectorTask::CreateVectorCTaskByForUserGUID(const CSafeString &guid)
 {
- vector<CTask> vector_CTask_Out;
+ std::vector<CTask> vector_CTask_Out;
  size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
@@ -238,9 +238,9 @@ vector<CTask> CVectorTask::CreateVectorCTaskByForUserGUID(const CSafeString &gui
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CVectorTask::CreateVectorCTaskByFromUserGUID(const CSafeString &guid)
+std::vector<CTask> CVectorTask::CreateVectorCTaskByFromUserGUID(const CSafeString &guid)
 {
- vector<CTask> vector_CTask_Out;
+ std::vector<CTask> vector_CTask_Out;
  size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
@@ -252,9 +252,9 @@ vector<CTask> CVectorTask::CreateVectorCTaskByFromUserGUID(const CSafeString &gu
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя один для которого задание от пользователя два
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CVectorTask::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
+std::vector<CTask> CVectorTask::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
 {
- vector<CTask> vector_CTask_Out;
+ std::vector<CTask> vector_CTask_Out;
  size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
@@ -266,9 +266,9 @@ vector<CTask> CVectorTask::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(c
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по проекту от пользователя
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
+std::vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
 {
- vector<CTask> vector_CTask_Out;
+ std::vector<CTask> vector_CTask_Out;
  size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {
@@ -283,9 +283,9 @@ vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSaf
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по проекту
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUID(const CSafeString &guid_project)
+std::vector<CTask> CVectorTask::CreateVectorCTaskByProjectGUID(const CSafeString &guid_project)
 {
- vector<CTask> vector_CTask_Out;
+ std::vector<CTask> vector_CTask_Out;
  size_t size=vector_CTask.size();
  for(size_t n=0;n<size;n++)
  {

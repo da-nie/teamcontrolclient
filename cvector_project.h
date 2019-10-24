@@ -15,7 +15,7 @@
 #include "stdafx.h"
 #include "cproject.h"
 
-using namespace std;
+
 
 //====================================================================================================
 //класс-обёртка для вектора хранения проектов
@@ -26,7 +26,7 @@ class CVectorProject
  protected: 
   unsigned long Version;//номер версии структуры
   //переменные
-  vector<CProject> vector_CProject;
+  std::vector<CProject> vector_CProject;
  public:
   //конструктор
   CVectorProject();
@@ -44,7 +44,7 @@ class CVectorProject
   size_t Size(void);//получить количество проектов
   bool PopBack(CProject &cProject);//получить последний проект и удалить его
   bool PushBack(const CProject &cProject);//добавить проект в конец
-  vector<CProject>& GetVectorCProject(void);//получить ссылку на вектор проектов
+  std::vector<CProject>& GetVectorCProject(void);//получить ссылку на вектор проектов
  protected:
   //функции
  

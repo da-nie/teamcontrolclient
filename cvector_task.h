@@ -16,7 +16,7 @@
 #include "stdafx.h"
 #include "ctask.h"
 
-using namespace std;
+
 
 //====================================================================================================
 //класс-обёртка для вектора хранения заданий
@@ -27,7 +27,7 @@ class CVectorTask
  protected: 
   unsigned long Version;//номер версии структуры
   //переменные
-  vector<CTask> vector_CTask;
+  std::vector<CTask> vector_CTask;
  public:
   //конструктор
   CVectorTask();
@@ -48,12 +48,12 @@ class CVectorTask
   size_t Size(void);//получить количество заданий
   bool PopBack(CTask &cTask);//получить последнее задание и удалить его
   bool PushBack(const CTask &cTask);//добавить задание в конец
-  vector<CTask>& GetVectorCTask(void);//получить ссылку на вектор задач
-  vector<CTask> CreateVectorCTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
-  vector<CTask> CreateVectorCTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
-  vector<CTask> CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
-  vector<CTask> CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
-  vector<CTask> CreateVectorCTaskByProjectGUID(const CSafeString &guid_project);//создать вектор задач по проекту
+  std::vector<CTask>& GetVectorCTask(void);//получить ссылку на вектор задач
+  std::vector<CTask> CreateVectorCTaskByForUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя для которого задание
+  std::vector<CTask> CreateVectorCTaskByFromUserGUID(const CSafeString &guid);//создать вектор задач по GUID пользователя от которого задание
+  std::vector<CTask> CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two);//создать вектор задач по GUID пользователя один для которого задание от пользователя два
+  std::vector<CTask> CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user);//создать вектор задач по проекту от пользователя
+  std::vector<CTask> CreateVectorCTaskByProjectGUID(const CSafeString &guid_project);//создать вектор задач по проекту
  protected:
   //функции
  

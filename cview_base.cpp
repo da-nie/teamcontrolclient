@@ -309,7 +309,7 @@ CDocument_Main* CView_Base::GetDocument(void)
 //----------------------------------------------------------------------------------------------------
 //обновить задания в списке
 //----------------------------------------------------------------------------------------------------
-void CView_Base::UpdateTask(vector<CTask> &vector_CTask_Local)
+void CView_Base::UpdateTask(std::vector<CTask> &vector_CTask_Local)
 {
  vector_CTask.clear();
  CDocument_Main *cDocument_Main_Ptr=GetDocument();

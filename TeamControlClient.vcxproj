@@ -109,6 +109,7 @@
     <ClCompile Include="cframecell.cpp" />
     <ClCompile Include="cframewnd_main.cpp" />
     <ClCompile Include="cicell.cpp" />
+    <ClCompile Include="citaskexport.cpp" />
     <ClCompile Include="clinetextcell.cpp" />
     <ClCompile Include="cproject.cpp" />
     <ClCompile Include="craiifilein.cpp" />
@@ -116,6 +117,8 @@
     <ClCompile Include="crc.cpp" />
     <ClCompile Include="csafestring.cpp" />
     <ClCompile Include="ctask.cpp" />
+    <ClCompile Include="ctaskexportcsv.cpp" />
+    <ClCompile Include="ctaskexporthtml.cpp" />
     <ClCompile Include="ctextcell.cpp" />
     <ClCompile Include="cthreadclient.cpp" />
     <ClCompile Include="ctransceiver.cpp" />
@@ -150,6 +153,7 @@
     <ClInclude Include="cframecell.h" />
     <ClInclude Include="cframewnd_main.h" />
     <ClInclude Include="cicell.h" />
+    <ClInclude Include="citaskexport.h" />
     <ClInclude Include="clinetextcell.h" />
     <ClInclude Include="cproject.h" />
     <ClInclude Include="craiiccriticalsection.h" />
@@ -158,6 +162,8 @@
     <ClInclude Include="crc.h" />
     <ClInclude Include="csafestring.h" />
     <ClInclude Include="ctask.h" />
+    <ClInclude Include="ctaskexportcsv.h" />
+    <ClInclude Include="ctaskexporthtml.h" />
     <ClInclude Include="ctextcell.h" />
     <ClInclude Include="cthreadclient.h" />
     <ClInclude Include="ctransceiver.h" />

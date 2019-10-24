@@ -52,7 +52,7 @@ CThreadClient::~CThreadClient()
 //----------------------------------------------------------------------------------------------------
 //сохранение массива заданий
 //----------------------------------------------------------------------------------------------------
-void CThreadClient::SaveTaskVector(char *filename,const vector<CTask> &vector_CTask)
+void CThreadClient::SaveTaskVector(char *filename,const std::vector<CTask> &vector_CTask)
 {
 
 }

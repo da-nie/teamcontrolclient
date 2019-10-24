@@ -24,7 +24,7 @@
 #include "ctransceiver_autorization.h"
 #include "ctransceiver_ping.h"
 
-using namespace std;
+
 
 //====================================================================================================
 //макроопределения
@@ -75,7 +75,7 @@ class CThreadClient
  friend UINT ThreadClient(LPVOID pParam);//функция потока
  protected:
 
-  vector<unsigned char> vector_Data;//принятые данные
+  std::vector<unsigned char> vector_Data;//принятые данные
 
   CEvent cEvent_Exit;//требование на выход из потока
   CWinThread *cWinThread_Thread;//поток обработки
@@ -102,7 +102,7 @@ class CThreadClient
    void Stop(void);//остановить поток
    void SetDocument(CDocument_Main *cDocument_Main_Set_Ptr);//задать класс документа
  protected:
-  void SaveTaskVector(char *filename,const vector<CTask> &vector_CTask);//сохранение массива заданий
+  void SaveTaskVector(char *filename,const std::vector<CTask> &vector_CTask);//сохранение массива заданий
   void Processing(void);//основной цикл обработки
   bool LinkProcessing(SOCKET socket_server,bool &on_exit);//обработка обмена с сервером
   bool TaskProcessing(SOCKET socket_server,bool &on_exit);//обработка заданий

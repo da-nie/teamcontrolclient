@@ -73,7 +73,7 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
   size_t size;
   long selected_index=0;
   CVectorUser cVector_User=cDocument_Main_Local_Ptr->GetCVectorUser();
-  vector<CUser> &vector_CUser=cVector_User.GetVectorCUser();
+  std::vector<CUser> &vector_CUser=cVector_User.GetVectorCUser();
   vector_CUser_Local=vector_CUser;
   size=vector_CUser_Local.size();
   for(n=0;n<size;n++)
@@ -85,7 +85,7 @@ afx_msg BOOL CDialog_TaskSettings::OnInitDialog(void)
   ((CComboBox *)GetDlgItem(IDC_COMBO_DIALOG_TASK_SETTINGS_USER))->SetCurSel(selected_index);
 
   CVectorProject cVector_Project=cDocument_Main_Local_Ptr->GetCVectorProject();
-  vector<CProject> &vector_CProject=cVector_Project.GetVectorCProject();
+  std::vector<CProject> &vector_CProject=cVector_Project.GetVectorCProject();
   vector_CProject_Local=vector_CProject;
   size=vector_CProject_Local.size();
   selected_index=0;   

@@ -1,39 +1,32 @@
-#ifndef CTRANSCEIVER_PING_H
-#define CTRANSCEIVER_PING_H
+#ifndef CTASK_EXPORT_CSV_H
+#define CTASK_EXPORT_CSV_H
 
 //====================================================================================================
 //описание
 //====================================================================================================
 
-//Класс приёмо-передатчика данных сообщения для проверки связи
+//Класс экспорта заданий в CSV
 
 //====================================================================================================
 //подключаемые библиотеки
 //====================================================================================================
+
 #include "stdafx.h"
-#include <list>
-#include <vector>
-#include <string>
-#include "cdocument_main.h"
-#include "protocol.h"
-#include "ctransceiver.h"
-
-
+#include "citaskexport.h"
 
 //====================================================================================================
-//класс приёмо-передатчика данных сообщения для проверки связи
+//класс экспорта заданий в CSV
 //====================================================================================================
 
-class CTransceiver_Ping:public CTransceiver
+class CTaskExportCSV:public CITaskExport
 {
- protected:
- public:  
+ public:
   //конструктор
-  CTransceiver_Ping(void);
+  CTaskExportCSV(void);
   //деструктор
-  ~CTransceiver_Ping();
-  //функции класса
-  void SendPingDataToServerInPackage(SOCKET socket_server,SERVER_COMMAND command,CEvent &cEvent_Exit,bool &on_exit);//передать серверу сообщение для проверки связи
+  ~CTaskExportCSV();
+  //-Функции класса----------------------------------------------------------
+  bool Export(const CString &file_name,const std::list<CTask> &list_CTask,const std::list<CUser> &list_CUser,const std::list<CProject> &list_CProject) override;//экспортировать задания
 };
 
 #endif

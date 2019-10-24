@@ -23,8 +23,8 @@ class CDialog_TaskSettings:public CDialog
   //-Переменные класса-------------------------------------------------------
   CTask cTask_Local;//редактируемое задание
   CDocument_Main *cDocument_Main_Local_Ptr;//указатель на документ
-  vector<CUser> vector_CUser_Local;//список пользователей на время редактирования заданий (он ведь может внезапно измениться в документе)
-  vector<CProject> vector_CProject_Local;//список проектов на время редактирования заданий (он ведь может внезапно измениться в документе)
+  std::vector<CUser> vector_CUser_Local;//список пользователей на время редактирования заданий (он ведь может внезапно измениться в документе)
+  std::vector<CProject> vector_CProject_Local;//список проектов на время редактирования заданий (он ведь может внезапно измениться в документе)
   bool NewTask;//создаётся ли новое задание
 
   HBITMAP hBitmap_TaskFinished;//пиктограмма завершения задания

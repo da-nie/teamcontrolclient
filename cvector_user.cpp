@@ -187,7 +187,7 @@ bool CVectorUser::PushBack(const CUser &cUser)
 //----------------------------------------------------------------------------------------------------
 //получить ссылку на вектор пользователей
 //----------------------------------------------------------------------------------------------------
-vector<CUser>& CVectorUser::GetVectorCUser(void)
+std::vector<CUser>& CVectorUser::GetVectorCUser(void)
 {
  return(vector_CUser);
 }

@@ -68,7 +68,7 @@ bool CTransceiver::SendQuestion(SOCKET socket_server,SERVER_ANSWER answer,const 
 bool CTransceiver::SendPart(SOCKET socket_server,const char *data,unsigned long size,CEvent &cEvent_Exit,bool &on_exit)
 {
  on_exit=false;
- vector<unsigned char> vector_answer;
+ std::vector<unsigned char> vector_answer;
  vector_answer.reserve(size*2);
  //выполняем замену данных с учётом байтстаффинга
  for(long n=0;n<size;n++)

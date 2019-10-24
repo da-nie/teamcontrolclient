@@ -1,8 +1,8 @@
 #include "cdocument_main.h"
 #include "cthreadclient.h"
-
-
 #include "ctreeview_kit.h"
+
+#include <algorithm>
 
 extern CThreadClient cThreadClient;//клиентский поток
 
@@ -121,7 +121,7 @@ void CDocument_Main::DeleteFinishedTask(long year,long month,long day)
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
-   vector<CTask> vector_CTask=sProtectedVariables.cVectorTask.CreateVectorCTaskByFromUserGUID(sProtectedVariables.MyGUID);
+   std::vector<CTask> vector_CTask=sProtectedVariables.cVectorTask.CreateVectorCTaskByFromUserGUID(sProtectedVariables.MyGUID);
    size_t size=vector_CTask.size();
    for(size_t n=0;n<size;n++)
    {
@@ -770,9 +770,9 @@ bool CDocument_Main::ChangeProject(CProject &cProject)
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CDocument_Main::CreateVectorCTaskByForUserGUID(const CSafeString &guid)
+std::vector<CTask> CDocument_Main::CreateVectorCTaskByForUserGUID(const CSafeString &guid)
 {
- vector<CTask> vector_CTask;
+ std::vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -784,9 +784,9 @@ vector<CTask> CDocument_Main::CreateVectorCTaskByForUserGUID(const CSafeString &
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя от которого задание
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CDocument_Main::CreateVectorCTaskByFromUserGUID(const CSafeString &guid)
+std::vector<CTask> CDocument_Main::CreateVectorCTaskByFromUserGUID(const CSafeString &guid)
 {
- vector<CTask> vector_CTask;
+ std::vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -798,9 +798,9 @@ vector<CTask> CDocument_Main::CreateVectorCTaskByFromUserGUID(const CSafeString 
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по GUID пользователя один для которого задание от пользователя два
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CDocument_Main::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
+std::vector<CTask> CDocument_Main::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUID(const CSafeString &guid_one,const CSafeString &guid_two)
 {
- vector<CTask> vector_CTask;
+ std::vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -812,9 +812,9 @@ vector<CTask> CDocument_Main::CreateVectorCTaskByForUserOneGUIDAndFromUserTwoGUI
 //----------------------------------------------------------------------------------------------------
 //создать вектор задач по проекту от пользователя
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CDocument_Main::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
+std::vector<CTask> CDocument_Main::CreateVectorCTaskByProjectGUIDFromUserGUID(const CSafeString &guid_project,const CSafeString &guid_from_user)
 {
- vector<CTask> vector_CTask;
+ std::vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -831,9 +831,9 @@ vector<CTask> CDocument_Main::CreateVectorCTaskByProjectGUIDFromUserGUID(const C
 //----------------------------------------------------------------------------------------------------
 //создать вектор общих задач по GUID пользователя для которого задание
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CDocument_Main::CreateVectorCTaskCommonByForUserGUID(const CSafeString &guid)
+std::vector<CTask> CDocument_Main::CreateVectorCTaskCommonByForUserGUID(const CSafeString &guid)
 {
- vector<CTask> vector_CTask;
+ std::vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -845,9 +845,9 @@ vector<CTask> CDocument_Main::CreateVectorCTaskCommonByForUserGUID(const CSafeSt
 //----------------------------------------------------------------------------------------------------
 //создать вектор общих задач
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CDocument_Main::CreateVectorCTaskCommon(void)
+std::vector<CTask> CDocument_Main::CreateVectorCTaskCommon(void)
 {
- vector<CTask> vector_CTask;
+ std::vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -859,9 +859,9 @@ vector<CTask> CDocument_Main::CreateVectorCTaskCommon(void)
 //----------------------------------------------------------------------------------------------------
 //создать вектор общих задач по проекту
 //----------------------------------------------------------------------------------------------------
-vector<CTask> CDocument_Main::CreateVectorCTaskCommonByProjectGUID(const CSafeString &guid_project)
+std::vector<CTask> CDocument_Main::CreateVectorCTaskCommonByProjectGUID(const CSafeString &guid_project)
 {
- vector<CTask> vector_CTask;
+ std::vector<CTask> vector_CTask;
  {
   CRAIICCriticalSection cRAIICCriticalSection(&sProtectedVariables.cCriticalSection);
   {
@@ -1007,6 +1007,59 @@ void CDocument_Main::Processing(void)
   }
  } 
  if (update_view==true) UpdateAllViews(NULL);//у всех видов вызываем обновление изображения 
+}
+
+//----------------------------------------------------------------------------------------------------
+//экспорт выданных заданий
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::ExportTaskFrom(const std::string &file_name,std::shared_ptr<CITaskExport> cITaskExport_Ptr)
+{
+ CSafeString guid;
+ CSafeString name;
+ bool on_line;
+ bool leader;
+ GetMyParam(on_line,guid,name,leader); 
+ 
+ //собираем список заданий от нас
+ std::list<CTask> list_CTask;
+ std::vector<CTask> vector_CTask_Local;
+ vector_CTask_Local=CreateVectorCTaskByFromUserGUID(guid); 
+ list_CTask.insert(list_CTask.end(),vector_CTask_Local.begin(),vector_CTask_Local.end());
+ //собираем список проектов
+ std::list<CProject> list_CProject;
+ std::vector<CProject> vector_CProject_Local=GetCVectorProject().GetVectorCProject();
+ list_CProject.insert(list_CProject.end(),vector_CProject_Local.begin(),vector_CProject_Local.end());
+ //собираем список пользователей
+ std::list<CUser> list_CUser;
+ std::vector<CUser> vector_CUser_Local=GetCVectorUser().GetVectorCUser();
+ list_CUser.insert(list_CUser.end(),vector_CUser_Local.begin(),vector_CUser_Local.end());
+ cITaskExport_Ptr->Export(CString(file_name.c_str()),list_CTask,list_CUser,list_CProject);
+}
+//----------------------------------------------------------------------------------------------------
+//экспорт полученных заданий
+//----------------------------------------------------------------------------------------------------
+void CDocument_Main::ExportTaskFor(const std::string &file_name,std::shared_ptr<CITaskExport> cITaskExport_Ptr)
+{
+ CSafeString guid;
+ CSafeString name;
+ bool on_line;
+ bool leader;
+ GetMyParam(on_line,guid,name,leader); 
+ 
+ //собираем список заданий для нас
+ std::list<CTask> list_CTask;
+ std::vector<CTask> vector_CTask_Local;
+ vector_CTask_Local=CreateVectorCTaskByForUserGUID(guid); 
+ list_CTask.insert(list_CTask.end(),vector_CTask_Local.begin(),vector_CTask_Local.end());
+ //собираем список проектов
+ std::list<CProject> list_CProject;
+ std::vector<CProject> vector_CProject_Local=GetCVectorProject().GetVectorCProject();
+ list_CProject.insert(list_CProject.end(),vector_CProject_Local.begin(),vector_CProject_Local.end());
+ //собираем список пользователей
+ std::list<CUser> list_CUser;
+ std::vector<CUser> vector_CUser_Local=GetCVectorUser().GetVectorCUser();
+ list_CUser.insert(list_CUser.end(),vector_CUser_Local.begin(),vector_CUser_Local.end());
+ cITaskExport_Ptr->Export(CString(file_name.c_str()),list_CTask,list_CUser,list_CProject);
 }
 
 //----------------------------------------------------------------------------------------------------

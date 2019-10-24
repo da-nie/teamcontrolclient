@@ -70,7 +70,7 @@ void CView_MyTasks::OnUpdate(CView *pSender,LPARAM lHint,CObject *pHint)
  bool leader;
  cDocument_Main_Ptr->GetMyParam(on_line,guid,name,leader);
  
- vector<CTask> vector_CTask_Local;
+ std::vector<CTask> vector_CTask_Local;
  vector_CTask_Local=cDocument_Main_Ptr->CreateVectorCTaskByForUserGUID(guid); 
  
  size_t size=vector_CTask_Local.size();

@@ -194,7 +194,7 @@ bool CVectorProject::PushBack(const CProject &cProject)
 //----------------------------------------------------------------------------------------------------
 //получить ссылку на вектор проектов
 //----------------------------------------------------------------------------------------------------
-vector<CProject>& CVectorProject::GetVectorCProject(void)
+std::vector<CProject>& CVectorProject::GetVectorCProject(void)
 {
  return(vector_CProject);
 }
